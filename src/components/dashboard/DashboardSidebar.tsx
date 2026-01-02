@@ -43,6 +43,9 @@ import {
   FileCheck as FileCheckIcon,
   FilePlus,
   Building,
+  CalendarClock,
+  ArrowRightLeft,
+  Timer,
 } from "lucide-react";
 import {
   Sidebar,
@@ -137,6 +140,14 @@ const billingSubItems = [
   { title: "Report", url: "/admin/billing/report", icon: PieChart },
 ];
 
+const shiftSubItems = [
+  { title: "All Shifts", url: "/admin/shifts/all", icon: Clock },
+  { title: "Assignments", url: "/admin/shifts/assignments", icon: UserCheck2 },
+  { title: "Schedule", url: "/admin/shifts/schedule", icon: CalendarClock },
+  { title: "Swap Requests", url: "/admin/shifts/swaps", icon: ArrowRightLeft },
+  { title: "Report", url: "/admin/shifts/report", icon: BarChart3 },
+];
+
 const otherItems = [
   { title: "Reports", url: "/admin/reports", icon: FileText },
   { title: "Awards", url: "/admin/awards", icon: Award },
@@ -159,6 +170,7 @@ export function DashboardSidebar() {
   const isAssetMenuActive = assetSubItems.some((item) => currentPath === item.url);
   const isExpenseMenuActive = expenseSubItems.some((item) => currentPath === item.url);
   const isBillingMenuActive = billingSubItems.some((item) => currentPath === item.url);
+  const isShiftMenuActive = shiftSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
@@ -168,6 +180,7 @@ export function DashboardSidebar() {
   const [assetMenuOpen, setAssetMenuOpen] = useState(isAssetMenuActive);
   const [expenseMenuOpen, setExpenseMenuOpen] = useState(isExpenseMenuActive);
   const [billingMenuOpen, setBillingMenuOpen] = useState(isBillingMenuActive);
+  const [shiftMenuOpen, setShiftMenuOpen] = useState(isShiftMenuActive);
 
   return (
     <Sidebar
@@ -316,6 +329,61 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {attendanceSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Shift Management with Submenu */}
+              <Collapsible
+                open={shiftMenuOpen}
+                onOpenChange={setShiftMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isShiftMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isShiftMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <Timer className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Shifts</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                shiftMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {shiftSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
