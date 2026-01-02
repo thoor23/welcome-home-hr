@@ -157,7 +157,7 @@ export function EditEmployeeDrawer({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal",
+                    "w-full justify-start text-left font-normal hover:bg-muted hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground",
                     !formData.joiningDate && "text-muted-foreground"
                   )}
                 >
