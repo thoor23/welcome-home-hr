@@ -9,7 +9,6 @@ import {
   TrendingUp,
   FileText,
   Settings,
-  ChevronDown,
   Building2,
   Clock,
   Award,
@@ -38,7 +37,7 @@ const hrModules = [
   { title: "Attendance", url: "/dashboard/attendance", icon: CalendarCheck },
   { title: "Payroll", url: "/dashboard/payroll", icon: Wallet },
   { title: "Leave Management", url: "/dashboard/leave", icon: CalendarDays },
-  { title: "Recruitment", url: "/dashboard/recruitment", icon: UserPlus, badge: "3" },
+  { title: "Recruitment", url: "/dashboard/recruitment", icon: UserPlus },
   { title: "Performance", url: "/dashboard/performance", icon: TrendingUp },
   { title: "Time Tracking", url: "/dashboard/time-tracking", icon: Clock },
   { title: "Departments", url: "/dashboard/departments", icon: Building2 },
@@ -128,17 +127,7 @@ export function DashboardSidebar() {
                   >
                     <Link to={item.url} className="flex items-center gap-3">
                       <item.icon className="h-5 w-5" />
-                      {!collapsed && (
-                        <>
-                          <span className="flex-1">{item.title}</span>
-                          {item.badge && (
-                            <Badge variant="outline" className="text-xs">
-                              {item.badge}
-                            </Badge>
-                          )}
-                          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                        </>
-                      )}
+                      {!collapsed && <span>{item.title}</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
