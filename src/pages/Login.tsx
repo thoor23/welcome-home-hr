@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Users, Eye, EyeOff, Mail, Lock } from "lucide-react";
 
 const Login = () => {
@@ -18,34 +19,37 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Background Effects - matching landing page */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse-glow" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/20 rounded-full blur-[100px]" />
+
+      {/* Theme Toggle */}
+      <div className="absolute top-6 right-6 z-20">
+        <ThemeToggle />
+      </div>
+
       {/* Main Container Card */}
-      <div className="w-full max-w-5xl min-h-[720px] bg-card rounded-3xl shadow-2xl overflow-hidden flex border border-border">
+      <div className="w-full max-w-5xl min-h-[720px] glass-card rounded-3xl shadow-2xl overflow-hidden flex relative z-10">
         {/* Left Side - Illustration Panel */}
-        <div className="hidden lg:flex lg:w-1/2 bg-emerald-500 p-10 flex-col justify-between relative overflow-hidden">
+        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary to-purple-500 p-10 flex-col justify-between relative overflow-hidden">
           {/* Decorative Shapes */}
           <div className="absolute inset-0 overflow-hidden">
-            {/* Orange circle top-left */}
-            <div className="absolute top-8 left-8 w-12 h-12 bg-orange-400 rounded-full opacity-90"></div>
-            {/* Teal circle top-right */}
-            <div className="absolute top-16 right-16 w-8 h-8 bg-teal-300 rounded-full opacity-80"></div>
-            {/* Dark square */}
-            <div className="absolute top-32 left-12 w-10 h-10 bg-card rounded-lg transform rotate-12"></div>
-            {/* Yellow diamond */}
-            <div className="absolute top-24 right-8 w-6 h-6 bg-yellow-400 transform rotate-45"></div>
-            {/* Bottom decorations */}
-            <div className="absolute bottom-32 left-8 w-14 h-14 bg-muted rounded-lg"></div>
-            <div className="absolute bottom-16 left-24 w-6 h-6 bg-teal-300 rounded-full"></div>
-            <div className="absolute bottom-20 left-32 w-6 h-6 bg-teal-400 rounded-full"></div>
-            {/* Large circle outline */}
-            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-teal-400/50 rounded-full"></div>
-            {/* Diamond bottom-right */}
-            <div className="absolute bottom-24 right-12 w-8 h-8 bg-transparent border-2 border-teal-300/60 transform rotate-45"></div>
+            <div className="absolute top-8 left-8 w-12 h-12 bg-white/20 rounded-full"></div>
+            <div className="absolute top-16 right-16 w-8 h-8 bg-white/30 rounded-full"></div>
+            <div className="absolute top-32 left-12 w-10 h-10 bg-white/10 rounded-lg transform rotate-12"></div>
+            <div className="absolute top-24 right-8 w-6 h-6 bg-white/25 transform rotate-45"></div>
+            <div className="absolute bottom-32 left-8 w-14 h-14 bg-white/10 rounded-lg"></div>
+            <div className="absolute bottom-16 left-24 w-6 h-6 bg-white/20 rounded-full"></div>
+            <div className="absolute bottom-20 left-32 w-6 h-6 bg-white/15 rounded-full"></div>
+            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-white/20 rounded-full"></div>
+            <div className="absolute bottom-24 right-12 w-8 h-8 bg-transparent border-2 border-white/30 transform rotate-45"></div>
           </div>
 
           {/* Content */}
           <div className="relative z-10 flex-1 flex flex-col justify-center">
-            <h1 className="text-4xl font-bold text-white leading-tight mb-4">
+            <h1 className="text-4xl font-bold text-white leading-tight mb-4 font-display">
               Welcome Back
             </h1>
             <p className="text-white/90 text-lg leading-relaxed">
@@ -62,25 +66,25 @@ const Login = () => {
         </div>
 
         {/* Right Side - Login Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-card">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-card/50 backdrop-blur-xl">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center">
-              <Users className="w-5 h-5 text-white" />
+          <Link to="/" className="flex items-center gap-2 mb-8 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Users className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-bold text-xl text-foreground">HRMS Portal</span>
+            <span className="font-display font-bold text-xl text-foreground">NexHR</span>
           </Link>
 
           {/* Header */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-2">Welcome Back</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-2 font-display">Welcome Back</h2>
             <p className="text-muted-foreground">Sign in to access your account</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm text-foreground">
+              <label htmlFor="email" className="text-sm text-foreground font-medium">
                 Email Address
               </label>
               <div className="relative">
@@ -91,14 +95,14 @@ const Login = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-emerald-500"
+                  className="pl-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm text-foreground">
+              <label htmlFor="password" className="text-sm text-foreground font-medium">
                 Password
               </label>
               <div className="relative">
@@ -109,7 +113,7 @@ const Login = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-emerald-500"
+                  className="pl-10 pr-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
                 <button
@@ -128,7 +132,7 @@ const Login = () => {
                   id="remember"
                   checked={rememberMe}
                   onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                  className="border-border data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                  className="border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
                 <label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer">
                   Remember me
@@ -136,7 +140,7 @@ const Login = () => {
               </div>
               <Link
                 to="/forgot-password"
-                className="text-sm text-emerald-500 hover:text-emerald-400 transition-colors"
+                className="text-sm text-primary hover:text-primary/80 transition-colors font-medium"
               >
                 Forgot Password?
               </Link>
@@ -144,7 +148,7 @@ const Login = () => {
 
             <Button
               type="submit"
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3"
             >
               Sign In
             </Button>
@@ -152,9 +156,9 @@ const Login = () => {
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
-            <Separator className="flex-1 bg-border" />
+            <Separator className="flex-1 bg-border/50" />
             <span className="text-sm text-muted-foreground">or continue with</span>
-            <Separator className="flex-1 bg-border" />
+            <Separator className="flex-1 bg-border/50" />
           </div>
 
           {/* Social Login Buttons */}
@@ -162,7 +166,7 @@ const Login = () => {
             <Button
               type="button"
               variant="outline"
-              className="flex-1 bg-secondary border-border text-foreground hover:bg-muted"
+              className="flex-1 border-border/50 hover:bg-secondary/50"
               onClick={() => console.log("Google login")}
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -188,7 +192,7 @@ const Login = () => {
             <Button
               type="button"
               variant="outline"
-              className="flex-1 bg-secondary border-border text-foreground hover:bg-muted"
+              className="flex-1 border-border/50 hover:bg-secondary/50"
               onClick={() => console.log("GitHub login")}
             >
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -201,7 +205,7 @@ const Login = () => {
           {/* Sign Up Link */}
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-emerald-500 hover:text-emerald-400 font-medium transition-colors">
+            <Link to="/signup" className="text-primary hover:text-primary/80 font-medium transition-colors">
               Sign up
             </Link>
           </p>
