@@ -41,6 +41,8 @@ import {
   Tags,
   ClipboardCheck,
   FileCheck as FileCheckIcon,
+  FilePlus,
+  Building,
 } from "lucide-react";
 import {
   Sidebar,
@@ -124,6 +126,17 @@ const expenseSubItems = [
   { title: "Report", url: "/admin/expenses/report", icon: BarChart3 },
 ];
 
+const billingSubItems = [
+  { title: "All Invoices", url: "/admin/billing/invoices", icon: FileText },
+  { title: "Generate Invoice", url: "/admin/billing/generate-invoice", icon: FilePlus },
+  { title: "Invoice Template", url: "/admin/billing/invoice-template", icon: LayoutTemplate },
+  { title: "Requests", url: "/admin/billing/requests", icon: Receipt },
+  { title: "Approvals", url: "/admin/billing/approvals", icon: FileCheckIcon },
+  { title: "Allocations", url: "/admin/billing/allocations", icon: Wallet },
+  { title: "Categories", url: "/admin/billing/categories", icon: Tags },
+  { title: "Report", url: "/admin/billing/report", icon: PieChart },
+];
+
 const otherItems = [
   { title: "Reports", url: "/admin/reports", icon: FileText },
   { title: "Awards", url: "/admin/awards", icon: Award },
@@ -145,6 +158,7 @@ export function DashboardSidebar() {
   const isRecruitmentMenuActive = recruitmentSubItems.some((item) => currentPath === item.url);
   const isAssetMenuActive = assetSubItems.some((item) => currentPath === item.url);
   const isExpenseMenuActive = expenseSubItems.some((item) => currentPath === item.url);
+  const isBillingMenuActive = billingSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
@@ -153,6 +167,7 @@ export function DashboardSidebar() {
   const [recruitmentMenuOpen, setRecruitmentMenuOpen] = useState(isRecruitmentMenuActive);
   const [assetMenuOpen, setAssetMenuOpen] = useState(isAssetMenuActive);
   const [expenseMenuOpen, setExpenseMenuOpen] = useState(isExpenseMenuActive);
+  const [billingMenuOpen, setBillingMenuOpen] = useState(isBillingMenuActive);
 
   return (
     <Sidebar
@@ -576,6 +591,61 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {expenseSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Internal Billing with Submenu */}
+              <Collapsible
+                open={billingMenuOpen}
+                onOpenChange={setBillingMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isBillingMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isBillingMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <Building className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Internal Billing</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                billingMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {billingSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
