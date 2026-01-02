@@ -18,7 +18,7 @@ const OrganizationOnboarding = () => {
     e.preventDefault();
     console.log("Organization onboarding submitted", { orgName, industry, companySize, country, website });
     // Navigate to dashboard or next step
-    navigate("/");
+    navigate("/dashboard");
   };
 
   return (
