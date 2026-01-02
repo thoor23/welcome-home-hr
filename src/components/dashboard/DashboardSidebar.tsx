@@ -30,7 +30,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 const mainMenuItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, badge: "Hot" },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
 ];
 
 const hrModules = [
@@ -96,16 +96,7 @@ export function DashboardSidebar() {
                   >
                     <Link to={item.url} className="flex items-center gap-3">
                       <item.icon className="h-5 w-5" />
-                      {!collapsed && (
-                        <>
-                          <span className="flex-1">{item.title}</span>
-                          {item.badge && (
-                            <Badge variant="secondary" className="bg-primary/20 text-primary text-xs">
-                              {item.badge}
-                            </Badge>
-                          )}
-                        </>
-                      )}
+                      {!collapsed && <span>{item.title}</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
