@@ -10,8 +10,6 @@ const plans = [
     monthlyPrice: 29,
     yearlyPrice: 24,
     icon: Zap,
-    accentColor: "from-blue-500 to-cyan-400",
-    glowColor: "group-hover:shadow-blue-500/25",
     features: [
       "Up to 25 employees",
       "Employee management",
@@ -28,8 +26,6 @@ const plans = [
     monthlyPrice: 59,
     yearlyPrice: 49,
     icon: Sparkles,
-    accentColor: "from-primary to-purple-400",
-    glowColor: "group-hover:shadow-primary/30",
     features: [
       "Up to 100 employees",
       "Everything in Starter",
@@ -47,8 +43,6 @@ const plans = [
     monthlyPrice: null,
     yearlyPrice: null,
     icon: Crown,
-    accentColor: "from-amber-500 to-orange-400",
-    glowColor: "group-hover:shadow-amber-500/25",
     features: [
       "Unlimited employees",
       "Everything in Professional",
@@ -131,31 +125,24 @@ const Pricing = () => {
               )}
               style={{ animationDelay: `${index * 150}ms` }}
             >
-              {/* Gradient Border */}
+              {/* Highlight Border */}
               <div className={cn(
-                "absolute -inset-[1px] rounded-2xl bg-gradient-to-b opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm",
-                plan.accentColor
-              )} />
-              <div className={cn(
-                "absolute -inset-[1px] rounded-2xl bg-gradient-to-b transition-opacity duration-500",
-                plan.popular ? "opacity-100" : "opacity-0 group-hover:opacity-100",
-                plan.accentColor
+                "absolute -inset-[1px] rounded-2xl transition-opacity duration-500",
+                plan.popular 
+                  ? "bg-border opacity-100" 
+                  : "bg-border/50 opacity-0 group-hover:opacity-100"
               )} />
 
               {/* Card Content */}
               <div className={cn(
-                "relative glass-card p-8 flex flex-col h-full rounded-2xl transition-shadow duration-500",
-                plan.glowColor,
-                plan.popular ? "shadow-xl" : ""
+                "relative glass-card p-8 flex flex-col h-full rounded-2xl transition-all duration-500",
+                "group-hover:shadow-lg group-hover:shadow-border/10",
+                plan.popular ? "shadow-lg shadow-border/10" : ""
               )}>
                 {/* Popular Badge */}
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className={cn(
-                      "px-4 py-1.5 rounded-full text-sm font-semibold",
-                      "bg-gradient-to-r text-primary-foreground",
-                      plan.accentColor
-                    )}>
+                    <span className="px-4 py-1.5 rounded-full text-sm font-semibold bg-foreground text-background">
                       Most Popular
                     </span>
                   </div>
@@ -163,11 +150,8 @@ const Pricing = () => {
 
                 {/* Plan Icon & Name */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={cn(
-                    "w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br",
-                    plan.accentColor
-                  )}>
-                    <plan.icon className="w-5 h-5 text-primary-foreground" />
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-secondary border border-border">
+                    <plan.icon className="w-5 h-5 text-foreground" />
                   </div>
                   <h3 className="font-display text-xl font-bold text-foreground">
                     {plan.name}
@@ -182,20 +166,13 @@ const Pricing = () => {
                 <div className="mb-8">
                   {plan.monthlyPrice !== null ? (
                     <div className="flex items-baseline gap-1">
-                      <span className={cn(
-                        "text-5xl font-display font-bold transition-all duration-300",
-                        "bg-clip-text text-transparent bg-gradient-to-r",
-                        plan.accentColor
-                      )}>
+                      <span className="text-5xl font-display font-bold text-foreground transition-all duration-300">
                         ${isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                       </span>
                       <span className="text-muted-foreground">/month</span>
                     </div>
                   ) : (
-                    <span className={cn(
-                      "text-3xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r",
-                      plan.accentColor
-                    )}>
+                    <span className="text-3xl font-display font-bold text-foreground">
                       Custom Pricing
                     </span>
                   )}
@@ -211,11 +188,8 @@ const Pricing = () => {
                 <ul className="space-y-4 mb-8 flex-1">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
-                      <div className={cn(
-                        "w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-gradient-to-br",
-                        plan.accentColor
-                      )}>
-                        <Check className="w-3 h-3 text-primary-foreground" />
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-secondary border border-border">
+                        <Check className="w-3 h-3 text-foreground" />
                       </div>
                       <span className="text-muted-foreground text-sm">{feature}</span>
                     </li>
@@ -227,8 +201,8 @@ const Pricing = () => {
                   className={cn(
                     "w-full py-6 font-semibold transition-all duration-300",
                     plan.popular
-                      ? "bg-gradient-to-r hover:opacity-90 text-primary-foreground " + plan.accentColor
-                      : "bg-secondary hover:bg-secondary/80 text-secondary-foreground group-hover:bg-gradient-to-r group-hover:text-primary-foreground group-hover:" + plan.accentColor
+                      ? "bg-foreground hover:bg-foreground/90 text-background"
+                      : "bg-secondary hover:bg-secondary/80 text-foreground border border-border"
                   )}
                 >
                   {plan.cta}
