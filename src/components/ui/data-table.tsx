@@ -303,7 +303,7 @@ export function DataTable<T>({
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               {selectable && (
-                <TableHead className="w-[50px] sticky left-0 bg-card z-20 border-r border-border">
+                <TableHead className="w-[50px] sticky left-0 bg-card z-20 border-r border-border shadow-[1px_0_0_hsl(var(--border))]">
                   <Checkbox
                     checked={allSelected}
                     ref={(el) => {
@@ -322,8 +322,8 @@ export function DataTable<T>({
                   className={cn(
                     column.headerClassName,
                     'border-r border-border',
-                    column.sticky === 'left' && 'sticky left-0 bg-card z-20',
-                    column.sticky === 'right' && 'sticky right-0 bg-card z-20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l'
+                    column.sticky === 'left' && 'sticky left-0 bg-card z-20 shadow-[1px_0_0_hsl(var(--border))]',
+                    column.sticky === 'right' &&
                   )}
                 >
                   {column.sortable !== false ? (
@@ -374,7 +374,7 @@ export function DataTable<T>({
                     {selectable && (
                       <TableCell
                         onClick={(e) => e.stopPropagation()}
-                        className="w-[50px] sticky left-0 bg-card z-10 border-r border-border"
+                        className="w-[50px] sticky left-0 bg-card z-10 border-r border-border shadow-[1px_0_0_hsl(var(--border))]"
                       >
                         <Checkbox
                           checked={isSelected}
@@ -391,8 +391,8 @@ export function DataTable<T>({
                         className={cn(
                           column.className,
                           'border-r border-border',
-                          column.sticky === 'left' && 'sticky left-0 bg-card z-10',
-                          column.sticky === 'right' && 'sticky right-0 bg-card z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l'
+                          column.sticky === 'left' && 'sticky left-0 bg-card z-10 shadow-[1px_0_0_hsl(var(--border))]',
+                          column.sticky === 'right' &&
                         )}
                       >
                         {column.render
