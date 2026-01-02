@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { format } from "date-fns";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Download, Eye, MoreHorizontal } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Download, Eye, MoreHorizontal, CalendarIcon, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTable, Column, Filter } from "@/components/ui/data-table";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface AttendanceRecord {
   id: string;
@@ -52,7 +56,7 @@ const initialRecords: AttendanceRecord[] = [
     employeeName: "Mike Chen",
     employeeEmail: "mike.chen@company.com",
     department: "Marketing",
-    date: "2024-01-15",
+    date: "2024-01-14",
     checkIn: "09:45 AM",
     checkOut: "06:30 PM",
     breakTime: "45m",
@@ -66,7 +70,7 @@ const initialRecords: AttendanceRecord[] = [
     employeeName: "Emily Davis",
     employeeEmail: "emily.davis@company.com",
     department: "HR",
-    date: "2024-01-15",
+    date: "2024-01-13",
     checkIn: "—",
     checkOut: "—",
     breakTime: "—",
@@ -80,7 +84,7 @@ const initialRecords: AttendanceRecord[] = [
     employeeName: "Alex Wilson",
     employeeEmail: "alex.wilson@company.com",
     department: "Sales",
-    date: "2024-01-15",
+    date: "2024-01-12",
     checkIn: "09:00 AM",
     checkOut: "01:00 PM",
     breakTime: "30m",
@@ -94,7 +98,7 @@ const initialRecords: AttendanceRecord[] = [
     employeeName: "Jessica Brown",
     employeeEmail: "jessica.brown@company.com",
     department: "Engineering",
-    date: "2024-01-15",
+    date: "2024-01-11",
     checkIn: "—",
     checkOut: "—",
     breakTime: "—",
@@ -105,7 +109,31 @@ const initialRecords: AttendanceRecord[] = [
 ];
 
 const AllAttendance = () => {
-  const [records] = useState<AttendanceRecord[]>(initialRecords);
+  const [allRecords] = useState<AttendanceRecord[]>(initialRecords);
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
+    from: undefined,
+    to: undefined,
+  });
+
+  // Filter records by date range
+  const records = useMemo(() => {
+    if (!dateRange.from && !dateRange.to) {
+      return allRecords;
+    }
+    return allRecords.filter((record) => {
+      const recordDate = new Date(record.date);
+      if (dateRange.from && dateRange.to) {
+        return recordDate >= dateRange.from && recordDate <= dateRange.to;
+      }
+      if (dateRange.from) {
+        return recordDate >= dateRange.from;
+      }
+      if (dateRange.to) {
+        return recordDate <= dateRange.to;
+      }
+      return true;
+    });
+  }, [allRecords, dateRange]);
 
   const getStatusBadge = (status: AttendanceRecord["status"]) => {
     const variants = {
@@ -328,10 +356,74 @@ const AllAttendance = () => {
           <DashboardHeader />
 
           <main className="flex-1 p-6 overflow-auto min-w-0">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
               <div>
                 <h1 className="text-3xl font-bold text-foreground font-display">All Attendance</h1>
                 <p className="text-muted-foreground mt-1">View and manage employee attendance records</p>
+              </div>
+              
+              {/* Date Range Filter */}
+              <div className="flex items-center gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "justify-start text-left font-normal",
+                        !dateRange.from && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {dateRange.from ? format(dateRange.from, "MMM dd, yyyy") : "From Date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={dateRange.from}
+                      onSelect={(date) => setDateRange((prev) => ({ ...prev, from: date }))}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+                
+                <span className="text-muted-foreground">to</span>
+                
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "justify-start text-left font-normal",
+                        !dateRange.to && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {dateRange.to ? format(dateRange.to, "MMM dd, yyyy") : "To Date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={dateRange.to}
+                      onSelect={(date) => setDateRange((prev) => ({ ...prev, to: date }))}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+
+                {(dateRange.from || dateRange.to) && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setDateRange({ from: undefined, to: undefined })}
+                    className="h-9 w-9"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
               </div>
             </div>
 
