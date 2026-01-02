@@ -61,6 +61,12 @@ import {
   FileArchive,
   FolderCog,
   HardDrive,
+  History,
+  Activity,
+  Database,
+  Shield,
+  Server,
+  Webhook,
 } from "lucide-react";
 import {
   Sidebar,
@@ -210,6 +216,16 @@ const documentsSubItems = [
   { title: "Report", url: "/admin/documents/report", icon: PieChart },
 ];
 
+const auditSubItems = [
+  { title: "All Logs", url: "/admin/audit/all", icon: History },
+  { title: "Activity Logs", url: "/admin/audit/activity", icon: Activity },
+  { title: "Data Changes", url: "/admin/audit/data", icon: Database },
+  { title: "Security Logs", url: "/admin/audit/security", icon: Shield },
+  { title: "System Logs", url: "/admin/audit/system", icon: Server },
+  { title: "API Logs", url: "/admin/audit/api", icon: Webhook },
+  { title: "Settings", url: "/admin/audit/settings", icon: Settings },
+];
+
 const otherItems = [
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
@@ -236,6 +252,7 @@ export function DashboardSidebar() {
   const isEventsMenuActive = eventsSubItems.some((item) => currentPath === item.url);
   const isSupportMenuActive = supportSubItems.some((item) => currentPath === item.url);
   const isDocumentsMenuActive = documentsSubItems.some((item) => currentPath === item.url);
+  const isAuditMenuActive = auditSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
@@ -252,6 +269,7 @@ export function DashboardSidebar() {
   const [eventsMenuOpen, setEventsMenuOpen] = useState(isEventsMenuActive);
   const [supportMenuOpen, setSupportMenuOpen] = useState(isSupportMenuActive);
   const [documentsMenuOpen, setDocumentsMenuOpen] = useState(isDocumentsMenuActive);
+  const [auditMenuOpen, setAuditMenuOpen] = useState(isAuditMenuActive);
 
   return (
     <Sidebar
@@ -1114,6 +1132,60 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {documentsSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+              {/* Audit Logs with Submenu */}
+              <Collapsible
+                open={auditMenuOpen}
+                onOpenChange={setAuditMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isAuditMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isAuditMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <History className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Audit Logs</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                auditMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {auditSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild

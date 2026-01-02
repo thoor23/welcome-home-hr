@@ -89,6 +89,13 @@ import MyDocuments from "./pages/admin/MyDocuments";
 import DocumentCategories from "./pages/admin/DocumentCategories";
 import DocumentSettings from "./pages/admin/DocumentSettings";
 import DocumentReport from "./pages/admin/DocumentReport";
+import AllAuditLogs from "./pages/admin/AllAuditLogs";
+import ActivityLogs from "./pages/admin/ActivityLogs";
+import DataChangeLogs from "./pages/admin/DataChangeLogs";
+import SecurityLogs from "./pages/admin/SecurityLogs";
+import SystemLogs from "./pages/admin/SystemLogs";
+import APILogs from "./pages/admin/APILogs";
+import AuditSettings from "./pages/admin/AuditSettings";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -202,6 +209,14 @@ const App = () => (
             <Route path="/admin/documents/categories" element={<DocumentCategories />} />
             <Route path="/admin/documents/settings" element={<DocumentSettings />} />
             <Route path="/admin/documents/report" element={<DocumentReport />} />
+            <Route path="/admin/audit" element={<Navigate to="/admin/audit/all" replace />} />
+            <Route path="/admin/audit/all" element={<AllAuditLogs />} />
+            <Route path="/admin/audit/activity" element={<ActivityLogs />} />
+            <Route path="/admin/audit/data" element={<DataChangeLogs />} />
+            <Route path="/admin/audit/security" element={<SecurityLogs />} />
+            <Route path="/admin/audit/system" element={<SystemLogs />} />
+            <Route path="/admin/audit/api" element={<APILogs />} />
+            <Route path="/admin/audit/settings" element={<AuditSettings />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
