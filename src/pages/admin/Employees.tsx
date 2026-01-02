@@ -271,7 +271,7 @@ const Employees = () => {
           </Avatar>
           <div>
             <p className="font-medium text-foreground">{employee.name}</p>
-            <p className="text-sm text-primary">{employee.email}</p>
+            <p className="text-sm text-muted-foreground">{employee.email}</p>
           </div>
         </div>
       ),
