@@ -13,6 +13,10 @@ import OrganizationOnboarding from "./pages/OrganizationOnboarding";
 import Dashboard from "./pages/admin/Dashboard";
 import AllEmployees from "./pages/admin/AllEmployees";
 import DetailsRegularization from "./pages/admin/DetailsRegularization";
+import AttendanceOverview from "./pages/admin/AttendanceOverview";
+import AllAttendance from "./pages/admin/AllAttendance";
+import AttendanceRegularization from "./pages/admin/AttendanceRegularization";
+import AttendanceRules from "./pages/admin/AttendanceRules";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -36,6 +40,11 @@ const App = () => (
             <Route path="/admin/employees" element={<Navigate to="/admin/employees/all" replace />} />
             <Route path="/admin/employees/all" element={<AllEmployees />} />
             <Route path="/admin/employees/regularization" element={<DetailsRegularization />} />
+            <Route path="/admin/attendance" element={<Navigate to="/admin/attendance/overview" replace />} />
+            <Route path="/admin/attendance/overview" element={<AttendanceOverview />} />
+            <Route path="/admin/attendance/all" element={<AllAttendance />} />
+            <Route path="/admin/attendance/regularization" element={<AttendanceRegularization />} />
+            <Route path="/admin/attendance/rules" element={<AttendanceRules />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

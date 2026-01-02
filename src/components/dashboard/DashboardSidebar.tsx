@@ -16,6 +16,9 @@ import {
   HelpCircle,
   ChevronDown,
   FileCheck,
+  BarChart3,
+  ListChecks,
+  ScrollText,
 } from "lucide-react";
 import {
   Sidebar,
@@ -47,8 +50,14 @@ const employeeSubItems = [
   { title: "Regularization", url: "/admin/employees/regularization", icon: FileCheck },
 ];
 
+const attendanceSubItems = [
+  { title: "Overview", url: "/admin/attendance/overview", icon: BarChart3 },
+  { title: "All Attendance", url: "/admin/attendance/all", icon: ListChecks },
+  { title: "Regularization", url: "/admin/attendance/regularization", icon: FileCheck },
+  { title: "Rules", url: "/admin/attendance/rules", icon: ScrollText },
+];
+
 const hrModules = [
-  { title: "Attendance", url: "/admin/attendance", icon: CalendarCheck },
   { title: "Payroll", url: "/admin/payroll", icon: Wallet },
   { title: "Leave Management", url: "/admin/leave", icon: CalendarDays },
   { title: "Recruitment", url: "/admin/recruitment", icon: UserPlus },
@@ -72,8 +81,10 @@ export function DashboardSidebar() {
 
   const isActive = (path: string) => currentPath === path;
   const isEmployeeMenuActive = employeeSubItems.some((item) => currentPath === item.url);
+  const isAttendanceMenuActive = attendanceSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
+  const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
 
   return (
     <Sidebar
@@ -167,6 +178,61 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {employeeSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Attendance Management with Submenu */}
+              <Collapsible
+                open={attendanceMenuOpen}
+                onOpenChange={setAttendanceMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isAttendanceMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isAttendanceMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <CalendarCheck className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Attendance</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                attendanceMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {attendanceSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
