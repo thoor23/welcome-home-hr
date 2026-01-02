@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { format, parseISO } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -18,6 +19,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import type { Employee } from "@/pages/admin/Employees";
 
 interface EditEmployeeDrawerProps {
@@ -145,16 +152,30 @@ export function EditEmployeeDrawer({
 
           <div className="space-y-2">
             <Label>Joining Date</Label>
-            <div className="border border-border rounded-md">
-              <Calendar
-                mode="single"
-                selected={formData.joiningDate ? parseISO(formData.joiningDate) : undefined}
-                onSelect={(date) =>
-                  setFormData({ ...formData, joiningDate: date ? format(date, "yyyy-MM-dd") : "" })
-                }
-                className="rounded-md"
-              />
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !formData.joiningDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {formData.joiningDate ? format(parseISO(formData.joiningDate), "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={formData.joiningDate ? parseISO(formData.joiningDate) : undefined}
+                  onSelect={(date) =>
+                    setFormData({ ...formData, joiningDate: date ? format(date, "yyyy-MM-dd") : "" })
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="space-y-2">
