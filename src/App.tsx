@@ -17,6 +17,11 @@ import AttendanceOverview from "./pages/admin/AttendanceOverview";
 import AllAttendance from "./pages/admin/AllAttendance";
 import AttendanceRegularization from "./pages/admin/AttendanceRegularization";
 import AttendanceRules from "./pages/admin/AttendanceRules";
+import LeaveOverview from "./pages/admin/LeaveOverview";
+import AllLeaves from "./pages/admin/AllLeaves";
+import LeaveRequests from "./pages/admin/LeaveRequests";
+import LeaveRules from "./pages/admin/LeaveRules";
+import LeaveReport from "./pages/admin/LeaveReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -45,6 +50,12 @@ const App = () => (
             <Route path="/admin/attendance/all" element={<AllAttendance />} />
             <Route path="/admin/attendance/regularization" element={<AttendanceRegularization />} />
             <Route path="/admin/attendance/rules" element={<AttendanceRules />} />
+            <Route path="/admin/leave" element={<Navigate to="/admin/leave/overview" replace />} />
+            <Route path="/admin/leave/overview" element={<LeaveOverview />} />
+            <Route path="/admin/leave/all" element={<AllLeaves />} />
+            <Route path="/admin/leave/requests" element={<LeaveRequests />} />
+            <Route path="/admin/leave/rules" element={<LeaveRules />} />
+            <Route path="/admin/leave/report" element={<LeaveReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

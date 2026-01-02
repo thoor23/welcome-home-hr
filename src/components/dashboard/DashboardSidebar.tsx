@@ -19,6 +19,9 @@ import {
   BarChart3,
   ListChecks,
   ScrollText,
+  ClipboardList,
+  CheckCircle,
+  FileBarChart,
 } from "lucide-react";
 import {
   Sidebar,
@@ -57,9 +60,16 @@ const attendanceSubItems = [
   { title: "Rules", url: "/admin/attendance/rules", icon: ScrollText },
 ];
 
+const leaveSubItems = [
+  { title: "Overview", url: "/admin/leave/overview", icon: BarChart3 },
+  { title: "All Leaves", url: "/admin/leave/all", icon: CheckCircle },
+  { title: "Requests", url: "/admin/leave/requests", icon: ClipboardList },
+  { title: "Rules", url: "/admin/leave/rules", icon: ScrollText },
+  { title: "Report", url: "/admin/leave/report", icon: FileBarChart },
+];
+
 const hrModules = [
   { title: "Payroll", url: "/admin/payroll", icon: Wallet },
-  { title: "Leave Management", url: "/admin/leave", icon: CalendarDays },
   { title: "Recruitment", url: "/admin/recruitment", icon: UserPlus },
   { title: "Performance", url: "/admin/performance", icon: TrendingUp },
   { title: "Time Tracking", url: "/admin/time-tracking", icon: Clock },
@@ -82,9 +92,11 @@ export function DashboardSidebar() {
   const isActive = (path: string) => currentPath === path;
   const isEmployeeMenuActive = employeeSubItems.some((item) => currentPath === item.url);
   const isAttendanceMenuActive = attendanceSubItems.some((item) => currentPath === item.url);
+  const isLeaveMenuActive = leaveSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
+  const [leaveMenuOpen, setLeaveMenuOpen] = useState(isLeaveMenuActive);
 
   return (
     <Sidebar
@@ -233,6 +245,61 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {attendanceSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Leave Management with Submenu */}
+              <Collapsible
+                open={leaveMenuOpen}
+                onOpenChange={setLeaveMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isLeaveMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isLeaveMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <CalendarDays className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Leave</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                leaveMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {leaveSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
