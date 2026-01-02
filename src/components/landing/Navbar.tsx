@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Users } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -42,11 +43,11 @@ const Navbar = () => {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-2">
             <ThemeToggle />
-            <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-              Login
+            <Button variant="ghost" className="text-muted-foreground hover:text-foreground" asChild>
+              <Link to="/login">Login</Link>
             </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6">
-              Start Free Trial
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6" asChild>
+              <Link to="/signup">Start Free Trial</Link>
             </Button>
           </div>
 
@@ -77,11 +78,11 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="pt-4 space-y-3">
-                <Button variant="ghost" className="w-full justify-center">
-                  Login
+                <Button variant="ghost" className="w-full justify-center" asChild>
+                  <Link to="/login">Login</Link>
                 </Button>
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
-                  Start Free Trial
+                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold" asChild>
+                  <Link to="/signup">Start Free Trial</Link>
                 </Button>
               </div>
             </div>
