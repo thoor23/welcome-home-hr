@@ -37,6 +37,11 @@ import Interviews from "./pages/admin/Interviews";
 import Offers from "./pages/admin/Offers";
 import RecruitmentReport from "./pages/admin/RecruitmentReport";
 import Locations from "./pages/admin/Locations";
+import AllAssets from "./pages/admin/AllAssets";
+import AssetCategories from "./pages/admin/AssetCategories";
+import AssetAssignments from "./pages/admin/AssetAssignments";
+import AssetMaintenance from "./pages/admin/AssetMaintenance";
+import AssetReport from "./pages/admin/AssetReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -88,6 +93,12 @@ const App = () => (
             <Route path="/admin/recruitment/interviews" element={<Interviews />} />
             <Route path="/admin/recruitment/offers" element={<Offers />} />
             <Route path="/admin/recruitment/report" element={<RecruitmentReport />} />
+            <Route path="/admin/assets" element={<Navigate to="/admin/assets/all" replace />} />
+            <Route path="/admin/assets/all" element={<AllAssets />} />
+            <Route path="/admin/assets/categories" element={<AssetCategories />} />
+            <Route path="/admin/assets/assignments" element={<AssetAssignments />} />
+            <Route path="/admin/assets/maintenance" element={<AssetMaintenance />} />
+            <Route path="/admin/assets/report" element={<AssetReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
