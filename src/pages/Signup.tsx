@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Users, Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 
@@ -29,57 +30,49 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Effects - matching landing page */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse-glow" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/20 rounded-full blur-[100px]" />
-
+    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative">
       {/* Theme Toggle */}
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
       </div>
 
       {/* Main Container Card */}
-      <div className="w-full max-w-5xl min-h-[720px] glass-card rounded-3xl shadow-2xl overflow-hidden flex relative z-10">
+      <div className="w-full max-w-5xl min-h-[720px] clean-card shadow-xl overflow-hidden flex relative z-10">
         {/* Left Side - Illustration Panel */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary to-purple-500 p-10 flex-col justify-between relative overflow-hidden">
+        <div className="hidden lg:flex lg:w-1/2 bg-primary p-10 flex-col justify-between relative overflow-hidden">
           {/* Decorative Shapes */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-8 left-8 w-12 h-12 bg-white/20 rounded-full"></div>
-            <div className="absolute top-16 right-16 w-8 h-8 bg-white/30 rounded-full"></div>
-            <div className="absolute top-32 left-12 w-10 h-10 bg-white/10 rounded-lg transform rotate-12"></div>
-            <div className="absolute top-24 right-8 w-6 h-6 bg-white/25 transform rotate-45"></div>
-            <div className="absolute bottom-32 left-8 w-14 h-14 bg-white/10 rounded-lg"></div>
-            <div className="absolute bottom-16 left-24 w-6 h-6 bg-white/20 rounded-full"></div>
-            <div className="absolute bottom-20 left-32 w-6 h-6 bg-white/15 rounded-full"></div>
-            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-white/20 rounded-full"></div>
-            <div className="absolute bottom-24 right-12 w-8 h-8 bg-transparent border-2 border-white/30 transform rotate-45"></div>
+            <div className="absolute top-8 left-8 w-12 h-12 bg-primary-foreground/10 rounded-full"></div>
+            <div className="absolute top-16 right-16 w-8 h-8 bg-primary-foreground/20 rounded-full"></div>
+            <div className="absolute top-32 left-12 w-10 h-10 bg-primary-foreground/10 rounded-lg transform rotate-12"></div>
+            <div className="absolute bottom-32 left-8 w-14 h-14 bg-primary-foreground/10 rounded-lg"></div>
+            <div className="absolute bottom-16 left-24 w-6 h-6 bg-primary-foreground/15 rounded-full"></div>
+            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-primary-foreground/20 rounded-full"></div>
           </div>
 
           {/* Content */}
           <div className="relative z-10 flex-1 flex flex-col justify-center">
-            <h1 className="text-4xl font-bold text-white leading-tight mb-4 font-display">
+            <h1 className="text-4xl font-bold text-primary-foreground leading-tight mb-4 font-display">
               Join Our Platform
             </h1>
-            <p className="text-white/90 text-lg leading-relaxed">
+            <p className="text-primary-foreground/90 text-lg leading-relaxed">
               Create an account and unlock powerful tools to streamline your workforce operations.
             </p>
           </div>
 
           {/* Carousel Dots */}
           <div className="relative z-10 flex gap-2">
-            <div className="w-2 h-2 bg-white rounded-full"></div>
-            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground/40 rounded-full"></div>
           </div>
         </div>
 
         {/* Right Side - Signup Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card/50 backdrop-blur-xl">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
               <Users className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="font-display font-bold text-xl text-foreground">NexHR</span>
@@ -89,6 +82,54 @@ const Signup = () => {
           <div className="mb-6 text-center">
             <h2 className="text-2xl font-bold text-foreground mb-2 font-display">Create Account</h2>
             <p className="text-muted-foreground">Get started with NexHR today</p>
+          </div>
+
+          {/* Social Login Buttons */}
+          <div className="flex gap-4 w-full max-w-sm mb-6">
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1 border-border hover:bg-secondary"
+              onClick={() => console.log("Google signup")}
+            >
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                />
+              </svg>
+              Sign Up With Gmail
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1 border-border hover:bg-secondary"
+              onClick={() => console.log("Facebook signup")}
+            >
+              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              Facebook
+            </Button>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4 mb-6 w-full max-w-sm">
+            <Separator className="flex-1 bg-border" />
+            <span className="text-sm text-muted-foreground">Or</span>
+            <Separator className="flex-1 bg-border" />
           </div>
 
           {/* Form */}
@@ -105,7 +146,7 @@ const Signup = () => {
                   placeholder="Enter your full name"
                   value={formData.fullName}
                   onChange={(e) => updateField("fullName", e.target.value)}
-                  className="pl-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
               </div>
@@ -123,7 +164,7 @@ const Signup = () => {
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => updateField("email", e.target.value)}
-                  className="pl-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
               </div>
@@ -141,7 +182,7 @@ const Signup = () => {
                   placeholder="Create a password"
                   value={formData.password}
                   onChange={(e) => updateField("password", e.target.value)}
-                  className="pl-10 pr-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 pr-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
                 <button
@@ -166,7 +207,7 @@ const Signup = () => {
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={(e) => updateField("confirmPassword", e.target.value)}
-                  className="pl-10 pr-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 pr-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
                 <button

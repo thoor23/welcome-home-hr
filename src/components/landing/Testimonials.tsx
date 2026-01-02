@@ -38,16 +38,13 @@ const testimonials = [
 ];
 
 const TestimonialCard = ({ testimonial, index }: { testimonial: typeof testimonials[0]; index: number }) => (
-  <div
-    className="glass-card p-8 hover-lift h-full"
-    style={{ animationDelay: `${index * 0.1}s` }}
-  >
+  <div className="clean-card p-8 hover-lift h-full">
     {/* Rating */}
     <div className="flex gap-1 mb-6">
       {[...Array(testimonial.rating)].map((_, i) => (
         <Star
           key={i}
-          className="w-5 h-5 fill-yellow-500 text-yellow-500"
+          className="w-5 h-5 fill-amber-400 text-amber-400"
         />
       ))}
     </div>
@@ -78,10 +75,7 @@ const TestimonialCard = ({ testimonial, index }: { testimonial: typeof testimoni
 
 const Testimonials = () => {
   return (
-    <section id="testimonials" className="section-padding relative">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/20 to-transparent" />
-
+    <section id="testimonials" className="section-padding relative bg-secondary/30">
       <div className="container-max relative z-10 px-4 md:px-6">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -90,10 +84,10 @@ const Testimonials = () => {
           </span>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
             Loved by{" "}
-            <span className="gradient-text">HR Teams Everywhere</span>
+            <span className="text-primary">HR Teams Everywhere</span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            See what our customers have to say about their experience with PeopleFlow.
+            See what our customers have to say about their experience with NexHR.
           </p>
         </div>
 

@@ -62,7 +62,7 @@ export function DashboardSidebar() {
   return (
     <Sidebar
       className={cn(
-        "border-r border-border/50 bg-card/50 backdrop-blur-xl transition-all duration-300",
+        "border-r border-border bg-card transition-all duration-300",
         collapsed ? "w-16" : "w-64"
       )}
       collapsible="icon"
@@ -70,7 +70,7 @@ export function DashboardSidebar() {
       <SidebarContent className="py-4">
         {/* Logo */}
         <div className={cn("px-4 mb-6 flex items-center gap-2", collapsed && "justify-center")}>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <Users className="w-4 h-4 text-primary-foreground" />
           </div>
           {!collapsed && (
@@ -91,7 +91,7 @@ export function DashboardSidebar() {
                       "mx-2 rounded-lg transition-all",
                       isActive(item.url)
                         ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                        : "hover:bg-secondary/50"
+                        : "hover:bg-secondary"
                     )}
                   >
                     <Link to={item.url} className="flex items-center gap-3">
@@ -132,7 +132,7 @@ export function DashboardSidebar() {
                       "mx-2 rounded-lg transition-all",
                       isActive(item.url)
                         ? "bg-secondary text-foreground"
-                        : "hover:bg-secondary/50"
+                        : "hover:bg-secondary"
                     )}
                   >
                     <Link to={item.url} className="flex items-center gap-3">
@@ -174,7 +174,7 @@ export function DashboardSidebar() {
                       "mx-2 rounded-lg transition-all",
                       isActive(item.url)
                         ? "bg-secondary text-foreground"
-                        : "hover:bg-secondary/50"
+                        : "hover:bg-secondary"
                     )}
                   >
                     <Link to={item.url} className="flex items-center gap-3">

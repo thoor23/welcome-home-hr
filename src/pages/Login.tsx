@@ -19,57 +19,49 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Effects - matching landing page */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse-glow" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/20 rounded-full blur-[100px]" />
-
+    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative">
       {/* Theme Toggle */}
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
       </div>
 
       {/* Main Container Card */}
-      <div className="w-full max-w-5xl min-h-[720px] glass-card rounded-3xl shadow-2xl overflow-hidden flex relative z-10">
+      <div className="w-full max-w-5xl min-h-[640px] clean-card shadow-xl overflow-hidden flex relative z-10">
         {/* Left Side - Illustration Panel */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary to-purple-500 p-10 flex-col justify-between relative overflow-hidden">
+        <div className="hidden lg:flex lg:w-1/2 bg-primary p-10 flex-col justify-between relative overflow-hidden">
           {/* Decorative Shapes */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-8 left-8 w-12 h-12 bg-white/20 rounded-full"></div>
-            <div className="absolute top-16 right-16 w-8 h-8 bg-white/30 rounded-full"></div>
-            <div className="absolute top-32 left-12 w-10 h-10 bg-white/10 rounded-lg transform rotate-12"></div>
-            <div className="absolute top-24 right-8 w-6 h-6 bg-white/25 transform rotate-45"></div>
-            <div className="absolute bottom-32 left-8 w-14 h-14 bg-white/10 rounded-lg"></div>
-            <div className="absolute bottom-16 left-24 w-6 h-6 bg-white/20 rounded-full"></div>
-            <div className="absolute bottom-20 left-32 w-6 h-6 bg-white/15 rounded-full"></div>
-            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-white/20 rounded-full"></div>
-            <div className="absolute bottom-24 right-12 w-8 h-8 bg-transparent border-2 border-white/30 transform rotate-45"></div>
+            <div className="absolute top-8 left-8 w-12 h-12 bg-primary-foreground/10 rounded-full"></div>
+            <div className="absolute top-16 right-16 w-8 h-8 bg-primary-foreground/20 rounded-full"></div>
+            <div className="absolute top-32 left-12 w-10 h-10 bg-primary-foreground/10 rounded-lg transform rotate-12"></div>
+            <div className="absolute bottom-32 left-8 w-14 h-14 bg-primary-foreground/10 rounded-lg"></div>
+            <div className="absolute bottom-16 left-24 w-6 h-6 bg-primary-foreground/15 rounded-full"></div>
+            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-primary-foreground/20 rounded-full"></div>
           </div>
 
           {/* Content */}
           <div className="relative z-10 flex-1 flex flex-col justify-center">
-            <h1 className="text-4xl font-bold text-white leading-tight mb-4 font-display">
+            <h1 className="text-4xl font-bold text-primary-foreground leading-tight mb-4 font-display">
               Welcome Back
             </h1>
-            <p className="text-white/90 text-lg leading-relaxed">
+            <p className="text-primary-foreground/90 text-lg leading-relaxed">
               Manage your workforce efficiently with our comprehensive HR management solution.
             </p>
           </div>
 
           {/* Carousel Dots */}
           <div className="relative z-10 flex gap-2">
-            <div className="w-2 h-2 bg-white rounded-full"></div>
-            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground/40 rounded-full"></div>
           </div>
         </div>
 
         {/* Right Side - Login Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card/50 backdrop-blur-xl">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
               <Users className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="font-display font-bold text-xl text-foreground">NexHR</span>
@@ -95,7 +87,7 @@ const Login = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
               </div>
@@ -113,7 +105,7 @@ const Login = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 pr-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
                 <button
@@ -155,18 +147,18 @@ const Login = () => {
           </form>
 
           {/* Divider */}
-          <div className="flex items-center gap-4 my-6">
-            <Separator className="flex-1 bg-border/50" />
+          <div className="flex items-center gap-4 my-6 w-full max-w-sm">
+            <Separator className="flex-1 bg-border" />
             <span className="text-sm text-muted-foreground">or continue with</span>
-            <Separator className="flex-1 bg-border/50" />
+            <Separator className="flex-1 bg-border" />
           </div>
 
           {/* Social Login Buttons */}
-          <div className="flex gap-4">
+          <div className="flex gap-4 w-full max-w-sm">
             <Button
               type="button"
               variant="outline"
-              className="flex-1 border-border/50 hover:bg-secondary/50"
+              className="flex-1 border-border hover:bg-secondary"
               onClick={() => console.log("Google login")}
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -192,13 +184,13 @@ const Login = () => {
             <Button
               type="button"
               variant="outline"
-              className="flex-1 border-border/50 hover:bg-secondary/50"
-              onClick={() => console.log("GitHub login")}
+              className="flex-1 border-border hover:bg-secondary"
+              onClick={() => console.log("Facebook login")}
             >
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
-              GitHub
+              Facebook
             </Button>
           </div>
 

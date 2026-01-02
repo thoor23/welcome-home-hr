@@ -29,7 +29,7 @@ const Dashboard = () => {
 
             {/* Tabs */}
             <Tabs defaultValue="overview" className="mb-8">
-              <TabsList className="bg-secondary/50 border border-border/50">
+              <TabsList className="bg-secondary border border-border">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
                 <TabsTrigger value="reports">Reports</TabsTrigger>
@@ -88,14 +88,14 @@ const Dashboard = () => {
               </TabsContent>
 
               <TabsContent value="analytics" className="mt-6">
-                <div className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-xl p-12 text-center">
+                <div className="bg-card border border-border rounded-xl p-12 text-center">
                   <h3 className="text-lg font-semibold text-foreground mb-2">Analytics Dashboard</h3>
                   <p className="text-muted-foreground">Detailed analytics and insights coming soon...</p>
                 </div>
               </TabsContent>
 
               <TabsContent value="reports" className="mt-6">
-                <div className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-xl p-12 text-center">
+                <div className="bg-card border border-border rounded-xl p-12 text-center">
                   <h3 className="text-lg font-semibold text-foreground mb-2">Reports Center</h3>
                   <p className="text-muted-foreground">Generate and download reports coming soon...</p>
                 </div>

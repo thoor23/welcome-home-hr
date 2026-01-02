@@ -3,24 +3,19 @@ import { ArrowRight, Play } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse-glow" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/20 rounded-full blur-[100px]" />
-
+    <section className="relative min-h-screen flex items-center pt-20 bg-background">
       <div className="container-max relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center px-4 md:px-6">
           {/* Content */}
           <div className="text-center lg:text-left space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border/50 text-sm text-muted-foreground">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm text-primary font-medium">
+              <span className="w-2 h-2 rounded-full bg-primary" />
               Trusted by 2,000+ companies worldwide
             </div>
 
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-foreground">
               Streamline Your{" "}
-              <span className="gradient-text">HR Operations</span>{" "}
+              <span className="text-primary">HR Operations</span>{" "}
               Effortlessly
             </h1>
 
@@ -40,7 +35,7 @@ const Hero = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-border/50 hover:bg-secondary/50 px-8 py-6 text-lg group"
+                className="border-border hover:bg-secondary px-8 py-6 text-lg group"
               >
                 <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                 Watch Demo
@@ -48,7 +43,7 @@ const Hero = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border/50">
+            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border">
               {[
                 { value: "50K+", label: "Active Users" },
                 { value: "98%", label: "Satisfaction" },
@@ -66,17 +61,17 @@ const Hero = () => {
 
           {/* Hero Image */}
           <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden glass-card p-2 animate-float">
+            <div className="relative rounded-2xl overflow-hidden clean-card p-2">
               <img
                 src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=800&h=600&fit=crop"
                 alt="Team collaborating on HR tasks with modern dashboard"
                 className="rounded-xl w-full h-auto object-cover"
               />
               {/* Floating Cards */}
-              <div className="absolute -left-6 top-1/4 glass-card p-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+              <div className="absolute -left-4 top-1/4 clean-card p-4 shadow-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                    <span className="text-green-500 font-bold">✓</span>
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">✓</span>
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-foreground">Payroll Processed</div>
@@ -84,9 +79,9 @@ const Hero = () => {
                   </div>
                 </div>
               </div>
-              <div className="absolute -right-6 bottom-1/4 glass-card p-4 animate-fade-in" style={{ animationDelay: "0.5s" }}>
+              <div className="absolute -right-4 bottom-1/4 clean-card p-4 shadow-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <span className="text-primary font-bold">↑</span>
                   </div>
                   <div>

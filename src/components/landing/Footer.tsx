@@ -9,14 +9,14 @@ const footerLinks = {
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border/50 bg-card/30">
+    <footer className="border-t border-border bg-card">
       <div className="container-max px-4 md:px-6">
         {/* Main Footer */}
         <div className="py-16 grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <a href="#" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
                 <Users className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="font-display font-bold text-xl text-foreground">
@@ -32,7 +32,7 @@ const Footer = () => {
                 <a
                   key={index}
                   href="#"
-                  className="w-10 h-10 rounded-lg bg-secondary/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-colors"
                 >
                   <Icon className="w-5 h-5" />
                 </a>
@@ -61,7 +61,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="py-6 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="py-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
             © 2024 NexHR. All rights reserved.
           </p>

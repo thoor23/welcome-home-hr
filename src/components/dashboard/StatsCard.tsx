@@ -19,7 +19,7 @@ export function StatsCard({
   iconColor = "text-primary",
 }: StatsCardProps) {
   return (
-    <div className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-xl p-6 hover:shadow-lg transition-all">
+    <div className="bg-card border border-border rounded-xl p-6 hover:shadow-md transition-all">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm text-muted-foreground">{title}</p>
@@ -28,14 +28,14 @@ export function StatsCard({
             <p
               className={cn(
                 "text-sm mt-2 font-medium",
-                changeType === "positive" ? "text-emerald-500" : "text-red-500"
+                changeType === "positive" ? "text-emerald-600 dark:text-emerald-400" : "text-red-500"
               )}
             >
               {changeType === "positive" ? "↑" : "↓"} {change}
             </p>
           )}
         </div>
-        <div className={cn("p-3 rounded-xl bg-secondary/50", iconColor)}>
+        <div className={cn("p-3 rounded-xl bg-secondary", iconColor)}>
           <Icon className="h-6 w-6" />
         </div>
       </div>

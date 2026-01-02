@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const data = [
   { name: "Mon", present: 85, absent: 10, leave: 5 },
@@ -12,7 +12,7 @@ const data = [
 
 export function AttendanceChart() {
   return (
-    <div className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-xl p-6">
+    <div className="bg-card border border-border rounded-xl p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-foreground">Weekly Attendance</h3>
@@ -36,7 +36,7 @@ export function AttendanceChart() {
       
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data} barGap={4}>
-          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
           <XAxis 
             dataKey="name" 
             axisLine={false} 
@@ -53,7 +53,6 @@ export function AttendanceChart() {
               backgroundColor: "hsl(var(--card))",
               border: "1px solid hsl(var(--border))",
               borderRadius: "8px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             }}
             labelStyle={{ color: "hsl(var(--foreground))" }}
           />
@@ -64,16 +63,16 @@ export function AttendanceChart() {
       </ResponsiveContainer>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-border/50">
+      <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
         <div>
           <p className="text-sm text-muted-foreground">Total Employees</p>
           <p className="text-xl font-bold text-foreground">248</p>
-          <p className="text-xs text-emerald-500">↑ 12.5%</p>
+          <p className="text-xs text-emerald-600 dark:text-emerald-400">↑ 12.5%</p>
         </div>
         <div>
           <p className="text-sm text-muted-foreground">Avg. Attendance</p>
           <p className="text-xl font-bold text-foreground">94.2%</p>
-          <p className="text-xs text-emerald-500">↑ 3.2%</p>
+          <p className="text-xs text-emerald-600 dark:text-emerald-400">↑ 3.2%</p>
         </div>
         <div>
           <p className="text-sm text-muted-foreground">On Leave Today</p>
@@ -83,7 +82,7 @@ export function AttendanceChart() {
         <div>
           <p className="text-sm text-muted-foreground">Late Arrivals</p>
           <p className="text-xl font-bold text-foreground">8</p>
-          <p className="text-xs text-emerald-500">↑ 15.3%</p>
+          <p className="text-xs text-emerald-600 dark:text-emerald-400">↑ 15.3%</p>
         </div>
       </div>
     </div>
