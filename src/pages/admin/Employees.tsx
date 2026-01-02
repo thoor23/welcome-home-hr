@@ -401,6 +401,7 @@ const Employees = () => {
       key: "status",
       header: "Status",
       sortable: true,
+      className: "whitespace-nowrap",
       render: (employee) => getStatusBadge(employee.status),
     },
     {
