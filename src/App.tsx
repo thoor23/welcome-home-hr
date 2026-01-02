@@ -55,6 +55,11 @@ import BillingApprovals from "./pages/admin/BillingApprovals";
 import BillingAllocations from "./pages/admin/BillingAllocations";
 import BillingCategories from "./pages/admin/BillingCategories";
 import BillingReport from "./pages/admin/BillingReport";
+import AllShifts from "./pages/admin/AllShifts";
+import ShiftAssignments from "./pages/admin/ShiftAssignments";
+import ShiftSchedule from "./pages/admin/ShiftSchedule";
+import ShiftSwaps from "./pages/admin/ShiftSwaps";
+import ShiftReport from "./pages/admin/ShiftReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -127,6 +132,12 @@ const App = () => (
             <Route path="/admin/billing/allocations" element={<BillingAllocations />} />
             <Route path="/admin/billing/categories" element={<BillingCategories />} />
             <Route path="/admin/billing/report" element={<BillingReport />} />
+            <Route path="/admin/shifts" element={<Navigate to="/admin/shifts/all" replace />} />
+            <Route path="/admin/shifts/all" element={<AllShifts />} />
+            <Route path="/admin/shifts/assignments" element={<ShiftAssignments />} />
+            <Route path="/admin/shifts/schedule" element={<ShiftSchedule />} />
+            <Route path="/admin/shifts/swaps" element={<ShiftSwaps />} />
+            <Route path="/admin/shifts/report" element={<ShiftReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
