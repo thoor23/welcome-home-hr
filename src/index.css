@@ -71,6 +71,14 @@
   * {
     @apply border-border;
   }
+  
+  /* Remove focus rings globally */
+  *:focus,
+  *:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
