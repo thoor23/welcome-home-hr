@@ -49,6 +49,9 @@ import {
   UserPlus2,
   UserMinus,
   LogOut,
+  Mail,
+  FileSignature,
+  Settings2,
 } from "lucide-react";
 import {
   Sidebar,
@@ -165,6 +168,15 @@ const offboardingSubItems = [
   { title: "Report", url: "/admin/offboarding/report", icon: PieChart },
 ];
 
+const communicationsSubItems = [
+  { title: "All Emails", url: "/admin/communications/all", icon: Mail },
+  { title: "Generate Letter", url: "/admin/communications/generate", icon: FileSignature },
+  { title: "Email Templates", url: "/admin/communications/email-templates", icon: FileText },
+  { title: "Letter Templates", url: "/admin/communications/letter-templates", icon: FileSignature },
+  { title: "Configuration", url: "/admin/communications/config", icon: Settings2 },
+  { title: "Report", url: "/admin/communications/report", icon: PieChart },
+];
+
 const otherItems = [
   { title: "Reports", url: "/admin/reports", icon: FileText },
   { title: "Awards", url: "/admin/awards", icon: Award },
@@ -190,6 +202,7 @@ export function DashboardSidebar() {
   const isShiftMenuActive = shiftSubItems.some((item) => currentPath === item.url);
   const isOnboardingMenuActive = onboardingSubItems.some((item) => currentPath === item.url);
   const isOffboardingMenuActive = offboardingSubItems.some((item) => currentPath === item.url);
+  const isCommunicationsMenuActive = communicationsSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
@@ -202,6 +215,7 @@ export function DashboardSidebar() {
   const [shiftMenuOpen, setShiftMenuOpen] = useState(isShiftMenuActive);
   const [onboardingMenuOpen, setOnboardingMenuOpen] = useState(isOnboardingMenuActive);
   const [offboardingMenuOpen, setOffboardingMenuOpen] = useState(isOffboardingMenuActive);
+  const [communicationsMenuOpen, setCommunicationsMenuOpen] = useState(isCommunicationsMenuActive);
 
   return (
     <Sidebar
