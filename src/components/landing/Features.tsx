@@ -84,10 +84,7 @@ const Features = () => {
   };
 
   return (
-    <section id="features" className="section-padding relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/20 to-transparent" />
-
+    <section id="features" className="section-padding relative bg-secondary/30">
       <div className="container-max relative z-10 px-4 md:px-6">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -96,7 +93,7 @@ const Features = () => {
           </span>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
             Everything You Need to{" "}
-            <span className="gradient-text">Manage Your Workforce</span>
+            <span className="text-primary">Manage Your Workforce</span>
           </h2>
           <p className="text-lg text-muted-foreground">
             Powerful tools designed to simplify HR processes and boost productivity across your organization.
@@ -112,7 +109,7 @@ const Features = () => {
               size="icon"
               onClick={prevSlide}
               disabled={currentIndex === 0}
-              className="w-10 h-10 rounded-full border-border/50 bg-secondary/50 hover:bg-secondary disabled:opacity-30"
+              className="w-10 h-10 rounded-full border-border bg-card hover:bg-secondary disabled:opacity-30"
             >
               <ChevronLeft className="w-5 h-5" />
             </Button>
@@ -121,7 +118,7 @@ const Features = () => {
               size="icon"
               onClick={nextSlide}
               disabled={currentIndex === maxIndex}
-              className="w-10 h-10 rounded-full border-border/50 bg-secondary/50 hover:bg-secondary disabled:opacity-30"
+              className="w-10 h-10 rounded-full border-border bg-card hover:bg-secondary disabled:opacity-30"
             >
               <ChevronRight className="w-5 h-5" />
             </Button>
@@ -145,7 +142,7 @@ const Features = () => {
                   className="flex-shrink-0"
                   style={{ width: `calc(${100 / slidesPerView}% - ${(slidesPerView - 1) * 24 / slidesPerView}px)` }}
                 >
-                  <div className="group glass-card overflow-hidden hover-lift cursor-pointer h-full">
+                  <div className="group clean-card overflow-hidden hover-lift cursor-pointer h-full">
                     {/* Feature Image */}
                     <div className="relative h-48 overflow-hidden">
                       <img
@@ -153,9 +150,8 @@ const Features = () => {
                         alt={feature.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
                       <div className="absolute bottom-4 left-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/20 backdrop-blur-sm flex items-center justify-center border border-border/30">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 backdrop-blur-sm flex items-center justify-center border border-primary/20">
                           <feature.icon className="w-6 h-6 text-primary" />
                         </div>
                       </div>

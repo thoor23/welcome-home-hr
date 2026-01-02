@@ -17,62 +17,53 @@ const OrganizationOnboarding = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Organization onboarding submitted", { orgName, industry, companySize, country, website });
-    // Navigate to dashboard or next step
     navigate("/dashboard");
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Effects - matching landing page */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse-glow" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/20 rounded-full blur-[100px]" />
-
+    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative">
       {/* Theme Toggle */}
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
       </div>
 
       {/* Main Container Card */}
-      <div className="w-full max-w-5xl min-h-[720px] glass-card rounded-3xl shadow-2xl overflow-hidden flex relative z-10">
+      <div className="w-full max-w-5xl min-h-[720px] clean-card shadow-xl overflow-hidden flex relative z-10">
         {/* Left Side - Illustration Panel */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary to-purple-500 p-10 flex-col justify-between relative overflow-hidden">
+        <div className="hidden lg:flex lg:w-1/2 bg-primary p-10 flex-col justify-between relative overflow-hidden">
           {/* Decorative Shapes */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-8 left-8 w-12 h-12 bg-white/20 rounded-full"></div>
-            <div className="absolute top-16 right-16 w-8 h-8 bg-white/30 rounded-full"></div>
-            <div className="absolute top-32 left-12 w-10 h-10 bg-white/10 rounded-lg transform rotate-12"></div>
-            <div className="absolute top-24 right-8 w-6 h-6 bg-white/25 transform rotate-45"></div>
-            <div className="absolute bottom-32 left-8 w-14 h-14 bg-white/10 rounded-lg"></div>
-            <div className="absolute bottom-16 left-24 w-6 h-6 bg-white/20 rounded-full"></div>
-            <div className="absolute bottom-20 left-32 w-6 h-6 bg-white/15 rounded-full"></div>
-            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-white/20 rounded-full"></div>
-            <div className="absolute bottom-24 right-12 w-8 h-8 bg-transparent border-2 border-white/30 transform rotate-45"></div>
+            <div className="absolute top-8 left-8 w-12 h-12 bg-primary-foreground/10 rounded-full"></div>
+            <div className="absolute top-16 right-16 w-8 h-8 bg-primary-foreground/20 rounded-full"></div>
+            <div className="absolute top-32 left-12 w-10 h-10 bg-primary-foreground/10 rounded-lg transform rotate-12"></div>
+            <div className="absolute bottom-32 left-8 w-14 h-14 bg-primary-foreground/10 rounded-lg"></div>
+            <div className="absolute bottom-16 left-24 w-6 h-6 bg-primary-foreground/15 rounded-full"></div>
+            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-primary-foreground/20 rounded-full"></div>
           </div>
 
           {/* Content */}
           <div className="relative z-10 flex-1 flex flex-col justify-center">
-            <h1 className="text-4xl font-bold text-white leading-tight mb-4 font-display">
+            <h1 className="text-4xl font-bold text-primary-foreground leading-tight mb-4 font-display">
               Set Up Your Organization
             </h1>
-            <p className="text-white/90 text-lg leading-relaxed">
+            <p className="text-primary-foreground/90 text-lg leading-relaxed">
               Tell us about your organization to customize your NexHR experience and get started quickly.
             </p>
           </div>
 
           {/* Carousel Dots */}
           <div className="relative z-10 flex gap-2">
-            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-            <div className="w-2 h-2 bg-white rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-primary-foreground rounded-full"></div>
           </div>
         </div>
 
         {/* Right Side - Onboarding Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card/50 backdrop-blur-xl">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
               <Users className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="font-display font-bold text-xl text-foreground">NexHR</span>
@@ -100,7 +91,7 @@ const OrganizationOnboarding = () => {
                   placeholder="Enter organization name"
                   value={orgName}
                   onChange={(e) => setOrgName(e.target.value)}
-                  className="pl-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
               </div>
@@ -111,7 +102,7 @@ const OrganizationOnboarding = () => {
                 Industry
               </label>
               <Select value={industry} onValueChange={setIndustry}>
-                <SelectTrigger className="bg-secondary/50 border-border/50 text-foreground focus:border-primary focus:ring-primary">
+                <SelectTrigger className="bg-secondary border-border text-foreground focus:border-primary focus:ring-primary">
                   <SelectValue placeholder="Select your industry" />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,7 +125,7 @@ const OrganizationOnboarding = () => {
               <div className="relative">
                 <UsersRound className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
                 <Select value={companySize} onValueChange={setCompanySize}>
-                  <SelectTrigger className="pl-10 bg-secondary/50 border-border/50 text-foreground focus:border-primary focus:ring-primary">
+                  <SelectTrigger className="pl-10 bg-secondary border-border text-foreground focus:border-primary focus:ring-primary">
                     <SelectValue placeholder="Select company size" />
                   </SelectTrigger>
                   <SelectContent>
@@ -161,7 +152,7 @@ const OrganizationOnboarding = () => {
                   placeholder="Enter your country"
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
-                  className="pl-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                   required
                 />
               </div>
@@ -179,7 +170,7 @@ const OrganizationOnboarding = () => {
                   placeholder="https://yourcompany.com"
                   value={website}
                   onChange={(e) => setWebsite(e.target.value)}
-                  className="pl-10 bg-secondary/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                 />
               </div>
             </div>
@@ -191,7 +182,6 @@ const OrganizationOnboarding = () => {
               Complete Setup
             </Button>
           </form>
-
         </div>
       </div>
     </div>

@@ -64,30 +64,19 @@ const plans = [
 const PricingCard = ({ plan, index, isYearly }: { plan: typeof plans[0]; index: number; isYearly: boolean }) => (
   <div
     className={cn(
-      "group relative rounded-2xl transition-all duration-500 h-full",
-      "animate-fade-in",
+      "group relative rounded-xl transition-all duration-500 h-full",
       plan.popular ? "md:scale-105 md:-my-4" : ""
     )}
-    style={{ animationDelay: `${index * 150}ms` }}
   >
-    {/* Highlight Border */}
-    <div className={cn(
-      "absolute -inset-[1px] rounded-2xl transition-opacity duration-500",
-      plan.popular 
-        ? "bg-border opacity-100" 
-        : "bg-border/50 opacity-0 group-hover:opacity-100"
-    )} />
-
     {/* Card Content */}
     <div className={cn(
-      "relative glass-card p-8 flex flex-col h-full rounded-2xl transition-all duration-500",
-      "group-hover:shadow-lg group-hover:shadow-border/10",
-      plan.popular ? "shadow-lg shadow-border/10" : ""
+      "relative clean-card p-8 flex flex-col h-full transition-all duration-500",
+      plan.popular ? "border-primary shadow-lg" : ""
     )}>
       {/* Popular Badge */}
       {plan.popular && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <span className="px-4 py-1.5 rounded-full text-sm font-semibold bg-foreground text-background">
+          <span className="px-4 py-1.5 rounded-full text-sm font-semibold bg-primary text-primary-foreground">
             Most Popular
           </span>
         </div>
@@ -119,7 +108,7 @@ const PricingCard = ({ plan, index, isYearly }: { plan: typeof plans[0]; index: 
         {plan.monthlyPrice !== null && isYearly && (
           <p className="text-sm text-muted-foreground mt-1">
             <span className="line-through">${plan.monthlyPrice}</span>
-            <span className="text-green-400 ml-2">Save ${(plan.monthlyPrice - plan.yearlyPrice!) * 12}/year</span>
+            <span className="text-emerald-600 dark:text-emerald-400 ml-2">Save ${(plan.monthlyPrice - plan.yearlyPrice!) * 12}/year</span>
           </p>
         )}
       </div>
@@ -128,8 +117,8 @@ const PricingCard = ({ plan, index, isYearly }: { plan: typeof plans[0]; index: 
       <ul className="space-y-4 mb-8 flex-1">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-start gap-3">
-            <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-secondary border border-border">
-              <Check className="w-3 h-3 text-foreground" />
+            <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-primary/10">
+              <Check className="w-3 h-3 text-primary" />
             </div>
             <span className="text-muted-foreground text-sm">{feature}</span>
           </li>
@@ -141,7 +130,7 @@ const PricingCard = ({ plan, index, isYearly }: { plan: typeof plans[0]; index: 
         className={cn(
           "w-full py-6 font-semibold transition-all duration-300",
           plan.popular
-            ? "bg-foreground hover:bg-foreground/90 text-background"
+            ? "bg-primary hover:bg-primary/90 text-primary-foreground"
             : "bg-secondary hover:bg-secondary/80 text-foreground border border-border"
         )}
       >
@@ -155,10 +144,7 @@ const Pricing = () => {
   const [isYearly, setIsYearly] = useState(false);
 
   return (
-    <section id="pricing" className="section-padding relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]" />
-
+    <section id="pricing" className="section-padding relative bg-background">
       <div className="container-max relative z-10 px-4 md:px-6">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
@@ -167,7 +153,7 @@ const Pricing = () => {
           </span>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
             Simple, Transparent{" "}
-            <span className="gradient-text">Pricing</span>
+            <span className="text-primary">Pricing</span>
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
             Choose the plan that fits your team. All plans include a 14-day free trial.
@@ -185,13 +171,13 @@ const Pricing = () => {
               onClick={() => setIsYearly(!isYearly)}
               className={cn(
                 "relative w-14 h-7 rounded-full transition-colors duration-300",
-                isYearly ? "bg-primary" : "bg-secondary"
+                isYearly ? "bg-primary" : "bg-secondary border border-border"
               )}
             >
               <div
                 className={cn(
-                  "absolute top-1 w-5 h-5 rounded-full bg-foreground transition-all duration-300 shadow-lg",
-                  isYearly ? "left-8" : "left-1"
+                  "absolute top-1 w-5 h-5 rounded-full transition-all duration-300 shadow-sm",
+                  isYearly ? "left-8 bg-primary-foreground" : "left-1 bg-foreground"
                 )}
               />
             </button>
@@ -201,7 +187,7 @@ const Pricing = () => {
             )}>
               Yearly
             </span>
-            <span className="ml-2 px-2.5 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-semibold">
+            <span className="ml-2 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
               Save 20%
             </span>
           </div>

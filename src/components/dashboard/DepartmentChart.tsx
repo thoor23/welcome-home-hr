@@ -11,7 +11,7 @@ export function DepartmentChart() {
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-xl p-6">
+    <div className="bg-card border border-border rounded-xl p-6">
       <h3 className="text-lg font-semibold text-foreground mb-2">Department Distribution</h3>
       <p className="text-sm text-muted-foreground mb-6">Employees by department</p>
 
