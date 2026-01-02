@@ -177,6 +177,13 @@ const communicationsSubItems = [
   { title: "Report", url: "/admin/communications/report", icon: PieChart },
 ];
 
+const eventsSubItems = [
+  { title: "Calendar", url: "/admin/events/calendar", icon: CalendarDays },
+  { title: "All Events", url: "/admin/events/list", icon: CalendarCheck },
+  { title: "Categories", url: "/admin/events/categories", icon: Tags },
+  { title: "Report", url: "/admin/events/report", icon: PieChart },
+];
+
 const otherItems = [
   { title: "Reports", url: "/admin/reports", icon: FileText },
   { title: "Awards", url: "/admin/awards", icon: Award },
@@ -203,6 +210,7 @@ export function DashboardSidebar() {
   const isOnboardingMenuActive = onboardingSubItems.some((item) => currentPath === item.url);
   const isOffboardingMenuActive = offboardingSubItems.some((item) => currentPath === item.url);
   const isCommunicationsMenuActive = communicationsSubItems.some((item) => currentPath === item.url);
+  const isEventsMenuActive = eventsSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
@@ -216,6 +224,7 @@ export function DashboardSidebar() {
   const [onboardingMenuOpen, setOnboardingMenuOpen] = useState(isOnboardingMenuActive);
   const [offboardingMenuOpen, setOffboardingMenuOpen] = useState(isOffboardingMenuActive);
   const [communicationsMenuOpen, setCommunicationsMenuOpen] = useState(isCommunicationsMenuActive);
+  const [eventsMenuOpen, setEventsMenuOpen] = useState(isEventsMenuActive);
 
   return (
     <Sidebar
@@ -914,6 +923,61 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {communicationsSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Events with Submenu */}
+              <Collapsible
+                open={eventsMenuOpen}
+                onOpenChange={setEventsMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isEventsMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isEventsMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <CalendarDays className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Events</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                eventsMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {eventsSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
