@@ -236,7 +236,7 @@ export function DataTable<T>({
   const endIndex = Math.min(currentPage * rowsPerPage, processedData.length);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full overflow-hidden">
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-3">
         {/* Search */}
@@ -296,7 +296,7 @@ export function DataTable<T>({
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-xl overflow-x-auto">
+      <div className="bg-card border border-border rounded-xl overflow-x-auto max-w-full">
         <Table className="min-w-max">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
