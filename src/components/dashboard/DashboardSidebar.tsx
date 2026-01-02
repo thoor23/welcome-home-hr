@@ -25,6 +25,8 @@ import {
   Receipt,
   FileSpreadsheet,
   LayoutTemplate,
+  Briefcase,
+  UserCheck,
 } from "lucide-react";
 import {
   Sidebar,
@@ -53,6 +55,9 @@ const mainMenuItems = [
 
 const employeeSubItems = [
   { title: "All Employees", url: "/admin/employees/all", icon: Users },
+  { title: "Departments", url: "/admin/employees/departments", icon: Building2 },
+  { title: "Designations", url: "/admin/employees/designations", icon: Briefcase },
+  { title: "Employment Types", url: "/admin/employees/types", icon: UserCheck },
   { title: "Regularization", url: "/admin/employees/regularization", icon: FileCheck },
 ];
 
