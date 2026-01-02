@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, Zap, Crown } from "lucide-react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const plans = [
@@ -9,7 +9,6 @@ const plans = [
     description: "Perfect for small teams getting started",
     monthlyPrice: 29,
     yearlyPrice: 24,
-    icon: Zap,
     features: [
       "Up to 25 employees",
       "Employee management",
@@ -25,7 +24,6 @@ const plans = [
     description: "For growing businesses with advanced needs",
     monthlyPrice: 59,
     yearlyPrice: 49,
-    icon: Sparkles,
     features: [
       "Up to 100 employees",
       "Everything in Starter",
@@ -42,7 +40,6 @@ const plans = [
     description: "Custom solutions for large organizations",
     monthlyPrice: null,
     yearlyPrice: null,
-    icon: Crown,
     features: [
       "Unlimited employees",
       "Everything in Professional",
@@ -148,15 +145,10 @@ const Pricing = () => {
                   </div>
                 )}
 
-                {/* Plan Icon & Name */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-secondary border border-border">
-                    <plan.icon className="w-5 h-5 text-foreground" />
-                  </div>
-                  <h3 className="font-display text-xl font-bold text-foreground">
-                    {plan.name}
-                  </h3>
-                </div>
+                {/* Plan Name */}
+                <h3 className="font-display text-xl font-bold text-foreground mb-2">
+                  {plan.name}
+                </h3>
 
                 <p className="text-muted-foreground text-sm mb-6">
                   {plan.description}
