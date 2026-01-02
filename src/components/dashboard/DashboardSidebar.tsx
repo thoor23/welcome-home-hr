@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -13,6 +14,8 @@ import {
   Clock,
   Award,
   HelpCircle,
+  ChevronDown,
+  FileCheck,
 } from "lucide-react";
 import {
   Sidebar,
@@ -23,17 +26,28 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const mainMenuItems = [
   { title: "Dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
 ];
 
+const employeeSubItems = [
+  { title: "All Employees", url: "/admin/employees/all", icon: Users },
+  { title: "Details Regularization", url: "/admin/employees/regularization", icon: FileCheck },
+];
+
 const hrModules = [
-  { title: "Employees", url: "/admin/employees", icon: Users },
   { title: "Attendance", url: "/admin/attendance", icon: CalendarCheck },
   { title: "Payroll", url: "/admin/payroll", icon: Wallet },
   { title: "Leave Management", url: "/admin/leave", icon: CalendarDays },
@@ -57,6 +71,9 @@ export function DashboardSidebar() {
   const currentPath = location.pathname;
 
   const isActive = (path: string) => currentPath === path;
+  const isEmployeeMenuActive = employeeSubItems.some((item) => currentPath === item.url);
+
+  const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
 
   return (
     <Sidebar
@@ -113,6 +130,62 @@ export function DashboardSidebar() {
           )}
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* Employee Management with Submenu */}
+              <Collapsible
+                open={employeeMenuOpen}
+                onOpenChange={setEmployeeMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isEmployeeMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isEmployeeMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <Users className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1">Employee Management</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 transition-transform duration-200",
+                                employeeMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {employeeSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Other HR Modules */}
               {hrModules.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
