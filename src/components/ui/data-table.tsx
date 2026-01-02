@@ -34,7 +34,6 @@ import {
 } from "@/components/ui/pagination";
 import {
   Search,
-  SlidersHorizontal,
   Columns3,
   ArrowUpDown,
   ArrowUp,
@@ -273,12 +272,6 @@ export function DataTable<T>({
           </Select>
         ))}
 
-        {/* Filters Button */}
-        <Button variant="default" size="sm" className="gap-2">
-          <SlidersHorizontal className="h-4 w-4" />
-          Filters
-        </Button>
-
         {/* Columns Visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -287,7 +280,7 @@ export function DataTable<T>({
               Columns
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-[180px]">
+          <DropdownMenuContent align="end" className="w-[180px] max-h-[300px] overflow-y-auto bg-popover">
             {columns.map((column) => (
               <DropdownMenuCheckboxItem
                 key={column.key}
