@@ -22,6 +22,10 @@ import AllLeaves from "./pages/admin/AllLeaves";
 import LeaveRequests from "./pages/admin/LeaveRequests";
 import LeaveRules from "./pages/admin/LeaveRules";
 import LeaveReport from "./pages/admin/LeaveReport";
+import SalaryStructure from "./pages/admin/SalaryStructure";
+import GeneratePayslip from "./pages/admin/GeneratePayslip";
+import PayslipTemplate from "./pages/admin/PayslipTemplate";
+import PayrollReport from "./pages/admin/PayrollReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -56,6 +60,11 @@ const App = () => (
             <Route path="/admin/leave/requests" element={<LeaveRequests />} />
             <Route path="/admin/leave/rules" element={<LeaveRules />} />
             <Route path="/admin/leave/report" element={<LeaveReport />} />
+            <Route path="/admin/payroll" element={<Navigate to="/admin/payroll/salary-structure" replace />} />
+            <Route path="/admin/payroll/salary-structure" element={<SalaryStructure />} />
+            <Route path="/admin/payroll/generate" element={<GeneratePayslip />} />
+            <Route path="/admin/payroll/template" element={<PayslipTemplate />} />
+            <Route path="/admin/payroll/report" element={<PayrollReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

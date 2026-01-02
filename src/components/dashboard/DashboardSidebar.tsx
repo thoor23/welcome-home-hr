@@ -22,6 +22,9 @@ import {
   ClipboardList,
   CheckCircle,
   FileBarChart,
+  Receipt,
+  FileSpreadsheet,
+  LayoutTemplate,
 } from "lucide-react";
 import {
   Sidebar,
@@ -68,8 +71,14 @@ const leaveSubItems = [
   { title: "Report", url: "/admin/leave/report", icon: FileBarChart },
 ];
 
+const payrollSubItems = [
+  { title: "Salary Structure", url: "/admin/payroll/salary-structure", icon: FileSpreadsheet },
+  { title: "Generate Payslip", url: "/admin/payroll/generate", icon: Receipt },
+  { title: "Payslip Template", url: "/admin/payroll/template", icon: LayoutTemplate },
+  { title: "Report", url: "/admin/payroll/report", icon: FileBarChart },
+];
+
 const hrModules = [
-  { title: "Payroll", url: "/admin/payroll", icon: Wallet },
   { title: "Recruitment", url: "/admin/recruitment", icon: UserPlus },
   { title: "Performance", url: "/admin/performance", icon: TrendingUp },
   { title: "Time Tracking", url: "/admin/time-tracking", icon: Clock },
@@ -93,10 +102,12 @@ export function DashboardSidebar() {
   const isEmployeeMenuActive = employeeSubItems.some((item) => currentPath === item.url);
   const isAttendanceMenuActive = attendanceSubItems.some((item) => currentPath === item.url);
   const isLeaveMenuActive = leaveSubItems.some((item) => currentPath === item.url);
+  const isPayrollMenuActive = payrollSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
   const [leaveMenuOpen, setLeaveMenuOpen] = useState(isLeaveMenuActive);
+  const [payrollMenuOpen, setPayrollMenuOpen] = useState(isPayrollMenuActive);
 
   return (
     <Sidebar
@@ -300,6 +311,61 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {leaveSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Payroll Management with Submenu */}
+              <Collapsible
+                open={payrollMenuOpen}
+                onOpenChange={setPayrollMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isPayrollMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isPayrollMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <Wallet className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Payroll</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                payrollMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {payrollSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
