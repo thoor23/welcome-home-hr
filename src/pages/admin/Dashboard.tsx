@@ -1,4 +1,4 @@
-import { Users, UserCheck, UserX, UserPlus, Calendar, Clock } from "lucide-react";
+import { Users, UserCheck, UserX, UserPlus, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -37,15 +37,11 @@ const Dashboard = () => {
                   Here's what's happening with your workforce today.
                 </p>
               </div>
-              <div className="flex items-center gap-6 text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-primary" />
-                  <span className="font-medium">{format(currentTime, "EEEE, MMMM d, yyyy")}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-primary" />
-                  <span className="font-medium tabular-nums">{format(currentTime, "hh:mm:ss a")}</span>
-                </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted/50 border border-border rounded-lg">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-foreground tabular-nums">
+                  {format(currentTime, "M/dd hh:mm a")}
+                </span>
               </div>
             </div>
 
