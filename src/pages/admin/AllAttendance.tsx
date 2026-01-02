@@ -307,6 +307,16 @@ const AllAttendance = () => {
         { label: "Sales", value: "Sales" },
       ],
     },
+    {
+      key: "todaysShift",
+      label: "Shift",
+      options: [
+        { label: "9:00 AM - 6:00 PM", value: "9:00 AM - 6:00 PM" },
+        { label: "10:00 AM - 7:00 PM", value: "10:00 AM - 7:00 PM" },
+        { label: "8:00 AM - 5:00 PM", value: "8:00 AM - 5:00 PM" },
+        { label: "Night Shift", value: "10:00 PM - 7:00 AM" },
+      ],
+    },
   ];
 
   return (
