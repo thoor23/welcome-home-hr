@@ -68,6 +68,12 @@ import OffboardingOverview from "./pages/admin/OffboardingOverview";
 import OffboardingTasks from "./pages/admin/OffboardingTasks";
 import ExitClearance from "./pages/admin/ExitClearance";
 import OffboardingReport from "./pages/admin/OffboardingReport";
+import AllEmails from "./pages/admin/AllEmails";
+import EmailTemplates from "./pages/admin/EmailTemplates";
+import LetterTemplates from "./pages/admin/LetterTemplates";
+import EmailConfiguration from "./pages/admin/EmailConfiguration";
+import EmailReport from "./pages/admin/EmailReport";
+import GenerateLetter from "./pages/admin/GenerateLetter";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -156,6 +162,13 @@ const App = () => (
             <Route path="/admin/offboarding/clearance" element={<ExitClearance />} />
             <Route path="/admin/offboarding/tasks" element={<OffboardingTasks />} />
             <Route path="/admin/offboarding/report" element={<OffboardingReport />} />
+            <Route path="/admin/communications" element={<Navigate to="/admin/communications/all" replace />} />
+            <Route path="/admin/communications/all" element={<AllEmails />} />
+            <Route path="/admin/communications/generate" element={<GenerateLetter />} />
+            <Route path="/admin/communications/email-templates" element={<EmailTemplates />} />
+            <Route path="/admin/communications/letter-templates" element={<LetterTemplates />} />
+            <Route path="/admin/communications/config" element={<EmailConfiguration />} />
+            <Route path="/admin/communications/report" element={<EmailReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
