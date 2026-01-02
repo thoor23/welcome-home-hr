@@ -251,6 +251,26 @@ const Employees = () => {
     );
   };
 
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "—";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  const formatEmploymentType = (type?: string) => {
+    if (!type) return "—";
+    return type.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+  };
+
+  const capitalize = (str?: string) => {
+    if (!str) return "—";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   // Define columns for the DataTable
   const columns: Column<Employee>[] = [
     {
@@ -277,11 +297,104 @@ const Employees = () => {
       ),
     },
     {
+      key: "employeeId",
+      header: "Employee ID",
+      searchable: true,
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+    },
+    {
+      key: "phone",
+      header: "Phone",
+      searchable: true,
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+    },
+    {
+      key: "dateOfBirth",
+      header: "Date of Birth",
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+      render: (employee) => formatDate(employee.dateOfBirth),
+    },
+    {
+      key: "gender",
+      header: "Gender",
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+      render: (employee) => capitalize(employee.gender),
+    },
+    {
+      key: "maritalStatus",
+      header: "Marital Status",
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+      render: (employee) => capitalize(employee.maritalStatus),
+    },
+    {
+      key: "bloodGroup",
+      header: "Blood Group",
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+      render: (employee) => employee.bloodGroup || "—",
+    },
+    {
+      key: "address",
+      header: "Address",
+      sortable: false,
+      defaultHidden: true,
+      className: "text-muted-foreground max-w-[200px] truncate",
+      render: (employee) => (
+        <span title={employee.address} className="truncate block max-w-[200px]">
+          {employee.address || "—"}
+        </span>
+      ),
+    },
+    {
       key: "designation",
       header: "Role",
       searchable: true,
       sortable: true,
       className: "text-muted-foreground",
+    },
+    {
+      key: "department",
+      header: "Department",
+      searchable: true,
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+    },
+    {
+      key: "region",
+      header: "Region",
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+      render: (employee) => employee.region || "—",
+    },
+    {
+      key: "reportingManager",
+      header: "Reporting Manager",
+      searchable: true,
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+      render: (employee) => employee.reportingManager || "—",
+    },
+    {
+      key: "employmentType",
+      header: "Employment Type",
+      sortable: true,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+      render: (employee) => formatEmploymentType(employee.employmentType),
     },
     {
       key: "status",
@@ -298,17 +411,29 @@ const Employees = () => {
     },
     {
       key: "joiningDate",
-      header: "Activity",
+      header: "Joining Date",
       sortable: true,
       className: "text-muted-foreground",
-      render: (employee) => {
-        const date = new Date(employee.joiningDate);
-        return date.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        });
-      },
+      render: (employee) => formatDate(employee.joiningDate),
+    },
+    {
+      key: "hasPortalAccess",
+      header: "Portal Access",
+      sortable: true,
+      defaultHidden: true,
+      render: (employee) => (
+        <Badge variant="outline" className={employee.hasPortalAccess ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted text-muted-foreground"}>
+          {employee.hasPortalAccess ? "Yes" : "No"}
+        </Badge>
+      ),
+    },
+    {
+      key: "emergencyContact",
+      header: "Emergency Contact",
+      sortable: false,
+      defaultHidden: true,
+      className: "text-muted-foreground",
+      render: (employee) => employee.emergencyContact?.name || "—",
     },
     {
       key: "actions",
