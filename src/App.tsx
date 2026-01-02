@@ -47,6 +47,14 @@ import ExpenseCategories from "./pages/admin/ExpenseCategories";
 import ExpenseClaims from "./pages/admin/ExpenseClaims";
 import ExpenseApprovals from "./pages/admin/ExpenseApprovals";
 import ExpenseReport from "./pages/admin/ExpenseReport";
+import AllInvoices from "./pages/admin/AllInvoices";
+import GenerateInvoice from "./pages/admin/GenerateInvoice";
+import InvoiceTemplate from "./pages/admin/InvoiceTemplate";
+import BillingRequests from "./pages/admin/BillingRequests";
+import BillingApprovals from "./pages/admin/BillingApprovals";
+import BillingAllocations from "./pages/admin/BillingAllocations";
+import BillingCategories from "./pages/admin/BillingCategories";
+import BillingReport from "./pages/admin/BillingReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -110,6 +118,15 @@ const App = () => (
             <Route path="/admin/expenses/claims" element={<ExpenseClaims />} />
             <Route path="/admin/expenses/approvals" element={<ExpenseApprovals />} />
             <Route path="/admin/expenses/report" element={<ExpenseReport />} />
+            <Route path="/admin/billing" element={<Navigate to="/admin/billing/invoices" replace />} />
+            <Route path="/admin/billing/invoices" element={<AllInvoices />} />
+            <Route path="/admin/billing/generate-invoice" element={<GenerateInvoice />} />
+            <Route path="/admin/billing/invoice-template" element={<InvoiceTemplate />} />
+            <Route path="/admin/billing/requests" element={<BillingRequests />} />
+            <Route path="/admin/billing/approvals" element={<BillingApprovals />} />
+            <Route path="/admin/billing/allocations" element={<BillingAllocations />} />
+            <Route path="/admin/billing/categories" element={<BillingCategories />} />
+            <Route path="/admin/billing/report" element={<BillingReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
