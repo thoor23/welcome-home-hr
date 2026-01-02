@@ -20,7 +20,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
       {/* Main Container Card */}
-      <div className="w-full max-w-5xl min-h-[650px] bg-slate-800 rounded-3xl shadow-2xl overflow-hidden flex">
+      <div className="w-full max-w-5xl min-h-[720px] bg-slate-800 rounded-3xl shadow-2xl overflow-hidden flex">
         {/* Left Side - Illustration Panel */}
         <div className="hidden lg:flex lg:w-1/2 bg-emerald-500 p-10 flex-col justify-between relative overflow-hidden">
           {/* Decorative Shapes */}
