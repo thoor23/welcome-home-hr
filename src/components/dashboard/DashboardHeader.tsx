@@ -1,6 +1,5 @@
-import { Search, Bell, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight } from "lucide-react";
+import { Bell, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -57,17 +56,12 @@ export function DashboardHeader() {
       <div className="flex items-center gap-4">
         <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
         
-        {/* Search */}
-        <div className="hidden md:flex relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search..."
-            className="pl-9 w-64 bg-secondary border-border focus:border-primary"
-          />
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-            /
-          </kbd>
-        </div>
+        {/* Breadcrumbs */}
+        <nav className="flex items-center text-sm">
+          <span className="text-muted-foreground hover:text-foreground cursor-pointer">Home</span>
+          <ChevronRight className="h-4 w-4 text-muted-foreground mx-2" />
+          <span className="text-foreground font-medium">Dashboard</span>
+        </nav>
       </div>
 
       {/* Right Side */}
