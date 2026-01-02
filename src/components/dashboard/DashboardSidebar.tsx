@@ -151,10 +151,10 @@ export function DashboardSidebar() {
                         <Users className="h-5 w-5 flex-shrink-0" />
                         {!collapsed && (
                           <>
-                            <span className="flex-1">Employee Management</span>
+                            <span className="flex-1 truncate">Employees</span>
                             <ChevronDown
                               className={cn(
-                                "h-4 w-4 transition-transform duration-200",
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
                                 employeeMenuOpen && "rotate-180"
                               )}
                             />
