@@ -296,8 +296,8 @@ export function DataTable<T>({
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <Table>
+      <div className="bg-card border border-border rounded-xl overflow-x-auto">
+        <Table className="min-w-max">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               {selectable && (
