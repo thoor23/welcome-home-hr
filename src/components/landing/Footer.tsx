@@ -19,13 +19,13 @@ const Footer = () => {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="font-display font-bold text-xl text-foreground">
-                PeopleFlow
-              </span>
-            </a>
-            <p className="text-muted-foreground text-sm mb-6 max-w-xs">
-              The modern HRMS platform that helps you manage your workforce efficiently.
-            </p>
+            <span className="font-display font-bold text-xl text-foreground">
+              HRNexus
+            </span>
+          </a>
+          <p className="text-muted-foreground text-sm mb-6 max-w-xs">
+            The modern HRMS platform that helps you manage your workforce efficiently.
+          </p>
             {/* Social Links */}
             <div className="flex gap-4">
               {[Twitter, Linkedin, Github].map((Icon, index) => (
@@ -63,12 +63,12 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="py-6 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            © 2024 PeopleFlow. All rights reserved.
+            © 2024 HRNexus. All rights reserved.
           </p>
           <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <Mail className="w-4 h-4" />
-            <a href="mailto:hello@peopleflow.com" className="hover:text-foreground transition-colors">
-              hello@peopleflow.com
+            <a href="mailto:hello@hrnexus.com" className="hover:text-foreground transition-colors">
+              hello@hrnexus.com
             </a>
           </div>
         </div>
