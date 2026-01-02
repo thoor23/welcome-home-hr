@@ -275,7 +275,7 @@ export function DataTable<T>({
         {/* Columns Visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2 bg-transparent border-border hover:bg-secondary">
+            <Button variant="ghost" size="sm" className="gap-2 border border-border">
               <Columns3 className="h-4 w-4" />
               Columns
             </Button>
