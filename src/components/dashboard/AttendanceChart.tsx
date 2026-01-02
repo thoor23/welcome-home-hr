@@ -65,29 +65,6 @@ export function AttendanceChart() {
           </BarChart>
         </ChartContainer>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
-          <div>
-            <p className="text-sm text-muted-foreground">Total Employees</p>
-            <p className="text-xl font-bold text-foreground">248</p>
-            <p className="text-xs text-emerald-600 dark:text-emerald-400">↑ 12.5%</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Avg. Attendance</p>
-            <p className="text-xl font-bold text-foreground">94.2%</p>
-            <p className="text-xs text-emerald-600 dark:text-emerald-400">↑ 3.2%</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">On Leave Today</p>
-            <p className="text-xl font-bold text-foreground">12</p>
-            <p className="text-xs text-red-500">↓ 2.1%</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Late Arrivals</p>
-            <p className="text-xl font-bold text-foreground">8</p>
-            <p className="text-xs text-emerald-600 dark:text-emerald-400">↑ 15.3%</p>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );
