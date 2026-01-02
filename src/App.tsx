@@ -12,6 +12,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import OrganizationOnboarding from "./pages/OrganizationOnboarding";
 import Dashboard from "./pages/admin/Dashboard";
 import AllEmployees from "./pages/admin/AllEmployees";
+import Departments from "./pages/admin/Departments";
+import Designations from "./pages/admin/Designations";
+import EmploymentTypes from "./pages/admin/EmploymentTypes";
 import DetailsRegularization from "./pages/admin/DetailsRegularization";
 import AttendanceOverview from "./pages/admin/AttendanceOverview";
 import AllAttendance from "./pages/admin/AllAttendance";
@@ -49,6 +52,9 @@ const App = () => (
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/employees" element={<Navigate to="/admin/employees/all" replace />} />
             <Route path="/admin/employees/all" element={<AllEmployees />} />
+            <Route path="/admin/employees/departments" element={<Departments />} />
+            <Route path="/admin/employees/designations" element={<Designations />} />
+            <Route path="/admin/employees/types" element={<EmploymentTypes />} />
             <Route path="/admin/employees/regularization" element={<DetailsRegularization />} />
             <Route path="/admin/attendance" element={<Navigate to="/admin/attendance/overview" replace />} />
             <Route path="/admin/attendance/overview" element={<AttendanceOverview />} />
