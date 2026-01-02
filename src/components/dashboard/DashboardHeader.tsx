@@ -43,7 +43,7 @@ export function DashboardHeader() {
           variant="ghost"
           size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="text-muted-foreground hover:text-foreground"
+          className="text-primary hover:bg-transparent hover:text-primary active:bg-transparent active:text-primary"
         >
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
