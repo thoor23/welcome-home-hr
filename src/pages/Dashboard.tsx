@@ -30,32 +30,24 @@ const Dashboard = () => {
               <StatsCard
                 title="Total Employees"
                 value="248"
-                change="12.5%"
-                changeType="positive"
                 icon={Users}
                 iconColor="text-primary"
               />
               <StatsCard
                 title="Present Today"
                 value="215"
-                change="8.2%"
-                changeType="positive"
                 icon={UserCheck}
                 iconColor="text-emerald-500"
               />
               <StatsCard
                 title="On Leave"
                 value="18"
-                change="2.4%"
-                changeType="negative"
                 icon={UserX}
                 iconColor="text-amber-500"
               />
               <StatsCard
                 title="New Hires"
                 value="12"
-                change="24.5%"
-                changeType="positive"
                 icon={UserPlus}
                 iconColor="text-purple-500"
               />
