@@ -29,7 +29,40 @@ const Signup = () => {
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
       {/* Main Container Card */}
       <div className="w-full max-w-5xl bg-slate-800 rounded-3xl shadow-2xl overflow-hidden flex">
-        {/* Left Side - Signup Form */}
+        {/* Left Side - Illustration Panel */}
+        <div className="hidden lg:flex lg:w-1/2 bg-emerald-500 p-10 flex-col justify-between relative overflow-hidden">
+          {/* Decorative Shapes */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-8 left-8 w-12 h-12 bg-orange-400 rounded-full opacity-90"></div>
+            <div className="absolute top-16 right-16 w-8 h-8 bg-teal-300 rounded-full opacity-80"></div>
+            <div className="absolute top-32 left-12 w-10 h-10 bg-slate-800 rounded-lg transform rotate-12"></div>
+            <div className="absolute top-24 right-8 w-6 h-6 bg-yellow-400 transform rotate-45"></div>
+            <div className="absolute bottom-32 left-8 w-14 h-14 bg-slate-700 rounded-lg"></div>
+            <div className="absolute bottom-16 left-24 w-6 h-6 bg-teal-300 rounded-full"></div>
+            <div className="absolute bottom-20 left-32 w-6 h-6 bg-teal-400 rounded-full"></div>
+            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-teal-400/50 rounded-full"></div>
+            <div className="absolute bottom-24 right-12 w-8 h-8 bg-transparent border-2 border-teal-300/60 transform rotate-45"></div>
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10 flex-1 flex flex-col justify-center">
+            <h1 className="text-4xl font-bold text-white leading-tight mb-4">
+              Join Our Platform
+            </h1>
+            <p className="text-white/90 text-lg leading-relaxed">
+              Create an account and unlock powerful tools to streamline your workforce operations.
+            </p>
+          </div>
+
+          {/* Carousel Dots */}
+          <div className="relative z-10 flex gap-2">
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
+          </div>
+        </div>
+
+        {/* Right Side - Signup Form */}
         <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 mb-8">
@@ -167,46 +200,6 @@ const Signup = () => {
               Sign in
             </Link>
           </p>
-        </div>
-
-        {/* Right Side - Illustration Panel */}
-        <div className="hidden lg:flex lg:w-1/2 bg-emerald-500 p-10 flex-col justify-between relative overflow-hidden">
-          {/* Decorative Shapes */}
-          <div className="absolute inset-0 overflow-hidden">
-            {/* Orange circle top-left */}
-            <div className="absolute top-8 left-8 w-12 h-12 bg-orange-400 rounded-full opacity-90"></div>
-            {/* Teal circle top-right */}
-            <div className="absolute top-16 right-16 w-8 h-8 bg-teal-300 rounded-full opacity-80"></div>
-            {/* Dark square */}
-            <div className="absolute top-32 left-12 w-10 h-10 bg-slate-800 rounded-lg transform rotate-12"></div>
-            {/* Yellow diamond */}
-            <div className="absolute top-24 right-8 w-6 h-6 bg-yellow-400 transform rotate-45"></div>
-            {/* Bottom decorations */}
-            <div className="absolute bottom-32 left-8 w-14 h-14 bg-slate-700 rounded-lg"></div>
-            <div className="absolute bottom-16 left-24 w-6 h-6 bg-teal-300 rounded-full"></div>
-            <div className="absolute bottom-20 left-32 w-6 h-6 bg-teal-400 rounded-full"></div>
-            {/* Large circle outline */}
-            <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-teal-400/50 rounded-full"></div>
-            {/* Diamond bottom-right */}
-            <div className="absolute bottom-24 right-12 w-8 h-8 bg-transparent border-2 border-teal-300/60 transform rotate-45"></div>
-          </div>
-
-          {/* Content */}
-          <div className="relative z-10 flex-1 flex flex-col justify-center">
-            <h1 className="text-4xl font-bold text-white leading-tight mb-4">
-              Join Our Platform
-            </h1>
-            <p className="text-white/90 text-lg leading-relaxed">
-              Create an account and unlock powerful tools to streamline your workforce operations.
-            </p>
-          </div>
-
-          {/* Carousel Dots */}
-          <div className="relative z-10 flex gap-2">
-            <div className="w-2 h-2 bg-white rounded-full"></div>
-            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-          </div>
         </div>
       </div>
     </div>
