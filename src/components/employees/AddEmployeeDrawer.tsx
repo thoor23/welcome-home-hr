@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -16,6 +18,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import type { Employee } from "@/pages/admin/Employees";
 
 interface AddEmployeeDrawerProps {
@@ -155,16 +164,31 @@ export function AddEmployeeDrawer({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="joiningDate">Joining Date</Label>
-            <Input
-              id="joiningDate"
-              type="date"
-              value={formData.joiningDate}
-              onChange={(e) =>
-                setFormData({ ...formData, joiningDate: e.target.value })
-              }
-              required
-            />
+            <Label>Joining Date</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !formData.joiningDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {formData.joiningDate ? format(new Date(formData.joiningDate), "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={formData.joiningDate ? new Date(formData.joiningDate) : undefined}
+                  onSelect={(date) =>
+                    setFormData({ ...formData, joiningDate: date ? format(date, "yyyy-MM-dd") : "" })
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="space-y-2">
