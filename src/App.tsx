@@ -7,6 +7,9 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import VerifyCode from "./pages/VerifyCode";
+import ForgotPassword from "./pages/ForgotPassword";
+import OrganizationOnboarding from "./pages/OrganizationOnboarding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +25,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/verify-code" element={<VerifyCode />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/organization-onboarding" element={<OrganizationOnboarding />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
