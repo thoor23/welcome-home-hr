@@ -143,47 +143,47 @@ const GeneratePayslip = () => {
     {
       key: "basicSalary",
       header: "Basic",
-      render: (row) => <span>₹{row.basicSalary.toLocaleString()}</span>,
+      render: (row) => <span>₹{(row.basicSalary ?? 0).toLocaleString()}</span>,
     },
     {
       key: "hra",
       header: "HRA",
-      render: (row) => <span>₹{row.hra.toLocaleString()}</span>,
+      render: (row) => <span>₹{(row.hra ?? 0).toLocaleString()}</span>,
     },
     {
       key: "da",
       header: "DA",
-      render: (row) => <span>₹{row.da.toLocaleString()}</span>,
+      render: (row) => <span>₹{(row.da ?? 0).toLocaleString()}</span>,
     },
     {
       key: "specialAllowance",
       header: "Special Allow.",
-      render: (row) => <span>₹{row.specialAllowance.toLocaleString()}</span>,
+      render: (row) => <span>₹{(row.specialAllowance ?? 0).toLocaleString()}</span>,
     },
     {
       key: "grossSalary",
       header: "Gross Salary",
-      render: (row) => <span className="font-medium">₹{row.grossSalary.toLocaleString()}</span>,
+      render: (row) => <span className="font-medium">₹{(row.grossSalary ?? 0).toLocaleString()}</span>,
     },
     {
       key: "pf",
       header: "PF",
-      render: (row) => <span className="text-rose-600">₹{row.pf.toLocaleString()}</span>,
+      render: (row) => <span className="text-rose-600">₹{(row.pf ?? 0).toLocaleString()}</span>,
     },
     {
       key: "tds",
       header: "TDS",
-      render: (row) => <span className="text-rose-600">₹{row.tds.toLocaleString()}</span>,
+      render: (row) => <span className="text-rose-600">₹{(row.tds ?? 0).toLocaleString()}</span>,
     },
     {
       key: "totalDeductions",
       header: "Total Ded.",
-      render: (row) => <span className="font-medium text-rose-600">₹{row.totalDeductions.toLocaleString()}</span>,
+      render: (row) => <span className="font-medium text-rose-600">₹{(row.totalDeductions ?? 0).toLocaleString()}</span>,
     },
     {
       key: "netSalary",
       header: "Net Salary",
-      render: (row) => <span className="font-bold text-emerald-600">₹{row.netSalary.toLocaleString()}</span>,
+      render: (row) => <span className="font-bold text-emerald-600">₹{(row.netSalary ?? 0).toLocaleString()}</span>,
     },
     {
       key: "presentDays",
