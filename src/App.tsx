@@ -30,6 +30,12 @@ import GeneratePayslip from "./pages/admin/GeneratePayslip";
 import PayslipTemplate from "./pages/admin/PayslipTemplate";
 import PayrollReport from "./pages/admin/PayrollReport";
 import EmployeeSalaries from "./pages/admin/EmployeeSalaries";
+import JobPostings from "./pages/admin/JobPostings";
+import Applications from "./pages/admin/Applications";
+import Candidates from "./pages/admin/Candidates";
+import Interviews from "./pages/admin/Interviews";
+import Offers from "./pages/admin/Offers";
+import RecruitmentReport from "./pages/admin/RecruitmentReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -73,6 +79,13 @@ const App = () => (
             <Route path="/admin/payroll/generate" element={<GeneratePayslip />} />
             <Route path="/admin/payroll/template" element={<PayslipTemplate />} />
             <Route path="/admin/payroll/report" element={<PayrollReport />} />
+            <Route path="/admin/recruitment" element={<Navigate to="/admin/recruitment/jobs" replace />} />
+            <Route path="/admin/recruitment/jobs" element={<JobPostings />} />
+            <Route path="/admin/recruitment/applications" element={<Applications />} />
+            <Route path="/admin/recruitment/candidates" element={<Candidates />} />
+            <Route path="/admin/recruitment/interviews" element={<Interviews />} />
+            <Route path="/admin/recruitment/offers" element={<Offers />} />
+            <Route path="/admin/recruitment/report" element={<RecruitmentReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
