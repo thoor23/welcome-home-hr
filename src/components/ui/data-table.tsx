@@ -282,7 +282,7 @@ export function DataTable<T>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[180px]">
-            {columns.map((column) => (
+            {columns.filter((col) => col.header).map((column) => (
               <DropdownMenuCheckboxItem
                 key={column.key}
                 checked={visibleColumns.has(column.key)}
