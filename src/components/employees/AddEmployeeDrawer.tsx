@@ -57,7 +57,7 @@ export function AddEmployeeDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+      <SheetContent className="w-full sm:max-w-lg overflow-y-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <SheetHeader>
           <SheetTitle>Add New Employee</SheetTitle>
           <SheetDescription>
