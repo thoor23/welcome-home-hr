@@ -66,9 +66,9 @@ export function DashboardSidebar() {
       )}
       collapsible="icon"
     >
-      <SidebarContent className="py-4">
+      <SidebarContent className="py-4 px-2">
         {/* Logo */}
-        <div className={cn("px-4 mb-6 flex items-center gap-2", collapsed && "justify-center")}>
+        <div className={cn("px-2 mb-6 flex items-center gap-2", collapsed && "justify-center")}>
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <Users className="w-4 h-4 text-primary-foreground" />
           </div>
@@ -87,7 +87,7 @@ export function DashboardSidebar() {
                     asChild
                     isActive={isActive(item.url)}
                     className={cn(
-                      "mx-2 rounded-lg transition-all",
+                      "rounded-lg transition-all",
                       isActive(item.url)
                         ? "bg-primary text-primary-foreground hover:bg-primary/90"
                         : "hover:bg-secondary"
@@ -107,7 +107,7 @@ export function DashboardSidebar() {
         {/* HR Modules */}
         <SidebarGroup>
           {!collapsed && (
-            <SidebarGroupLabel className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <SidebarGroupLabel className="px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               HR Modules
             </SidebarGroupLabel>
           )}
@@ -119,7 +119,7 @@ export function DashboardSidebar() {
                     asChild
                     isActive={isActive(item.url)}
                     className={cn(
-                      "mx-2 rounded-lg transition-all",
+                      "rounded-lg transition-all",
                       isActive(item.url)
                         ? "bg-secondary text-foreground"
                         : "hover:bg-secondary"
@@ -139,7 +139,7 @@ export function DashboardSidebar() {
         {/* Other */}
         <SidebarGroup>
           {!collapsed && (
-            <SidebarGroupLabel className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <SidebarGroupLabel className="px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Others
             </SidebarGroupLabel>
           )}
@@ -151,7 +151,7 @@ export function DashboardSidebar() {
                     asChild
                     isActive={isActive(item.url)}
                     className={cn(
-                      "mx-2 rounded-lg transition-all",
+                      "rounded-lg transition-all",
                       isActive(item.url)
                         ? "bg-secondary text-foreground"
                         : "hover:bg-secondary"
