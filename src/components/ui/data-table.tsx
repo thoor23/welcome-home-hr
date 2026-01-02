@@ -275,12 +275,12 @@ export function DataTable<T>({
         {/* Columns Visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2">
+            <Button variant="outline" size="sm" className="gap-2 bg-transparent border-border hover:bg-secondary">
               <Columns3 className="h-4 w-4" />
               Columns
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-[180px] max-h-[300px] overflow-y-auto bg-popover">
+          <DropdownMenuContent align="end" className="w-[180px] max-h-[300px]">
             {columns.map((column) => (
               <DropdownMenuCheckboxItem
                 key={column.key}
