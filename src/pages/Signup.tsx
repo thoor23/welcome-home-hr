@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import { Users, Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 
 const Signup = () => {
@@ -27,18 +26,18 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-background flex items-center justify-center p-6">
       {/* Main Container Card */}
-      <div className="w-full max-w-5xl min-h-[720px] bg-slate-800 rounded-3xl shadow-2xl overflow-hidden flex">
+      <div className="w-full max-w-5xl min-h-[720px] bg-card rounded-3xl shadow-2xl overflow-hidden flex border border-border">
         {/* Left Side - Illustration Panel */}
         <div className="hidden lg:flex lg:w-1/2 bg-emerald-500 p-10 flex-col justify-between relative overflow-hidden">
           {/* Decorative Shapes */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-8 left-8 w-12 h-12 bg-orange-400 rounded-full opacity-90"></div>
             <div className="absolute top-16 right-16 w-8 h-8 bg-teal-300 rounded-full opacity-80"></div>
-            <div className="absolute top-32 left-12 w-10 h-10 bg-slate-800 rounded-lg transform rotate-12"></div>
+            <div className="absolute top-32 left-12 w-10 h-10 bg-card rounded-lg transform rotate-12"></div>
             <div className="absolute top-24 right-8 w-6 h-6 bg-yellow-400 transform rotate-45"></div>
-            <div className="absolute bottom-32 left-8 w-14 h-14 bg-slate-700 rounded-lg"></div>
+            <div className="absolute bottom-32 left-8 w-14 h-14 bg-muted rounded-lg"></div>
             <div className="absolute bottom-16 left-24 w-6 h-6 bg-teal-300 rounded-full"></div>
             <div className="absolute bottom-20 left-32 w-6 h-6 bg-teal-400 rounded-full"></div>
             <div className="absolute top-1/2 right-4 w-20 h-20 border-4 border-teal-400/50 rounded-full"></div>
@@ -64,78 +63,78 @@ const Signup = () => {
         </div>
 
         {/* Right Side - Signup Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-card">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center">
               <Users className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-xl text-white">HRMS Portal</span>
+            <span className="font-bold text-xl text-foreground">HRMS Portal</span>
           </Link>
 
           {/* Header */}
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-white mb-2">Create Account</h2>
-            <p className="text-slate-400">Get started with NexHR today</p>
+            <h2 className="text-2xl font-bold text-foreground mb-2">Create Account</h2>
+            <p className="text-muted-foreground">Get started with NexHR today</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="fullName" className="text-sm text-slate-300">
+              <label htmlFor="fullName" className="text-sm text-foreground">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="fullName"
                   type="text"
                   placeholder="Enter your full name"
                   value={formData.fullName}
                   onChange={(e) => updateField("fullName", e.target.value)}
-                  className="pl-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-emerald-500"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm text-slate-300">
+              <label htmlFor="email" className="text-sm text-foreground">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => updateField("email", e.target.value)}
-                  className="pl-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-emerald-500"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm text-slate-300">
+              <label htmlFor="password" className="text-sm text-foreground">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
                   value={formData.password}
                   onChange={(e) => updateField("password", e.target.value)}
-                  className="pl-10 pr-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="pl-10 pr-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-emerald-500"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -143,24 +142,24 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="confirmPassword" className="text-sm text-slate-300">
+              <label htmlFor="confirmPassword" className="text-sm text-foreground">
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={(e) => updateField("confirmPassword", e.target.value)}
-                  className="pl-10 pr-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="pl-10 pr-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-emerald-500"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -172,15 +171,15 @@ const Signup = () => {
                 id="terms"
                 checked={formData.agreeToTerms}
                 onCheckedChange={(checked) => updateField("agreeToTerms", checked as boolean)}
-                className="mt-0.5 border-slate-600 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                className="mt-0.5 border-border data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
               />
-              <label htmlFor="terms" className="text-sm text-slate-400 cursor-pointer leading-relaxed">
+              <label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
                 I agree to the{" "}
-                <Link to="/terms" className="text-emerald-400 hover:text-emerald-300 transition-colors">
+                <Link to="/terms" className="text-emerald-500 hover:text-emerald-400 transition-colors">
                   Terms of Service
                 </Link>{" "}
                 and{" "}
-                <Link to="/privacy" className="text-emerald-400 hover:text-emerald-300 transition-colors">
+                <Link to="/privacy" className="text-emerald-500 hover:text-emerald-400 transition-colors">
                   Privacy Policy
                 </Link>
               </label>
@@ -188,16 +187,16 @@ const Signup = () => {
 
             <Button
               type="submit"
-              className="w-full bg-white hover:bg-slate-100 text-slate-900 font-semibold py-3"
+              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3"
             >
               Create Account
             </Button>
           </form>
 
           {/* Login Link */}
-          <p className="mt-5 text-center text-sm text-slate-400">
+          <p className="mt-5 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link to="/login" className="text-emerald-400 hover:text-emerald-300 font-medium transition-colors">
+            <Link to="/login" className="text-emerald-500 hover:text-emerald-400 font-medium transition-colors">
               Sign in
             </Link>
           </p>

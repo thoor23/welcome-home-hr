@@ -18,9 +18,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-background flex items-center justify-center p-6">
       {/* Main Container Card */}
-      <div className="w-full max-w-5xl min-h-[720px] bg-slate-800 rounded-3xl shadow-2xl overflow-hidden flex">
+      <div className="w-full max-w-5xl min-h-[720px] bg-card rounded-3xl shadow-2xl overflow-hidden flex border border-border">
         {/* Left Side - Illustration Panel */}
         <div className="hidden lg:flex lg:w-1/2 bg-emerald-500 p-10 flex-col justify-between relative overflow-hidden">
           {/* Decorative Shapes */}
@@ -30,11 +30,11 @@ const Login = () => {
             {/* Teal circle top-right */}
             <div className="absolute top-16 right-16 w-8 h-8 bg-teal-300 rounded-full opacity-80"></div>
             {/* Dark square */}
-            <div className="absolute top-32 left-12 w-10 h-10 bg-slate-800 rounded-lg transform rotate-12"></div>
+            <div className="absolute top-32 left-12 w-10 h-10 bg-card rounded-lg transform rotate-12"></div>
             {/* Yellow diamond */}
             <div className="absolute top-24 right-8 w-6 h-6 bg-yellow-400 transform rotate-45"></div>
             {/* Bottom decorations */}
-            <div className="absolute bottom-32 left-8 w-14 h-14 bg-slate-700 rounded-lg"></div>
+            <div className="absolute bottom-32 left-8 w-14 h-14 bg-muted rounded-lg"></div>
             <div className="absolute bottom-16 left-24 w-6 h-6 bg-teal-300 rounded-full"></div>
             <div className="absolute bottom-20 left-32 w-6 h-6 bg-teal-400 rounded-full"></div>
             {/* Large circle outline */}
@@ -62,60 +62,60 @@ const Login = () => {
         </div>
 
         {/* Right Side - Login Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-card">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center">
               <Users className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-xl text-white">HRMS Portal</span>
+            <span className="font-bold text-xl text-foreground">HRMS Portal</span>
           </Link>
 
           {/* Header */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
-            <p className="text-slate-400">Sign in to access your account</p>
+            <h2 className="text-2xl font-bold text-foreground mb-2">Welcome Back</h2>
+            <p className="text-muted-foreground">Sign in to access your account</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm text-slate-300">
+              <label htmlFor="email" className="text-sm text-foreground">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="pl-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-emerald-500"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm text-slate-300">
+              <label htmlFor="password" className="text-sm text-foreground">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="pl-10 pr-10 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-emerald-500"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -128,15 +128,15 @@ const Login = () => {
                   id="remember"
                   checked={rememberMe}
                   onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                  className="border-slate-600 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                  className="border-border data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
                 />
-                <label htmlFor="remember" className="text-sm text-slate-400 cursor-pointer">
+                <label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer">
                   Remember me
                 </label>
               </div>
               <Link
                 to="/forgot-password"
-                className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
+                className="text-sm text-emerald-500 hover:text-emerald-400 transition-colors"
               >
                 Forgot Password?
               </Link>
@@ -144,7 +144,7 @@ const Login = () => {
 
             <Button
               type="submit"
-              className="w-full bg-white hover:bg-slate-100 text-slate-900 font-semibold py-3"
+              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3"
             >
               Sign In
             </Button>
@@ -152,9 +152,9 @@ const Login = () => {
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
-            <Separator className="flex-1 bg-slate-600" />
-            <span className="text-sm text-slate-500">or continue with</span>
-            <Separator className="flex-1 bg-slate-600" />
+            <Separator className="flex-1 bg-border" />
+            <span className="text-sm text-muted-foreground">or continue with</span>
+            <Separator className="flex-1 bg-border" />
           </div>
 
           {/* Social Login Buttons */}
@@ -162,7 +162,7 @@ const Login = () => {
             <Button
               type="button"
               variant="outline"
-              className="flex-1 bg-slate-700/50 border-slate-600 text-white hover:bg-slate-700 hover:text-white"
+              className="flex-1 bg-secondary border-border text-foreground hover:bg-muted"
               onClick={() => console.log("Google login")}
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -188,7 +188,7 @@ const Login = () => {
             <Button
               type="button"
               variant="outline"
-              className="flex-1 bg-slate-700/50 border-slate-600 text-white hover:bg-slate-700 hover:text-white"
+              className="flex-1 bg-secondary border-border text-foreground hover:bg-muted"
               onClick={() => console.log("GitHub login")}
             >
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -199,9 +199,9 @@ const Login = () => {
           </div>
 
           {/* Sign Up Link */}
-          <p className="mt-6 text-center text-sm text-slate-400">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-emerald-400 hover:text-emerald-300 font-medium transition-colors">
+            <Link to="/signup" className="text-emerald-500 hover:text-emerald-400 font-medium transition-colors">
               Sign up
             </Link>
           </p>
