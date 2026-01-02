@@ -84,6 +84,11 @@ import TicketCategories from "./pages/admin/TicketCategories";
 import SLASettings from "./pages/admin/SLASettings";
 import KnowledgeBase from "./pages/admin/KnowledgeBase";
 import SupportReport from "./pages/admin/SupportReport";
+import AllDocuments from "./pages/admin/AllDocuments";
+import MyDocuments from "./pages/admin/MyDocuments";
+import DocumentCategories from "./pages/admin/DocumentCategories";
+import DocumentSettings from "./pages/admin/DocumentSettings";
+import DocumentReport from "./pages/admin/DocumentReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -191,6 +196,12 @@ const App = () => (
             <Route path="/admin/support/sla" element={<SLASettings />} />
             <Route path="/admin/support/knowledge-base" element={<KnowledgeBase />} />
             <Route path="/admin/support/report" element={<SupportReport />} />
+            <Route path="/admin/documents" element={<Navigate to="/admin/documents/all" replace />} />
+            <Route path="/admin/documents/all" element={<AllDocuments />} />
+            <Route path="/admin/documents/my" element={<MyDocuments />} />
+            <Route path="/admin/documents/categories" element={<DocumentCategories />} />
+            <Route path="/admin/documents/settings" element={<DocumentSettings />} />
+            <Route path="/admin/documents/report" element={<DocumentReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

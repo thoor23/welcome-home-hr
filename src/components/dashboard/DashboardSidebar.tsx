@@ -57,6 +57,10 @@ import {
   Bookmark,
   Gauge,
   BookOpen,
+  FolderOpen,
+  FileArchive,
+  FolderCog,
+  HardDrive,
 } from "lucide-react";
 import {
   Sidebar,
@@ -198,6 +202,14 @@ const supportSubItems = [
   { title: "Report", url: "/admin/support/report", icon: PieChart },
 ];
 
+const documentsSubItems = [
+  { title: "All Documents", url: "/admin/documents/all", icon: FolderOpen },
+  { title: "My Documents", url: "/admin/documents/my", icon: FileArchive },
+  { title: "Categories", url: "/admin/documents/categories", icon: Tags },
+  { title: "Settings", url: "/admin/documents/settings", icon: FolderCog },
+  { title: "Report", url: "/admin/documents/report", icon: PieChart },
+];
+
 const otherItems = [
   { title: "Reports", url: "/admin/reports", icon: FileText },
   { title: "Awards", url: "/admin/awards", icon: Award },
@@ -226,6 +238,7 @@ export function DashboardSidebar() {
   const isCommunicationsMenuActive = communicationsSubItems.some((item) => currentPath === item.url);
   const isEventsMenuActive = eventsSubItems.some((item) => currentPath === item.url);
   const isSupportMenuActive = supportSubItems.some((item) => currentPath === item.url);
+  const isDocumentsMenuActive = documentsSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
@@ -241,6 +254,7 @@ export function DashboardSidebar() {
   const [communicationsMenuOpen, setCommunicationsMenuOpen] = useState(isCommunicationsMenuActive);
   const [eventsMenuOpen, setEventsMenuOpen] = useState(isEventsMenuActive);
   const [supportMenuOpen, setSupportMenuOpen] = useState(isSupportMenuActive);
+  const [documentsMenuOpen, setDocumentsMenuOpen] = useState(isDocumentsMenuActive);
 
   return (
     <Sidebar
@@ -1049,6 +1063,60 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {supportSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+              {/* Documents Management with Submenu */}
+              <Collapsible
+                open={documentsMenuOpen}
+                onOpenChange={setDocumentsMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isDocumentsMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isDocumentsMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <FolderOpen className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Documents</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                documentsMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {documentsSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
