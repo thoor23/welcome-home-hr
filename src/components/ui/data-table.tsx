@@ -303,7 +303,7 @@ export function DataTable<T>({
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               {selectable && (
-                <TableHead className="w-[50px] sticky left-0 bg-card z-20">
+                <TableHead className="w-[50px] sticky left-0 bg-card z-20 border-r border-border">
                   <Checkbox
                     checked={allSelected}
                     ref={(el) => {
@@ -321,8 +321,9 @@ export function DataTable<T>({
                   key={column.key}
                   className={cn(
                     column.headerClassName,
+                    'border-r border-border',
                     column.sticky === 'left' && 'sticky left-0 bg-card z-20',
-                    column.sticky === 'right' && 'sticky right-0 bg-card z-20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]'
+                    column.sticky === 'right' && 'sticky right-0 bg-card z-20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l'
                   )}
                 >
                   {column.sortable !== false ? (
@@ -373,7 +374,7 @@ export function DataTable<T>({
                     {selectable && (
                       <TableCell
                         onClick={(e) => e.stopPropagation()}
-                        className="w-[50px] sticky left-0 bg-card z-10"
+                        className="w-[50px] sticky left-0 bg-card z-10 border-r border-border"
                       >
                         <Checkbox
                           checked={isSelected}
@@ -389,8 +390,9 @@ export function DataTable<T>({
                         key={column.key} 
                         className={cn(
                           column.className,
+                          'border-r border-border',
                           column.sticky === 'left' && 'sticky left-0 bg-card z-10',
-                          column.sticky === 'right' && 'sticky right-0 bg-card z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]'
+                          column.sticky === 'right' && 'sticky right-0 bg-card z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l'
                         )}
                       >
                         {column.render
