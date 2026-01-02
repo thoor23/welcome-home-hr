@@ -108,7 +108,7 @@ export function DashboardHeader() {
             </div>
             
             {/* Notification List */}
-            <div className="max-h-80 overflow-y-auto">
+            <div className="max-h-80 overflow-y-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {notifications.map((notification) => (
                 <div key={notification.id} className="flex items-start gap-3 p-4 border-b border-border hover:bg-secondary/50 cursor-pointer">
                   {notification.avatar ? (
