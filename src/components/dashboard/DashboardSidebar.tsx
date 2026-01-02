@@ -211,10 +211,7 @@ const documentsSubItems = [
 ];
 
 const otherItems = [
-  { title: "Reports", url: "/admin/reports", icon: FileText },
-  { title: "Awards", url: "/admin/awards", icon: Award },
   { title: "Settings", url: "/admin/settings", icon: Settings },
-  { title: "Help & Support", url: "/admin/help", icon: HelpCircle },
 ];
 
 export function DashboardSidebar() {
