@@ -42,6 +42,11 @@ import AssetCategories from "./pages/admin/AssetCategories";
 import AssetAssignments from "./pages/admin/AssetAssignments";
 import AssetMaintenance from "./pages/admin/AssetMaintenance";
 import AssetReport from "./pages/admin/AssetReport";
+import AllExpenses from "./pages/admin/AllExpenses";
+import ExpenseCategories from "./pages/admin/ExpenseCategories";
+import ExpenseClaims from "./pages/admin/ExpenseClaims";
+import ExpenseApprovals from "./pages/admin/ExpenseApprovals";
+import ExpenseReport from "./pages/admin/ExpenseReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -99,6 +104,12 @@ const App = () => (
             <Route path="/admin/assets/assignments" element={<AssetAssignments />} />
             <Route path="/admin/assets/maintenance" element={<AssetMaintenance />} />
             <Route path="/admin/assets/report" element={<AssetReport />} />
+            <Route path="/admin/expenses" element={<Navigate to="/admin/expenses/all" replace />} />
+            <Route path="/admin/expenses/all" element={<AllExpenses />} />
+            <Route path="/admin/expenses/categories" element={<ExpenseCategories />} />
+            <Route path="/admin/expenses/claims" element={<ExpenseClaims />} />
+            <Route path="/admin/expenses/approvals" element={<ExpenseApprovals />} />
+            <Route path="/admin/expenses/report" element={<ExpenseReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

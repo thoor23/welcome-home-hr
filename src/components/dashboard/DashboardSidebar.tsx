@@ -37,6 +37,10 @@ import {
   Layers,
   UserCheck2,
   Wrench,
+  CreditCard,
+  Tags,
+  ClipboardCheck,
+  FileCheck as FileCheckIcon,
 } from "lucide-react";
 import {
   Sidebar,
@@ -112,6 +116,14 @@ const assetSubItems = [
   { title: "Report", url: "/admin/assets/report", icon: BarChart3 },
 ];
 
+const expenseSubItems = [
+  { title: "All Expenses", url: "/admin/expenses/all", icon: CreditCard },
+  { title: "Categories", url: "/admin/expenses/categories", icon: Tags },
+  { title: "Claims", url: "/admin/expenses/claims", icon: ClipboardCheck },
+  { title: "Approvals", url: "/admin/expenses/approvals", icon: FileCheckIcon },
+  { title: "Report", url: "/admin/expenses/report", icon: BarChart3 },
+];
+
 const otherItems = [
   { title: "Reports", url: "/admin/reports", icon: FileText },
   { title: "Awards", url: "/admin/awards", icon: Award },
@@ -132,6 +144,7 @@ export function DashboardSidebar() {
   const isPayrollMenuActive = payrollSubItems.some((item) => currentPath === item.url);
   const isRecruitmentMenuActive = recruitmentSubItems.some((item) => currentPath === item.url);
   const isAssetMenuActive = assetSubItems.some((item) => currentPath === item.url);
+  const isExpenseMenuActive = expenseSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
@@ -139,6 +152,7 @@ export function DashboardSidebar() {
   const [payrollMenuOpen, setPayrollMenuOpen] = useState(isPayrollMenuActive);
   const [recruitmentMenuOpen, setRecruitmentMenuOpen] = useState(isRecruitmentMenuActive);
   const [assetMenuOpen, setAssetMenuOpen] = useState(isAssetMenuActive);
+  const [expenseMenuOpen, setExpenseMenuOpen] = useState(isExpenseMenuActive);
 
   return (
     <Sidebar
@@ -507,6 +521,61 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {assetSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Expense Management with Submenu */}
+              <Collapsible
+                open={expenseMenuOpen}
+                onOpenChange={setExpenseMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isExpenseMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isExpenseMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <CreditCard className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Expenses</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                expenseMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {expenseSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
