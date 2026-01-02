@@ -5,7 +5,7 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Plus, Eye, Pencil, MoreHorizontal } from "lucide-react";
+import { Plus, Eye, Pencil, MoreHorizontal, Download } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,10 +20,10 @@ import type { DocumentItem } from "@/components/employees/DocumentUpload";
 
 export interface Employee {
   id: string;
-  
+
   // Profile Picture
   profilePic?: string;
-  
+
   // Personal Information
   name: string;
   email: string;
@@ -33,7 +33,7 @@ export interface Employee {
   maritalStatus?: "single" | "married" | "divorced" | "widowed";
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   address?: string;
-  
+
   // Work Information
   employeeId: string;
   department: string;
@@ -44,7 +44,7 @@ export interface Employee {
   employmentType?: "full-time" | "part-time" | "contract" | "intern";
   joiningDate: string;
   status: "active" | "probation" | "notice" | "exit";
-  
+
   // Past Job Details
   pastJobs?: Array<{
     company: string;
@@ -53,7 +53,7 @@ export interface Employee {
     endDate: string;
     description?: string;
   }>;
-  
+
   // Education Details
   education?: Array<{
     degree: string;
@@ -61,10 +61,10 @@ export interface Employee {
     year: string;
     grade?: string;
   }>;
-  
+
   // Documents
   documents?: DocumentItem[];
-  
+
   // Emergency Contact
   emergencyContact?: {
     name: string;
@@ -72,7 +72,7 @@ export interface Employee {
     phone: string;
     email?: string;
   };
-  
+
   // Portal Access
   hasPortalAccess?: boolean;
   password?: string;
@@ -202,11 +202,7 @@ const Employees = () => {
   };
 
   const handleEditEmployee = (updatedEmployee: Employee) => {
-    setEmployees(
-      employees.map((emp) =>
-        emp.id === updatedEmployee.id ? updatedEmployee : emp
-      )
-    );
+    setEmployees(employees.map((emp) => (emp.id === updatedEmployee.id ? updatedEmployee : emp)));
     setEditDrawerOpen(false);
     setSelectedEmployee(null);
   };
@@ -219,6 +215,52 @@ const Employees = () => {
   const handleEditClick = (employee: Employee) => {
     setSelectedEmployee(employee);
     setEditDrawerOpen(true);
+  };
+
+  const exportEmployeesCsv = () => {
+    const headers = [
+      "Name",
+      "Email",
+      "Phone",
+      "Department",
+      "Designation",
+      "Employee ID",
+      "Joining Date",
+      "Status",
+      "Location",
+    ];
+
+    const escapeCsv = (value: string) => {
+      if (value.includes('"') || value.includes(",") || value.includes("\n")) {
+        return `"${value.replace(/"/g, '""')}"`;
+      }
+      return value;
+    };
+
+    const rows = employees.map((employee) => [
+      employee.name,
+      employee.email,
+      employee.phone,
+      employee.department,
+      employee.designation,
+      employee.employeeId,
+      employee.joiningDate,
+      employee.status,
+      employee.location ?? "",
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.map((cell) => escapeCsv(String(cell))).join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "employees.csv";
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const getStatusBadge = (status: Employee["status"]) => {
@@ -263,7 +305,10 @@ const Employees = () => {
 
   const formatEmploymentType = (type?: string) => {
     if (!type) return "—";
-    return type.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    return type
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
   const capitalize = (str?: string) => {
@@ -423,7 +468,14 @@ const Employees = () => {
       sortable: true,
       defaultHidden: true,
       render: (employee) => (
-        <Badge variant="outline" className={employee.hasPortalAccess ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted text-muted-foreground"}>
+        <Badge
+          variant="outline"
+          className={
+            employee.hasPortalAccess
+              ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+              : "bg-muted text-muted-foreground"
+          }
+        >
           {employee.hasPortalAccess ? "Yes" : "No"}
         </Badge>
       ),
@@ -441,15 +493,11 @@ const Employees = () => {
       header: "",
       sortable: false,
       headerClassName: "w-[50px]",
-      sticky: 'right',
+      sticky: "right",
       render: (employee) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -514,17 +562,9 @@ const Employees = () => {
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h1 className="text-3xl font-bold text-foreground font-display">
-                  Employees
-                </h1>
-                <p className="text-muted-foreground mt-1">
-                  Manage your organization's employees
-                </p>
+                <h1 className="text-3xl font-bold text-foreground font-display">Employees</h1>
+                <p className="text-muted-foreground mt-1">Manage your organization's employees</p>
               </div>
-              <Button onClick={() => setAddDrawerOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Employee
-              </Button>
             </div>
 
             {/* Data Table */}
@@ -534,6 +574,18 @@ const Employees = () => {
               filters={filters}
               searchPlaceholder="Search Users..."
               selectable
+              toolbarActions={
+                <>
+                  <Button variant="outline" onClick={exportEmployeesCsv}>
+                    <Download className="h-4 w-4 mr-2" />
+                    Export CSV
+                  </Button>
+                  <Button onClick={() => setAddDrawerOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Employee
+                  </Button>
+                </>
+              }
               pageSize={10}
               pageSizeOptions={[10, 25, 50, 100]}
               getRowId={(employee) => employee.id}
@@ -552,11 +604,7 @@ const Employees = () => {
 
       {selectedEmployee && (
         <>
-          <ViewEmployeeDrawer
-            open={viewDrawerOpen}
-            onOpenChange={setViewDrawerOpen}
-            employee={selectedEmployee}
-          />
+          <ViewEmployeeDrawer open={viewDrawerOpen} onOpenChange={setViewDrawerOpen} employee={selectedEmployee} />
           <EditEmployeeDrawer
             open={editDrawerOpen}
             onOpenChange={setEditDrawerOpen}

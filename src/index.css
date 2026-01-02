@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -37,33 +37,33 @@
   }
 
   .dark {
-    --background: 0 0% 0%;
-    --foreground: 210 40% 98%;
-    --card: 0 0% 0%;
-    --card-foreground: 210 40% 98%;
-    --popover: 0 0% 0%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 174 72% 46%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 0 0% 8%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 0 0% 8%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 174 72% 46%;
-    --accent-foreground: 0 0% 0%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 174 72% 46%;
-    --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 174 72% 46%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 8%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 174 72% 46%;
+    --background: 222 14% 10%;
+    --foreground: 210 40% 96%;
+    --card: 222 14% 12%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 14% 12%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 174 65% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 12% 16%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 222 12% 18%;
+    --muted-foreground: 215 16% 66%;
+    --accent: 174 65% 48%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 210 40% 96%;
+    --border: 222 12% 22%;
+    --input: 222 12% 22%;
+    --ring: 174 65% 48%;
+    --sidebar-background: 222 14% 11%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 174 65% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 12% 16%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 222 12% 22%;
+    --sidebar-ring: 174 65% 48%;
   }
 }
 
@@ -71,14 +71,14 @@
   * {
     @apply border-border;
   }
-  
+
   /* Remove focus rings globally */
   *:focus,
   *:focus-visible {
     outline: none !important;
     box-shadow: none !important;
   }
-  
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
@@ -96,15 +96,15 @@
   .clean-card {
     @apply bg-card border border-border rounded-xl shadow-sm;
   }
-  
+
   .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
   }
-  
+
   .section-padding {
     @apply py-20 md:py-28 px-4 md:px-6 lg:px-8;
   }
-  
+
   .container-max {
     @apply max-w-7xl mx-auto;
   }
@@ -114,17 +114,22 @@
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
-  
+
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
-  
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -150,5 +155,30 @@
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.4);
+  }
+
+  .scrollbar-horizontal {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.35) transparent;
+  }
+
+  .scrollbar-horizontal::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  .scrollbar-horizontal::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-horizontal::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .scrollbar-horizontal:hover::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.45);
+    background-clip: padding-box;
   }
 }

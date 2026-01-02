@@ -4,27 +4,14 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Pagination,
   PaginationContent,
@@ -33,15 +20,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  Search,
-  Columns3,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Search, Columns3, ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 // Column definition interface
 export interface Column<T> {
@@ -54,7 +33,7 @@ export interface Column<T> {
   render?: (item: T) => React.ReactNode;
   className?: string;
   headerClassName?: string;
-  sticky?: 'left' | 'right';
+  sticky?: "left" | "right";
 }
 
 // Filter option interface
@@ -78,6 +57,7 @@ export interface DataTableProps<T> {
   searchPlaceholder?: string;
   emptyMessage?: string;
   selectable?: boolean;
+  toolbarActions?: React.ReactNode;
   onRowClick?: (item: T) => void;
   onSelectionChange?: (selectedItems: T[]) => void;
   pageSize?: number;
@@ -92,6 +72,7 @@ export function DataTable<T>({
   searchPlaceholder = "Search...",
   emptyMessage = "No results found.",
   selectable = false,
+  toolbarActions,
   onRowClick,
   onSelectionChange,
   pageSize: initialPageSize = 10,
@@ -106,17 +87,14 @@ export function DataTable<T>({
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-    new Set(columns.filter((col) => col.visible !== false && col.defaultHidden !== true).map((col) => col.key))
+    new Set(columns.filter((col) => col.visible !== false && col.defaultHidden !== true).map((col) => col.key)),
   );
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(initialPageSize);
 
   // Get searchable columns
-  const searchableColumns = useMemo(
-    () => columns.filter((col) => col.searchable !== false),
-    [columns]
-  );
+  const searchableColumns = useMemo(() => columns.filter((col) => col.searchable !== false), [columns]);
 
   // Filter and sort data
   const processedData = useMemo(() => {
@@ -129,7 +107,7 @@ export function DataTable<T>({
         searchableColumns.some((col) => {
           const value = (item as Record<string, unknown>)[col.key];
           return value && String(value).toLowerCase().includes(query);
-        })
+        }),
       );
     }
 
@@ -227,20 +205,17 @@ export function DataTable<T>({
   const displayColumns = columns.filter((col) => visibleColumns.has(col.key));
 
   // Check if all rows on current page are selected
-  const allSelected =
-    paginatedData.length > 0 &&
-    paginatedData.every((item) => selectedRows.has(resolveRowId(item)));
-  const someSelected =
-    paginatedData.some((item) => selectedRows.has(resolveRowId(item))) && !allSelected;
+  const allSelected = paginatedData.length > 0 && paginatedData.every((item) => selectedRows.has(resolveRowId(item)));
+  const someSelected = paginatedData.some((item) => selectedRows.has(resolveRowId(item))) && !allSelected;
 
   // Pagination range
   const startIndex = (currentPage - 1) * rowsPerPage + 1;
   const endIndex = Math.min(currentPage * rowsPerPage, processedData.length);
 
   return (
-    <div className="space-y-4">
+    <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3 px-4 py-3 border-b border-border">
         {/* Search */}
         <div className="relative flex-1 min-w-[200px] max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -248,7 +223,7 @@ export function DataTable<T>({
             placeholder={searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
+            className="h-9 pl-9"
           />
         </div>
 
@@ -257,11 +232,9 @@ export function DataTable<T>({
           <Select
             key={filter.key}
             value={activeFilters[filter.key] || "all"}
-            onValueChange={(value) =>
-              setActiveFilters((prev) => ({ ...prev, [filter.key]: value }))
-            }
+            onValueChange={(value) => setActiveFilters((prev) => ({ ...prev, [filter.key]: value }))}
           >
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="h-9 w-[140px]">
               <SelectValue placeholder={filter.label} />
             </SelectTrigger>
             <SelectContent>
@@ -278,28 +251,32 @@ export function DataTable<T>({
         {/* Columns Visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="gap-2 border border-border">
+            <Button variant="ghost" size="sm" className="h-9 gap-2 border border-border">
               <Columns3 className="h-4 w-4" />
               Columns
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[180px] max-h-[400px] overflow-y-auto scrollbar-hide">
-            {columns.filter((col) => col.header).map((column) => (
-              <DropdownMenuCheckboxItem
-                key={column.key}
-                checked={visibleColumns.has(column.key)}
-                onCheckedChange={() => toggleColumn(column.key)}
-              >
-                {column.header}
-              </DropdownMenuCheckboxItem>
-            ))}
+            {columns
+              .filter((col) => col.header)
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.key}
+                  checked={visibleColumns.has(column.key)}
+                  onCheckedChange={() => toggleColumn(column.key)}
+                >
+                  {column.header}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {toolbarActions ? <div className="ml-auto flex items-center gap-2">{toolbarActions}</div> : null}
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-xl overflow-x-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/40 transition-colors">
-        <Table>
+      <div className="overflow-x-auto scrollbar-horizontal">
+        <Table className="text-sm min-w-max">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               {selectable && (
@@ -321,9 +298,9 @@ export function DataTable<T>({
                   key={column.key}
                   className={cn(
                     column.headerClassName,
-                    'border-r border-border',
-                    column.sticky === 'left' && 'sticky left-0 bg-card z-20 shadow-[1px_0_0_hsl(var(--border))]',
-                    column.sticky === 'right' &&
+                    "border-r border-border text-xs font-semibold text-muted-foreground",
+                    column.sticky === "left" && "sticky left-0 bg-card z-20 shadow-[1px_0_0_hsl(var(--border))]",
+                    column.sticky === "right" && "sticky right-0 bg-card z-20 shadow-[-1px_0_0_hsl(var(--border))]",
                   )}
                 >
                   {column.sortable !== false ? (
@@ -374,25 +351,24 @@ export function DataTable<T>({
                     {selectable && (
                       <TableCell
                         onClick={(e) => e.stopPropagation()}
-                        className="w-[50px] sticky left-0 bg-card z-10 border-r border-border shadow-[1px_0_0_hsl(var(--border))]"
+                        className="w-[50px] min-w-[50px] sticky left-0 bg-card z-10 border-r border-border shadow-[1px_0_0_hsl(var(--border))]"
                       >
                         <Checkbox
                           checked={isSelected}
-                          onCheckedChange={(checked) =>
-                            handleRowSelect(rowId, checked as boolean)
-                          }
+                          onCheckedChange={(checked) => handleRowSelect(rowId, checked as boolean)}
                           aria-label={`Select row ${rowId}`}
                         />
                       </TableCell>
                     )}
                     {displayColumns.map((column) => (
-                      <TableCell 
-                        key={column.key} 
+                      <TableCell
+                        key={column.key}
                         className={cn(
                           column.className,
-                          'border-r border-border',
-                          column.sticky === 'left' && 'sticky left-0 bg-card z-10 shadow-[1px_0_0_hsl(var(--border))]',
-                          column.sticky === 'right' &&
+                          "border-r border-border",
+                          column.sticky === "left" && "sticky left-0 bg-card z-10 shadow-[1px_0_0_hsl(var(--border))]",
+                          column.sticky === "right" &&
+                            "sticky right-0 bg-card z-10 shadow-[-1px_0_0_hsl(var(--border))]",
                         )}
                       >
                         {column.render
@@ -409,14 +385,11 @@ export function DataTable<T>({
       </div>
 
       {/* Pagination */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t border-border">
         {/* Rows per page */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span>Rows per page:</span>
-          <Select
-            value={String(rowsPerPage)}
-            onValueChange={(value) => setRowsPerPage(Number(value))}
-          >
+          <Select value={String(rowsPerPage)} onValueChange={(value) => setRowsPerPage(Number(value))}>
             <SelectTrigger className="w-[70px] h-8">
               <SelectValue />
             </SelectTrigger>
@@ -432,9 +405,7 @@ export function DataTable<T>({
 
         {/* Count display */}
         <div className="text-sm text-muted-foreground">
-          {processedData.length > 0
-            ? `${startIndex} - ${endIndex} of ${processedData.length}`
-            : "0 results"}
+          {processedData.length > 0 ? `${startIndex} - ${endIndex} of ${processedData.length}` : "0 results"}
         </div>
 
         {/* Page navigation */}
