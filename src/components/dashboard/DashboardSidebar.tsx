@@ -27,6 +27,11 @@ import {
   LayoutTemplate,
   Briefcase,
   UserCheck,
+  FileUser,
+  UserSearch,
+  Calendar,
+  FileCheck2,
+  PieChart,
 } from "lucide-react";
 import {
   Sidebar,
@@ -84,8 +89,16 @@ const payrollSubItems = [
   { title: "Report", url: "/admin/payroll/report", icon: FileBarChart },
 ];
 
+const recruitmentSubItems = [
+  { title: "Job Postings", url: "/admin/recruitment/jobs", icon: Briefcase },
+  { title: "Applications", url: "/admin/recruitment/applications", icon: FileUser },
+  { title: "Candidates", url: "/admin/recruitment/candidates", icon: UserSearch },
+  { title: "Interviews", url: "/admin/recruitment/interviews", icon: Calendar },
+  { title: "Offers", url: "/admin/recruitment/offers", icon: FileCheck2 },
+  { title: "Report", url: "/admin/recruitment/report", icon: PieChart },
+];
+
 const hrModules = [
-  { title: "Recruitment", url: "/admin/recruitment", icon: UserPlus },
   { title: "Performance", url: "/admin/performance", icon: TrendingUp },
   { title: "Time Tracking", url: "/admin/time-tracking", icon: Clock },
   { title: "Departments", url: "/admin/departments", icon: Building2 },
@@ -109,11 +122,13 @@ export function DashboardSidebar() {
   const isAttendanceMenuActive = attendanceSubItems.some((item) => currentPath === item.url);
   const isLeaveMenuActive = leaveSubItems.some((item) => currentPath === item.url);
   const isPayrollMenuActive = payrollSubItems.some((item) => currentPath === item.url);
+  const isRecruitmentMenuActive = recruitmentSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
   const [leaveMenuOpen, setLeaveMenuOpen] = useState(isLeaveMenuActive);
   const [payrollMenuOpen, setPayrollMenuOpen] = useState(isPayrollMenuActive);
+  const [recruitmentMenuOpen, setRecruitmentMenuOpen] = useState(isRecruitmentMenuActive);
 
   return (
     <Sidebar
@@ -372,6 +387,61 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {payrollSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Recruitment Management with Submenu */}
+              <Collapsible
+                open={recruitmentMenuOpen}
+                onOpenChange={setRecruitmentMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isRecruitmentMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isRecruitmentMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <UserPlus className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Recruitment</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                recruitmentMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {recruitmentSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
