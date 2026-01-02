@@ -32,6 +32,7 @@ import {
   Calendar,
   FileCheck2,
   PieChart,
+  MapPin,
 } from "lucide-react";
 import {
   Sidebar,
@@ -63,6 +64,7 @@ const employeeSubItems = [
   { title: "Departments", url: "/admin/employees/departments", icon: Building2 },
   { title: "Designations", url: "/admin/employees/designations", icon: Briefcase },
   { title: "Employment Types", url: "/admin/employees/types", icon: UserCheck },
+  { title: "Locations", url: "/admin/employees/locations", icon: MapPin },
   { title: "Regularization", url: "/admin/employees/regularization", icon: FileCheck },
 ];
 

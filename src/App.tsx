@@ -36,6 +36,7 @@ import Candidates from "./pages/admin/Candidates";
 import Interviews from "./pages/admin/Interviews";
 import Offers from "./pages/admin/Offers";
 import RecruitmentReport from "./pages/admin/RecruitmentReport";
+import Locations from "./pages/admin/Locations";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -62,6 +63,7 @@ const App = () => (
             <Route path="/admin/employees/designations" element={<Designations />} />
             <Route path="/admin/employees/types" element={<EmploymentTypes />} />
             <Route path="/admin/employees/regularization" element={<DetailsRegularization />} />
+            <Route path="/admin/employees/locations" element={<Locations />} />
             <Route path="/admin/attendance" element={<Navigate to="/admin/attendance/overview" replace />} />
             <Route path="/admin/attendance/overview" element={<AttendanceOverview />} />
             <Route path="/admin/attendance/all" element={<AllAttendance />} />
