@@ -7,8 +7,6 @@ import { AttendanceChart } from "@/components/dashboard/AttendanceChart";
 import { DepartmentChart } from "@/components/dashboard/DepartmentChart";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { UpcomingEvents } from "@/components/dashboard/UpcomingEvents";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 const Dashboard = () => {
   return (
     <SidebarProvider>
@@ -27,80 +25,55 @@ const Dashboard = () => {
               </p>
             </div>
 
-            {/* Tabs */}
-            <Tabs defaultValue="overview" className="mb-8">
-              <TabsList className="bg-secondary border border-border">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="reports">Reports</TabsTrigger>
-              </TabsList>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <StatsCard
+                title="Total Employees"
+                value="248"
+                change="12.5%"
+                changeType="positive"
+                icon={Users}
+                iconColor="text-primary"
+              />
+              <StatsCard
+                title="Present Today"
+                value="215"
+                change="8.2%"
+                changeType="positive"
+                icon={UserCheck}
+                iconColor="text-emerald-500"
+              />
+              <StatsCard
+                title="On Leave"
+                value="18"
+                change="2.4%"
+                changeType="negative"
+                icon={UserX}
+                iconColor="text-amber-500"
+              />
+              <StatsCard
+                title="New Hires"
+                value="12"
+                change="24.5%"
+                changeType="positive"
+                icon={UserPlus}
+                iconColor="text-purple-500"
+              />
+            </div>
 
-              <TabsContent value="overview" className="mt-6">
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                  <StatsCard
-                    title="Total Employees"
-                    value="248"
-                    change="12.5%"
-                    changeType="positive"
-                    icon={Users}
-                    iconColor="text-primary"
-                  />
-                  <StatsCard
-                    title="Present Today"
-                    value="215"
-                    change="8.2%"
-                    changeType="positive"
-                    icon={UserCheck}
-                    iconColor="text-emerald-500"
-                  />
-                  <StatsCard
-                    title="On Leave"
-                    value="18"
-                    change="2.4%"
-                    changeType="negative"
-                    icon={UserX}
-                    iconColor="text-amber-500"
-                  />
-                  <StatsCard
-                    title="New Hires"
-                    value="12"
-                    change="24.5%"
-                    changeType="positive"
-                    icon={UserPlus}
-                    iconColor="text-purple-500"
-                  />
-                </div>
+            {/* Charts Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="lg:col-span-2">
+                <AttendanceChart />
+              </div>
+              <DepartmentChart />
+            </div>
 
-                {/* Charts Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                  <div className="lg:col-span-2">
-                    <AttendanceChart />
-                  </div>
-                  <DepartmentChart />
-                </div>
-
-                {/* Activity & Events Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <RecentActivity />
-                  <UpcomingEvents />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="analytics" className="mt-6">
-                <div className="bg-card border border-border rounded-xl p-12 text-center">
-                  <h3 className="text-lg font-semibold text-foreground mb-2">Analytics Dashboard</h3>
-                  <p className="text-muted-foreground">Detailed analytics and insights coming soon...</p>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="reports" className="mt-6">
-                <div className="bg-card border border-border rounded-xl p-12 text-center">
-                  <h3 className="text-lg font-semibold text-foreground mb-2">Reports Center</h3>
-                  <p className="text-muted-foreground">Generate and download reports coming soon...</p>
-                </div>
-              </TabsContent>
-            </Tabs>
+            {/* Activity & Events Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <RecentActivity />
+              <UpcomingEvents />
+            </div>
           </main>
         </div>
       </div>
