@@ -37,7 +37,7 @@ function CustomCaption({ displayMonth }: CaptionProps) {
   };
 
   return (
-    <div className="flex items-center justify-between px-1 gap-2">
+    <div className="flex items-center justify-center px-1 gap-1">
       <Select
         value={displayMonth.getMonth().toString()}
         onValueChange={handleMonthChange}
