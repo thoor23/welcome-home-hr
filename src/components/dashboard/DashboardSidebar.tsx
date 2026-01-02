@@ -98,11 +98,6 @@ const recruitmentSubItems = [
   { title: "Report", url: "/admin/recruitment/report", icon: PieChart },
 ];
 
-const hrModules = [
-  { title: "Performance", url: "/admin/performance", icon: TrendingUp },
-  { title: "Time Tracking", url: "/admin/time-tracking", icon: Clock },
-  { title: "Departments", url: "/admin/departments", icon: Building2 },
-];
 
 const otherItems = [
   { title: "Reports", url: "/admin/reports", icon: FileText },
@@ -460,26 +455,6 @@ export function DashboardSidebar() {
                 </SidebarMenuItem>
               </Collapsible>
 
-              {/* Other HR Modules */}
-              {hrModules.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    className={cn(
-                      "rounded-lg transition-all",
-                      isActive(item.url)
-                        ? "bg-secondary text-foreground"
-                        : "hover:bg-secondary"
-                    )}
-                  >
-                    <Link to={item.url} className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
-                      <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
