@@ -46,6 +46,9 @@ import {
   CalendarClock,
   ArrowRightLeft,
   Timer,
+  UserPlus2,
+  UserMinus,
+  LogOut,
 } from "lucide-react";
 import {
   Sidebar,
@@ -148,6 +151,20 @@ const shiftSubItems = [
   { title: "Report", url: "/admin/shifts/report", icon: BarChart3 },
 ];
 
+const onboardingSubItems = [
+  { title: "Overview", url: "/admin/onboarding/overview", icon: BarChart3 },
+  { title: "New Hire", url: "/admin/onboarding/new", icon: UserPlus2 },
+  { title: "Tasks", url: "/admin/onboarding/tasks", icon: ClipboardList },
+  { title: "Report", url: "/admin/onboarding/report", icon: PieChart },
+];
+
+const offboardingSubItems = [
+  { title: "Overview", url: "/admin/offboarding/overview", icon: BarChart3 },
+  { title: "Exit Clearance", url: "/admin/offboarding/clearance", icon: LogOut },
+  { title: "Tasks", url: "/admin/offboarding/tasks", icon: ClipboardList },
+  { title: "Report", url: "/admin/offboarding/report", icon: PieChart },
+];
+
 const otherItems = [
   { title: "Reports", url: "/admin/reports", icon: FileText },
   { title: "Awards", url: "/admin/awards", icon: Award },
@@ -171,6 +188,8 @@ export function DashboardSidebar() {
   const isExpenseMenuActive = expenseSubItems.some((item) => currentPath === item.url);
   const isBillingMenuActive = billingSubItems.some((item) => currentPath === item.url);
   const isShiftMenuActive = shiftSubItems.some((item) => currentPath === item.url);
+  const isOnboardingMenuActive = onboardingSubItems.some((item) => currentPath === item.url);
+  const isOffboardingMenuActive = offboardingSubItems.some((item) => currentPath === item.url);
 
   const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
   const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
@@ -181,6 +200,8 @@ export function DashboardSidebar() {
   const [expenseMenuOpen, setExpenseMenuOpen] = useState(isExpenseMenuActive);
   const [billingMenuOpen, setBillingMenuOpen] = useState(isBillingMenuActive);
   const [shiftMenuOpen, setShiftMenuOpen] = useState(isShiftMenuActive);
+  const [onboardingMenuOpen, setOnboardingMenuOpen] = useState(isOnboardingMenuActive);
+  const [offboardingMenuOpen, setOffboardingMenuOpen] = useState(isOffboardingMenuActive);
 
   return (
     <Sidebar
@@ -714,6 +735,116 @@ export function DashboardSidebar() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {billingSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Onboarding with Submenu */}
+              <Collapsible
+                open={onboardingMenuOpen}
+                onOpenChange={setOnboardingMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isOnboardingMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isOnboardingMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <UserPlus2 className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Onboarding</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                onboardingMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {onboardingSubItems.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive(item.url)}
+                            >
+                              <Link to={item.url} className="flex items-center gap-2">
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {/* Offboarding with Submenu */}
+              <Collapsible
+                open={offboardingMenuOpen}
+                onOpenChange={setOffboardingMenuOpen}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      isActive={isOffboardingMenuActive}
+                      className={cn(
+                        "rounded-lg transition-all w-full",
+                        isOffboardingMenuActive
+                          ? "bg-secondary text-foreground"
+                          : "hover:bg-secondary"
+                      )}
+                    >
+                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+                        <UserMinus className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">Offboarding</span>
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                                offboardingMenuOpen && "rotate-180"
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {!collapsed && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {offboardingSubItems.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
