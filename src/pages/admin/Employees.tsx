@@ -278,7 +278,6 @@ const Employees = () => {
       header: "Member",
       searchable: true,
       sortable: true,
-      sticky: 'left',
       render: (employee) => (
         <div className="flex items-center gap-3 whitespace-nowrap">
           <Avatar className="h-9 w-9 flex-shrink-0">
