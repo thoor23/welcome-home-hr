@@ -25,6 +25,8 @@ interface AttendanceRecord {
   date: string;
   checkIn: string;
   checkOut: string;
+  breakTime: string;
+  todaysShift: string;
   workHours: string;
   status: "present" | "absent" | "late" | "half-day" | "on-leave";
 }
@@ -39,6 +41,8 @@ const initialRecords: AttendanceRecord[] = [
     date: "2024-01-15",
     checkIn: "09:00 AM",
     checkOut: "06:00 PM",
+    breakTime: "1h 0m",
+    todaysShift: "9:00 AM - 6:00 PM",
     workHours: "9h 0m",
     status: "present",
   },
@@ -51,6 +55,8 @@ const initialRecords: AttendanceRecord[] = [
     date: "2024-01-15",
     checkIn: "09:45 AM",
     checkOut: "06:30 PM",
+    breakTime: "45m",
+    todaysShift: "9:00 AM - 6:00 PM",
     workHours: "8h 45m",
     status: "late",
   },
@@ -63,6 +69,8 @@ const initialRecords: AttendanceRecord[] = [
     date: "2024-01-15",
     checkIn: "—",
     checkOut: "—",
+    breakTime: "—",
+    todaysShift: "9:00 AM - 6:00 PM",
     workHours: "0h 0m",
     status: "absent",
   },
@@ -75,6 +83,8 @@ const initialRecords: AttendanceRecord[] = [
     date: "2024-01-15",
     checkIn: "09:00 AM",
     checkOut: "01:00 PM",
+    breakTime: "30m",
+    todaysShift: "9:00 AM - 6:00 PM",
     workHours: "4h 0m",
     status: "half-day",
   },
@@ -87,6 +97,8 @@ const initialRecords: AttendanceRecord[] = [
     date: "2024-01-15",
     checkIn: "—",
     checkOut: "—",
+    breakTime: "—",
+    todaysShift: "10:00 AM - 7:00 PM",
     workHours: "0h 0m",
     status: "on-leave",
   },
@@ -138,7 +150,7 @@ const AllAttendance = () => {
   };
 
   const exportCsv = () => {
-    const headers = ["Employee Name", "Employee ID", "Department", "Date", "Check In", "Check Out", "Work Hours", "Status"];
+    const headers = ["Employee Name", "Employee ID", "Department", "Date", "Check In", "Check Out", "Break", "Today's Shift", "Work Hours", "Status"];
     const rows = records.map((r) => [
       r.employeeName,
       r.employeeId,
@@ -146,6 +158,8 @@ const AllAttendance = () => {
       r.date,
       r.checkIn,
       r.checkOut,
+      r.breakTime,
+      r.todaysShift,
       r.workHours,
       r.status,
     ]);
@@ -214,6 +228,18 @@ const AllAttendance = () => {
     {
       key: "checkOut",
       header: "Check Out",
+      sortable: true,
+      className: "text-muted-foreground whitespace-nowrap",
+    },
+    {
+      key: "breakTime",
+      header: "Break",
+      sortable: true,
+      className: "text-muted-foreground whitespace-nowrap",
+    },
+    {
+      key: "todaysShift",
+      header: "Today's Shift",
       sortable: true,
       className: "text-muted-foreground whitespace-nowrap",
     },
