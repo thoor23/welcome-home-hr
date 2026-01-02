@@ -3,18 +3,9 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Plus, Search, Eye, Pencil, MoreHorizontal } from "lucide-react";
+import { Plus, Eye, Pencil, MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +15,7 @@ import {
 import { AddEmployeeDrawer } from "@/components/employees/AddEmployeeDrawer";
 import { ViewEmployeeDrawer } from "@/components/employees/ViewEmployeeDrawer";
 import { EditEmployeeDrawer } from "@/components/employees/EditEmployeeDrawer";
+import { DataTable, Column, Filter } from "@/components/ui/data-table";
 import type { DocumentItem } from "@/components/employees/DocumentUpload";
 
 export interface Employee {
@@ -195,19 +187,10 @@ const initialEmployees: Employee[] = [
 
 const Employees = () => {
   const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
-  const [searchQuery, setSearchQuery] = useState("");
   const [addDrawerOpen, setAddDrawerOpen] = useState(false);
   const [viewDrawerOpen, setViewDrawerOpen] = useState(false);
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-
-  const filteredEmployees = employees.filter(
-    (employee) =>
-      employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.employeeId.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleAddEmployee = (newEmployee: Omit<Employee, "id">) => {
     const employee: Employee = {
@@ -247,18 +230,150 @@ const Employees = () => {
     };
 
     const labels = {
-      active: "Active",
-      probation: "Probation",
-      notice: "Notice",
+      active: "In Office",
+      probation: "Remote",
+      notice: "On Leave",
       exit: "Exit",
     };
 
+    const dots = {
+      active: "bg-emerald-500",
+      probation: "bg-blue-500",
+      notice: "bg-amber-500",
+      exit: "bg-red-500",
+    };
+
     return (
-      <Badge variant="outline" className={variants[status]}>
+      <Badge variant="outline" className={`${variants[status]} gap-1.5`}>
+        <span className={`h-1.5 w-1.5 rounded-full ${dots[status]}`} />
         {labels[status]}
       </Badge>
     );
   };
+
+  // Define columns for the DataTable
+  const columns: Column<Employee>[] = [
+    {
+      key: "name",
+      header: "Member",
+      searchable: true,
+      sortable: true,
+      render: (employee) => (
+        <div className="flex items-center gap-3">
+          <Avatar className="h-9 w-9">
+            <AvatarImage src={employee.profilePic} />
+            <AvatarFallback className="bg-primary/10 text-primary">
+              {employee.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="font-medium text-foreground">{employee.name}</p>
+            <p className="text-sm text-primary">{employee.email}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "designation",
+      header: "Role",
+      searchable: true,
+      sortable: true,
+      className: "text-muted-foreground",
+    },
+    {
+      key: "status",
+      header: "Status",
+      sortable: true,
+      render: (employee) => getStatusBadge(employee.status),
+    },
+    {
+      key: "location",
+      header: "Location",
+      sortable: true,
+      className: "text-muted-foreground",
+      render: (employee) => employee.location || "—",
+    },
+    {
+      key: "joiningDate",
+      header: "Activity",
+      sortable: true,
+      className: "text-muted-foreground",
+      render: (employee) => {
+        const date = new Date(employee.joiningDate);
+        return date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      },
+    },
+    {
+      key: "actions",
+      header: "",
+      sortable: false,
+      headerClassName: "w-[50px]",
+      render: (employee) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                handleViewEmployee(employee);
+              }}
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              View Details
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEditClick(employee);
+              }}
+            >
+              <Pencil className="h-4 w-4 mr-2" />
+              Edit Employee
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ];
+
+  // Define filters
+  const filters: Filter[] = [
+    {
+      key: "status",
+      label: "Status",
+      options: [
+        { label: "In Office", value: "active" },
+        { label: "Remote", value: "probation" },
+        { label: "On Leave", value: "notice" },
+        { label: "Exit", value: "exit" },
+      ],
+    },
+    {
+      key: "department",
+      label: "Department",
+      options: [
+        { label: "Engineering", value: "Engineering" },
+        { label: "Marketing", value: "Marketing" },
+        { label: "HR", value: "HR" },
+        { label: "Sales", value: "Sales" },
+      ],
+    },
+  ];
 
   return (
     <SidebarProvider>
@@ -285,94 +400,17 @@ const Employees = () => {
               </Button>
             </div>
 
-            {/* Search */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search employees..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
-                />
-              </div>
-            </div>
-
-            {/* Table */}
-            <div className="bg-card border border-border rounded-xl overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow className="hover:bg-transparent">
-                    <TableHead>Employee</TableHead>
-                    <TableHead>Employee ID</TableHead>
-                    <TableHead>Department</TableHead>
-                    <TableHead>Designation</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredEmployees.map((employee) => (
-                    <TableRow key={employee.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-9 w-9">
-                            <AvatarImage src={employee.profilePic} />
-                            <AvatarFallback className="bg-primary/10 text-primary">
-                              {employee.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-medium text-foreground">
-                              {employee.name}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {employee.email}
-                            </p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {employee.employeeId}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {employee.department}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {employee.designation}
-                      </TableCell>
-                      <TableCell>{getStatusBadge(employee.status)}</TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => handleViewEmployee(employee)}
-                            >
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleEditClick(employee)}
-                            >
-                              <Pencil className="h-4 w-4 mr-2" />
-                              Edit Employee
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+            {/* Data Table */}
+            <DataTable
+              data={employees}
+              columns={columns}
+              filters={filters}
+              searchPlaceholder="Search Users..."
+              selectable
+              pageSize={10}
+              pageSizeOptions={[10, 25, 50, 100]}
+              getRowId={(employee) => employee.id}
+            />
           </main>
         </div>
       </div>
