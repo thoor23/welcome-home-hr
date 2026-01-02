@@ -192,12 +192,6 @@ const OrganizationOnboarding = () => {
             </Button>
           </form>
 
-          {/* Skip for now */}
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            <Link to="/" className="text-primary hover:text-primary/80 font-medium transition-colors">
-              Skip for now
-            </Link>
-          </p>
         </div>
       </div>
     </div>
