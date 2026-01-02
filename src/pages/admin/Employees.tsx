@@ -280,8 +280,8 @@ const Employees = () => {
       sortable: true,
       sticky: 'left',
       render: (employee) => (
-        <div className="flex items-center gap-3">
-          <Avatar className="h-9 w-9">
+        <div className="flex items-center gap-3 whitespace-nowrap">
+          <Avatar className="h-9 w-9 flex-shrink-0">
             <AvatarImage src={employee.profilePic} />
             <AvatarFallback className="bg-primary/10 text-primary">
               {employee.name
@@ -303,7 +303,7 @@ const Employees = () => {
       searchable: true,
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
     },
     {
       key: "phone",
@@ -311,14 +311,14 @@ const Employees = () => {
       searchable: true,
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
     },
     {
       key: "dateOfBirth",
       header: "Date of Birth",
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => formatDate(employee.dateOfBirth),
     },
     {
@@ -326,7 +326,7 @@ const Employees = () => {
       header: "Gender",
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => capitalize(employee.gender),
     },
     {
@@ -334,7 +334,7 @@ const Employees = () => {
       header: "Marital Status",
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => capitalize(employee.maritalStatus),
     },
     {
@@ -342,7 +342,7 @@ const Employees = () => {
       header: "Blood Group",
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => employee.bloodGroup || "—",
     },
     {
@@ -362,7 +362,7 @@ const Employees = () => {
       header: "Role",
       searchable: true,
       sortable: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
     },
     {
       key: "department",
@@ -370,14 +370,14 @@ const Employees = () => {
       searchable: true,
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
     },
     {
       key: "region",
       header: "Region",
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => employee.region || "—",
     },
     {
@@ -386,7 +386,7 @@ const Employees = () => {
       searchable: true,
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => employee.reportingManager || "—",
     },
     {
@@ -394,7 +394,7 @@ const Employees = () => {
       header: "Employment Type",
       sortable: true,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => formatEmploymentType(employee.employmentType),
     },
     {
@@ -407,14 +407,14 @@ const Employees = () => {
       key: "location",
       header: "Location",
       sortable: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => employee.location || "—",
     },
     {
       key: "joiningDate",
       header: "Joining Date",
       sortable: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => formatDate(employee.joiningDate),
     },
     {
@@ -433,7 +433,7 @@ const Employees = () => {
       header: "Emergency Contact",
       sortable: false,
       defaultHidden: true,
-      className: "text-muted-foreground",
+      className: "text-muted-foreground whitespace-nowrap",
       render: (employee) => employee.emergencyContact?.name || "—",
     },
     {
