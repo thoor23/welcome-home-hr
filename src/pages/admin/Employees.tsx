@@ -24,18 +24,66 @@ import {
 import { AddEmployeeDrawer } from "@/components/employees/AddEmployeeDrawer";
 import { ViewEmployeeDrawer } from "@/components/employees/ViewEmployeeDrawer";
 import { EditEmployeeDrawer } from "@/components/employees/EditEmployeeDrawer";
+import type { DocumentItem } from "@/components/employees/DocumentUpload";
 
 export interface Employee {
   id: string;
+  
+  // Profile Picture
+  profilePic?: string;
+  
+  // Personal Information
   name: string;
   email: string;
   phone: string;
+  dateOfBirth?: string;
+  gender?: "male" | "female" | "other";
+  maritalStatus?: "single" | "married" | "divorced" | "widowed";
+  bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+  address?: string;
+  
+  // Work Information
+  employeeId: string;
   department: string;
   designation: string;
-  employeeId: string;
+  location?: string;
+  region?: string;
+  reportingManager?: string;
+  employmentType?: "full-time" | "part-time" | "contract" | "intern";
   joiningDate: string;
-  status: "active" | "inactive" | "on-leave";
-  avatar?: string;
+  status: "active" | "probation" | "notice" | "exit";
+  
+  // Past Job Details
+  pastJobs?: Array<{
+    company: string;
+    designation: string;
+    startDate: string;
+    endDate: string;
+    description?: string;
+  }>;
+  
+  // Education Details
+  education?: Array<{
+    degree: string;
+    institution: string;
+    year: string;
+    grade?: string;
+  }>;
+  
+  // Documents
+  documents?: DocumentItem[];
+  
+  // Emergency Contact
+  emergencyContact?: {
+    name: string;
+    relationship: string;
+    phone: string;
+    email?: string;
+  };
+  
+  // Portal Access
+  hasPortalAccess?: boolean;
+  password?: string;
 }
 
 const initialEmployees: Employee[] = [
@@ -49,6 +97,39 @@ const initialEmployees: Employee[] = [
     employeeId: "EMP001",
     joiningDate: "2022-03-15",
     status: "active",
+    dateOfBirth: "1990-05-12",
+    gender: "female",
+    maritalStatus: "married",
+    bloodGroup: "O+",
+    address: "123 Tech Street, San Francisco, CA 94102",
+    location: "San Francisco",
+    region: "West",
+    reportingManager: "Mike Chen",
+    employmentType: "full-time",
+    pastJobs: [
+      {
+        company: "Tech Corp",
+        designation: "Junior Developer",
+        startDate: "2018-01-01",
+        endDate: "2022-02-28",
+        description: "Worked on frontend development",
+      },
+    ],
+    education: [
+      {
+        degree: "B.S. Computer Science",
+        institution: "Stanford University",
+        year: "2017",
+        grade: "3.8 GPA",
+      },
+    ],
+    emergencyContact: {
+      name: "John Johnson",
+      relationship: "Spouse",
+      phone: "+1 234 567 8900",
+      email: "john.johnson@email.com",
+    },
+    hasPortalAccess: true,
   },
   {
     id: "2",
@@ -60,6 +141,10 @@ const initialEmployees: Employee[] = [
     employeeId: "EMP002",
     joiningDate: "2021-06-20",
     status: "active",
+    gender: "male",
+    employmentType: "full-time",
+    location: "New York",
+    region: "East",
   },
   {
     id: "3",
@@ -70,7 +155,11 @@ const initialEmployees: Employee[] = [
     designation: "HR Specialist",
     employeeId: "EMP003",
     joiningDate: "2023-01-10",
-    status: "on-leave",
+    status: "probation",
+    gender: "female",
+    employmentType: "full-time",
+    location: "Chicago",
+    region: "Midwest",
   },
   {
     id: "4",
@@ -81,7 +170,11 @@ const initialEmployees: Employee[] = [
     designation: "Sales Executive",
     employeeId: "EMP004",
     joiningDate: "2022-09-05",
-    status: "active",
+    status: "notice",
+    gender: "male",
+    employmentType: "full-time",
+    location: "Los Angeles",
+    region: "West",
   },
   {
     id: "5",
@@ -92,7 +185,11 @@ const initialEmployees: Employee[] = [
     designation: "UI/UX Designer",
     employeeId: "EMP005",
     joiningDate: "2023-04-12",
-    status: "inactive",
+    status: "exit",
+    gender: "female",
+    employmentType: "contract",
+    location: "Austin",
+    region: "South",
   },
 ];
 
@@ -144,14 +241,16 @@ const Employees = () => {
   const getStatusBadge = (status: Employee["status"]) => {
     const variants = {
       active: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-      inactive: "bg-red-500/10 text-red-500 border-red-500/20",
-      "on-leave": "bg-amber-500/10 text-amber-500 border-amber-500/20",
+      probation: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+      notice: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+      exit: "bg-red-500/10 text-red-500 border-red-500/20",
     };
 
     const labels = {
       active: "Active",
-      inactive: "Inactive",
-      "on-leave": "On Leave",
+      probation: "Probation",
+      notice: "Notice",
+      exit: "Exit",
     };
 
     return (
@@ -218,7 +317,7 @@ const Employees = () => {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <Avatar className="h-9 w-9">
-                            <AvatarImage src={employee.avatar} />
+                            <AvatarImage src={employee.profilePic} />
                             <AvatarFallback className="bg-primary/10 text-primary">
                               {employee.name
                                 .split(" ")
@@ -283,6 +382,7 @@ const Employees = () => {
         open={addDrawerOpen}
         onOpenChange={setAddDrawerOpen}
         onSubmit={handleAddEmployee}
+        employees={employees}
       />
 
       {selectedEmployee && (
@@ -297,6 +397,7 @@ const Employees = () => {
             onOpenChange={setEditDrawerOpen}
             employee={selectedEmployee}
             onSubmit={handleEditEmployee}
+            employees={employees}
           />
         </>
       )}
