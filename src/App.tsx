@@ -26,6 +26,7 @@ import SalaryStructure from "./pages/admin/SalaryStructure";
 import GeneratePayslip from "./pages/admin/GeneratePayslip";
 import PayslipTemplate from "./pages/admin/PayslipTemplate";
 import PayrollReport from "./pages/admin/PayrollReport";
+import EmployeeSalaries from "./pages/admin/EmployeeSalaries";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -60,7 +61,8 @@ const App = () => (
             <Route path="/admin/leave/requests" element={<LeaveRequests />} />
             <Route path="/admin/leave/rules" element={<LeaveRules />} />
             <Route path="/admin/leave/report" element={<LeaveReport />} />
-            <Route path="/admin/payroll" element={<Navigate to="/admin/payroll/salary-structure" replace />} />
+            <Route path="/admin/payroll" element={<Navigate to="/admin/payroll/salaries" replace />} />
+            <Route path="/admin/payroll/salaries" element={<EmployeeSalaries />} />
             <Route path="/admin/payroll/salary-structure" element={<SalaryStructure />} />
             <Route path="/admin/payroll/generate" element={<GeneratePayslip />} />
             <Route path="/admin/payroll/template" element={<PayslipTemplate />} />

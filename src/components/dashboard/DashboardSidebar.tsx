@@ -72,6 +72,7 @@ const leaveSubItems = [
 ];
 
 const payrollSubItems = [
+  { title: "Employee Salaries", url: "/admin/payroll/salaries", icon: Users },
   { title: "Salary Structure", url: "/admin/payroll/salary-structure", icon: FileSpreadsheet },
   { title: "Generate Payslip", url: "/admin/payroll/generate", icon: Receipt },
   { title: "Payslip Template", url: "/admin/payroll/template", icon: LayoutTemplate },
