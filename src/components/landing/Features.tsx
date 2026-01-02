@@ -44,6 +44,7 @@ const features = [
 const Features = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slidesPerView, setSlidesPerView] = useState(3);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,6 +63,17 @@ const Features = () => {
   }, []);
 
   const maxIndex = Math.max(0, features.length - slidesPerView);
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isPaused, maxIndex]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
@@ -116,7 +128,11 @@ const Features = () => {
           </div>
 
           {/* Slider */}
-          <div className="overflow-hidden">
+          <div 
+            className="overflow-hidden"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             <div
               className="flex transition-transform duration-500 ease-out gap-6"
               style={{
