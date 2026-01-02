@@ -29,25 +29,25 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 const mainMenuItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
 ];
 
 const hrModules = [
-  { title: "Employees", url: "/dashboard/employees", icon: Users },
-  { title: "Attendance", url: "/dashboard/attendance", icon: CalendarCheck },
-  { title: "Payroll", url: "/dashboard/payroll", icon: Wallet },
-  { title: "Leave Management", url: "/dashboard/leave", icon: CalendarDays },
-  { title: "Recruitment", url: "/dashboard/recruitment", icon: UserPlus },
-  { title: "Performance", url: "/dashboard/performance", icon: TrendingUp },
-  { title: "Time Tracking", url: "/dashboard/time-tracking", icon: Clock },
-  { title: "Departments", url: "/dashboard/departments", icon: Building2 },
+  { title: "Employees", url: "/admin/employees", icon: Users },
+  { title: "Attendance", url: "/admin/attendance", icon: CalendarCheck },
+  { title: "Payroll", url: "/admin/payroll", icon: Wallet },
+  { title: "Leave Management", url: "/admin/leave", icon: CalendarDays },
+  { title: "Recruitment", url: "/admin/recruitment", icon: UserPlus },
+  { title: "Performance", url: "/admin/performance", icon: TrendingUp },
+  { title: "Time Tracking", url: "/admin/time-tracking", icon: Clock },
+  { title: "Departments", url: "/admin/departments", icon: Building2 },
 ];
 
 const otherItems = [
-  { title: "Reports", url: "/dashboard/reports", icon: FileText },
-  { title: "Awards", url: "/dashboard/awards", icon: Award },
-  { title: "Settings", url: "/dashboard/settings", icon: Settings },
-  { title: "Help & Support", url: "/dashboard/help", icon: HelpCircle },
+  { title: "Reports", url: "/admin/reports", icon: FileText },
+  { title: "Awards", url: "/admin/awards", icon: Award },
+  { title: "Settings", url: "/admin/settings", icon: Settings },
+  { title: "Help & Support", url: "/admin/help", icon: HelpCircle },
 ];
 
 export function DashboardSidebar() {

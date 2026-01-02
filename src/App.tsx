@@ -11,6 +11,8 @@ import VerifyCode from "./pages/VerifyCode";
 import ForgotPassword from "./pages/ForgotPassword";
 import OrganizationOnboarding from "./pages/OrganizationOnboarding";
 import Dashboard from "./pages/admin/Dashboard";
+import Employees from "./pages/admin/Employees";
+import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/organization-onboarding" element={<OrganizationOnboarding />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/employees" element={<Employees />} />
+            <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
