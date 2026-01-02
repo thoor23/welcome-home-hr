@@ -298,7 +298,7 @@ export function DataTable<T>({
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-xl overflow-x-auto">
+      <div className="bg-card border border-border rounded-xl overflow-x-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/40 transition-colors">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
@@ -321,8 +321,8 @@ export function DataTable<T>({
                   key={column.key}
                   className={cn(
                     column.headerClassName,
-                    column.sticky === 'left' && 'sticky left-[50px] bg-card z-20',
-                    column.sticky === 'right' && 'sticky right-0 bg-card z-20'
+                    column.sticky === 'left' && 'sticky left-0 bg-card z-20',
+                    column.sticky === 'right' && 'sticky right-0 bg-card z-20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]'
                   )}
                 >
                   {column.sortable !== false ? (
@@ -389,8 +389,8 @@ export function DataTable<T>({
                         key={column.key} 
                         className={cn(
                           column.className,
-                          column.sticky === 'left' && 'sticky left-[50px] bg-card z-10',
-                          column.sticky === 'right' && 'sticky right-0 bg-card z-10'
+                          column.sticky === 'left' && 'sticky left-0 bg-card z-10',
+                          column.sticky === 'right' && 'sticky right-0 bg-card z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]'
                         )}
                       >
                         {column.render
