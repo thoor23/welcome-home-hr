@@ -1,4 +1,4 @@
-import { Pie, PieChart } from "recharts";
+import { Pie, PieChart, Label } from "recharts";
 import {
   ChartConfig,
   ChartContainer,
@@ -68,20 +68,45 @@ export function DepartmentChart() {
               dataKey="employees"
               nameKey="department"
               innerRadius={60}
+              outerRadius={80}
               strokeWidth={5}
-            />
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                        >
+                          {total}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 24}
+                          className="fill-muted-foreground text-sm"
+                        >
+                          Total
+                        </tspan>
+                      </text>
+                    );
+                  }
+                }}
+              />
+            </Pie>
             <ChartLegend
               content={<ChartLegendContent nameKey="department" />}
               className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
             />
           </PieChart>
         </ChartContainer>
-        
-        {/* Center overlay with total */}
-        <div className="text-center -mt-[140px] mb-[100px]">
-          <p className="text-3xl font-bold text-foreground">{total}</p>
-          <p className="text-sm text-muted-foreground">Total</p>
-        </div>
       </CardContent>
     </Card>
   );
