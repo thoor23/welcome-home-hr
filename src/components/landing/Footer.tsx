@@ -1,4 +1,5 @@
-import { Sparkles, Twitter, Linkedin, Github, Mail } from "lucide-react";
+import { Twitter, Linkedin, Github, Mail } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const footerLinks = {
   Product: ["Features", "Pricing", "Integrations", "Changelog"],
@@ -15,17 +16,16 @@ const Footer = () => {
         <div className="py-16 grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <a href="#" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary-foreground" />
-              </div>
-            <span className="font-display font-bold text-xl text-foreground">
-              HRNexus
-            </span>
-          </a>
-          <p className="text-muted-foreground text-sm mb-6 max-w-xs">
-            The modern HRMS platform that helps you manage your workforce efficiently.
-          </p>
+            <a href="#" className="flex items-center mb-4">
+              <img 
+                src={logo} 
+                alt="HRNexus" 
+                className="h-10 w-auto"
+              />
+            </a>
+            <p className="text-muted-foreground text-sm mb-6 max-w-xs">
+              The modern HRMS platform that helps you manage your workforce efficiently.
+            </p>
             {/* Social Links */}
             <div className="flex gap-4">
               {[Twitter, Linkedin, Github].map((Icon, index) => (
