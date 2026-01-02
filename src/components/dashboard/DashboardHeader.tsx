@@ -49,13 +49,13 @@ export function DashboardHeader() {
         </Button>
 
         {/* Mail */}
-        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+        <Button variant="ghost" size="icon" className="text-primary hover:bg-transparent hover:text-primary active:bg-transparent active:text-primary relative">
           <Mail className="h-5 w-5" />
           <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
         </Button>
 
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+        <Button variant="ghost" size="icon" className="text-primary hover:bg-transparent hover:text-primary active:bg-transparent active:text-primary relative">
           <Bell className="h-5 w-5" />
           <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
             4
