@@ -78,6 +78,12 @@ import AllEvents from "./pages/admin/AllEvents";
 import EventsList from "./pages/admin/EventsList";
 import EventCategories from "./pages/admin/EventCategories";
 import EventReport from "./pages/admin/EventReport";
+import AllTickets from "./pages/admin/AllTickets";
+import MyTickets from "./pages/admin/MyTickets";
+import TicketCategories from "./pages/admin/TicketCategories";
+import SLASettings from "./pages/admin/SLASettings";
+import KnowledgeBase from "./pages/admin/KnowledgeBase";
+import SupportReport from "./pages/admin/SupportReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -178,6 +184,13 @@ const App = () => (
             <Route path="/admin/events/list" element={<EventsList />} />
             <Route path="/admin/events/categories" element={<EventCategories />} />
             <Route path="/admin/events/report" element={<EventReport />} />
+            <Route path="/admin/support" element={<Navigate to="/admin/support/all" replace />} />
+            <Route path="/admin/support/all" element={<AllTickets />} />
+            <Route path="/admin/support/my-tickets" element={<MyTickets />} />
+            <Route path="/admin/support/categories" element={<TicketCategories />} />
+            <Route path="/admin/support/sla" element={<SLASettings />} />
+            <Route path="/admin/support/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/admin/support/report" element={<SupportReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
