@@ -44,7 +44,7 @@ const mainMenuItems = [
 
 const employeeSubItems = [
   { title: "All Employees", url: "/admin/employees/all", icon: Users },
-  { title: "Details Regularization", url: "/admin/employees/regularization", icon: FileCheck },
+  { title: "Regularization", url: "/admin/employees/regularization", icon: FileCheck },
 ];
 
 const hrModules = [
