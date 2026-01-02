@@ -7,7 +7,7 @@ const testimonials = [
     company: "TechStart Inc.",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face",
     content:
-      "HRNexus transformed our HR operations. We've reduced administrative tasks by 60% and our team can now focus on what matters most – our employees.",
+      "NexHR transformed our HR operations. We've reduced administrative tasks by 60% and our team can now focus on what matters most – our employees.",
     rating: 5,
   },
   {
@@ -25,7 +25,7 @@ const testimonials = [
     company: "Innovate Co.",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
     content:
-      "We evaluated several HRMS platforms, and HRNexus stood out with its comprehensive features and seamless user experience. Best decision we made.",
+      "We evaluated several HRMS platforms, and NexHR stood out with its comprehensive features and seamless user experience. Best decision we made.",
     rating: 5,
   },
 ];

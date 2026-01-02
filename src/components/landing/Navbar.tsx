@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-import logo from "@/assets/logo.png";
+import { Menu, X, Users } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,12 +16,13 @@ const Navbar = () => {
       <div className="container-max">
         <div className="flex items-center justify-between h-16 md:h-20 px-4 md:px-6">
           {/* Logo */}
-          <a href="#" className="flex items-center group">
-            <img 
-              src={logo} 
-              alt="HRNexus" 
-              className="h-10 w-auto group-hover:scale-105 transition-transform"
-            />
+          <a href="#" className="flex items-center gap-2 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Users className="w-5 h-5 text-primary-foreground" />
+            </div>
+            <span className="font-display font-bold text-xl text-foreground">
+              NexHR
+            </span>
           </a>
 
           {/* Desktop Navigation */}
