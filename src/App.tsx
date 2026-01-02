@@ -74,6 +74,10 @@ import LetterTemplates from "./pages/admin/LetterTemplates";
 import EmailConfiguration from "./pages/admin/EmailConfiguration";
 import EmailReport from "./pages/admin/EmailReport";
 import GenerateLetter from "./pages/admin/GenerateLetter";
+import AllEvents from "./pages/admin/AllEvents";
+import EventsList from "./pages/admin/EventsList";
+import EventCategories from "./pages/admin/EventCategories";
+import EventReport from "./pages/admin/EventReport";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -169,6 +173,11 @@ const App = () => (
             <Route path="/admin/communications/letter-templates" element={<LetterTemplates />} />
             <Route path="/admin/communications/config" element={<EmailConfiguration />} />
             <Route path="/admin/communications/report" element={<EmailReport />} />
+            <Route path="/admin/events" element={<Navigate to="/admin/events/calendar" replace />} />
+            <Route path="/admin/events/calendar" element={<AllEvents />} />
+            <Route path="/admin/events/list" element={<EventsList />} />
+            <Route path="/admin/events/categories" element={<EventCategories />} />
+            <Route path="/admin/events/report" element={<EventReport />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
