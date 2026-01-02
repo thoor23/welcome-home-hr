@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useMemo } from "react";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -53,6 +54,7 @@ export interface Column<T> {
   render?: (item: T) => React.ReactNode;
   className?: string;
   headerClassName?: string;
+  sticky?: 'left' | 'right';
 }
 
 // Filter option interface
@@ -317,7 +319,11 @@ export function DataTable<T>({
               {displayColumns.map((column) => (
                 <TableHead
                   key={column.key}
-                  className={column.headerClassName}
+                  className={cn(
+                    column.headerClassName,
+                    column.sticky === 'left' && 'sticky left-0 bg-card z-20',
+                    column.sticky === 'right' && 'sticky right-0 bg-card z-20'
+                  )}
                 >
                   {column.sortable !== false ? (
                     <button
@@ -379,7 +385,14 @@ export function DataTable<T>({
                       </TableCell>
                     )}
                     {displayColumns.map((column) => (
-                      <TableCell key={column.key} className={column.className}>
+                      <TableCell 
+                        key={column.key} 
+                        className={cn(
+                          column.className,
+                          column.sticky === 'left' && 'sticky left-0 bg-card z-10',
+                          column.sticky === 'right' && 'sticky right-0 bg-card z-10'
+                        )}
+                      >
                         {column.render
                           ? column.render(item)
                           : String((item as Record<string, unknown>)[column.key] ?? "")}

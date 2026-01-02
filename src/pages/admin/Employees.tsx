@@ -278,6 +278,7 @@ const Employees = () => {
       header: "Member",
       searchable: true,
       sortable: true,
+      sticky: 'left',
       render: (employee) => (
         <div className="flex items-center gap-3">
           <Avatar className="h-9 w-9">
@@ -440,6 +441,7 @@ const Employees = () => {
       header: "",
       sortable: false,
       headerClassName: "w-[50px]",
+      sticky: 'right',
       render: (employee) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
