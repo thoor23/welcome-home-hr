@@ -1,4 +1,4 @@
-import { Search, Bell, Mail, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle } from "lucide-react";
+import { Search, Bell, Mail, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,9 +10,43 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
+
+const notifications = [
+  {
+    id: 1,
+    title: "Invitation to join the team",
+    badge: "Collaboration",
+    badgeColor: "bg-primary",
+    time: "Today, 10:14 PM",
+    avatar: true,
+    hasArrow: true,
+  },
+  {
+    id: 2,
+    title: "New message received from Alan Rickman",
+    time: "Today, 7:51 AM",
+    icon: MessageSquare,
+    iconBg: "bg-primary",
+  },
+  {
+    id: 3,
+    title: "You have a follow up with Jampack Head on Friday, Dec 19 at 9:30 am",
+    time: "Yesterday, 9:25 PM",
+    icon: Clock,
+    iconBg: "bg-pink-100 dark:bg-pink-900",
+    iconColor: "text-pink-500",
+  },
+  {
+    id: 4,
+    title: "Application of Sarah Williams is waiting for your approval",
+    time: "Today 10:14 PM",
+    avatar: true,
+  },
+];
 
 export function DashboardHeader() {
   const { theme, setTheme } = useTheme();
@@ -55,12 +89,66 @@ export function DashboardHeader() {
         </Button>
 
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="text-primary hover:bg-transparent hover:text-primary active:bg-transparent active:text-primary relative">
-          <Bell className="h-5 w-5" />
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
-            4
-          </Badge>
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-primary hover:bg-transparent hover:text-primary active:bg-transparent active:text-primary relative">
+              <Bell className="h-5 w-5" />
+              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
+                4
+              </Badge>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-80 p-0 bg-card border-border">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-border">
+              <span className="font-semibold text-foreground">Notifications</span>
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-transparent">
+                <Settings className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            {/* Notification List */}
+            <div className="max-h-80 overflow-y-auto">
+              {notifications.map((notification) => (
+                <div key={notification.id} className="flex items-start gap-3 p-4 border-b border-border hover:bg-secondary/50 cursor-pointer">
+                  {notification.avatar ? (
+                    <Avatar className="h-10 w-10 flex-shrink-0">
+                      <AvatarImage src="/placeholder.svg" />
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                        {notification.id === 1 ? "TM" : "SW"}
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : notification.icon ? (
+                    <div className={`h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0 ${notification.iconBg}`}>
+                      <notification.icon className={`h-5 w-5 ${notification.iconColor || "text-primary-foreground"}`} />
+                    </div>
+                  ) : null}
+                  
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-foreground leading-tight">{notification.title}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      {notification.badge && (
+                        <Badge className={`${notification.badgeColor} text-primary-foreground text-xs px-2 py-0.5`}>
+                          {notification.badge}
+                        </Badge>
+                      )}
+                      <span className="text-xs text-muted-foreground">{notification.time}</span>
+                    </div>
+                  </div>
+                  
+                  {notification.hasArrow && (
+                    <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-1" />
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            {/* Footer */}
+            <div className="p-3 text-center border-t border-border">
+              <span className="text-sm text-primary cursor-pointer hover:underline">View all notifications</span>
+            </div>
+          </PopoverContent>
+        </Popover>
 
         {/* User Menu */}
         <DropdownMenu>
