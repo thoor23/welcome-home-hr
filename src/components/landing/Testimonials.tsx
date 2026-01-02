@@ -1,4 +1,11 @@
 import { Star } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const testimonials = [
   {
@@ -30,6 +37,45 @@ const testimonials = [
   },
 ];
 
+const TestimonialCard = ({ testimonial, index }: { testimonial: typeof testimonials[0]; index: number }) => (
+  <div
+    className="glass-card p-8 hover-lift h-full"
+    style={{ animationDelay: `${index * 0.1}s` }}
+  >
+    {/* Rating */}
+    <div className="flex gap-1 mb-6">
+      {[...Array(testimonial.rating)].map((_, i) => (
+        <Star
+          key={i}
+          className="w-5 h-5 fill-yellow-500 text-yellow-500"
+        />
+      ))}
+    </div>
+
+    {/* Content */}
+    <p className="text-foreground leading-relaxed mb-8">
+      "{testimonial.content}"
+    </p>
+
+    {/* Author */}
+    <div className="flex items-center gap-4">
+      <img
+        src={testimonial.image}
+        alt={testimonial.name}
+        className="w-12 h-12 rounded-full object-cover ring-2 ring-border"
+      />
+      <div>
+        <div className="font-semibold text-foreground">
+          {testimonial.name}
+        </div>
+        <div className="text-sm text-muted-foreground">
+          {testimonial.role} at {testimonial.company}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const Testimonials = () => {
   return (
     <section id="testimonials" className="section-padding relative">
@@ -51,46 +97,25 @@ const Testimonials = () => {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Mobile Carousel */}
+        <div className="md:hidden">
+          <Carousel className="w-full">
+            <CarouselContent>
+              {testimonials.map((testimonial, index) => (
+                <CarouselItem key={testimonial.name}>
+                  <TestimonialCard testimonial={testimonial} index={index} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-0 -translate-x-1/2" />
+            <CarouselNext className="right-0 translate-x-1/2" />
+          </Carousel>
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden md:grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <div
-              key={testimonial.name}
-              className="glass-card p-8 hover-lift"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Rating */}
-              <div className="flex gap-1 mb-6">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-5 h-5 fill-yellow-500 text-yellow-500"
-                  />
-                ))}
-              </div>
-
-              {/* Content */}
-              <p className="text-foreground leading-relaxed mb-8">
-                "{testimonial.content}"
-              </p>
-
-              {/* Author */}
-              <div className="flex items-center gap-4">
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover ring-2 ring-border"
-                />
-                <div>
-                  <div className="font-semibold text-foreground">
-                    {testimonial.name}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    {testimonial.role} at {testimonial.company}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TestimonialCard key={testimonial.name} testimonial={testimonial} index={index} />
           ))}
         </div>
       </div>
