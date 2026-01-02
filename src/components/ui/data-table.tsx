@@ -49,6 +49,7 @@ export interface Column<T> {
   sortable?: boolean;
   searchable?: boolean;
   visible?: boolean;
+  defaultHidden?: boolean;
   render?: (item: T) => React.ReactNode;
   className?: string;
   headerClassName?: string;
@@ -103,7 +104,7 @@ export function DataTable<T>({
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-    new Set(columns.filter((col) => col.visible !== false).map((col) => col.key))
+    new Set(columns.filter((col) => col.visible !== false && col.defaultHidden !== true).map((col) => col.key))
   );
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -280,7 +281,7 @@ export function DataTable<T>({
               Columns
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-[180px] max-h-[300px]">
+          <DropdownMenuContent align="end" className="w-[180px] max-h-[400px] overflow-y-auto">
             {columns.map((column) => (
               <DropdownMenuCheckboxItem
                 key={column.key}
