@@ -303,7 +303,7 @@ export function DataTable<T>({
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               {selectable && (
-                <TableHead className="w-[50px]">
+                <TableHead className="w-[50px] sticky left-0 bg-card z-20">
                   <Checkbox
                     checked={allSelected}
                     ref={(el) => {
@@ -321,7 +321,7 @@ export function DataTable<T>({
                   key={column.key}
                   className={cn(
                     column.headerClassName,
-                    column.sticky === 'left' && 'sticky left-0 bg-card z-20',
+                    column.sticky === 'left' && 'sticky left-[50px] bg-card z-20',
                     column.sticky === 'right' && 'sticky right-0 bg-card z-20'
                   )}
                 >
@@ -373,7 +373,7 @@ export function DataTable<T>({
                     {selectable && (
                       <TableCell
                         onClick={(e) => e.stopPropagation()}
-                        className="w-[50px]"
+                        className="w-[50px] sticky left-0 bg-card z-10"
                       >
                         <Checkbox
                           checked={isSelected}
@@ -389,7 +389,7 @@ export function DataTable<T>({
                         key={column.key} 
                         className={cn(
                           column.className,
-                          column.sticky === 'left' && 'sticky left-0 bg-card z-10',
+                          column.sticky === 'left' && 'sticky left-[50px] bg-card z-10',
                           column.sticky === 'right' && 'sticky right-0 bg-card z-10'
                         )}
                       >
