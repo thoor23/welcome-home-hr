@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,6 +7,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Users, Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const Signup = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Signup submitted", formData);
+    navigate("/verify-code");
   };
 
   const updateField = (field: string, value: string | boolean) => {
@@ -74,7 +76,7 @@ const Signup = () => {
         </div>
 
         {/* Right Side - Signup Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-card/50 backdrop-blur-xl">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card/50 backdrop-blur-xl">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -84,13 +86,13 @@ const Signup = () => {
           </Link>
 
           {/* Header */}
-          <div className="mb-6">
+          <div className="mb-6 text-center">
             <h2 className="text-2xl font-bold text-foreground mb-2 font-display">Create Account</h2>
             <p className="text-muted-foreground">Get started with NexHR today</p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
             <div className="space-y-2">
               <label htmlFor="fullName" className="text-sm text-foreground font-medium">
                 Full Name

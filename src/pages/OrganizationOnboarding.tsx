@@ -69,7 +69,7 @@ const OrganizationOnboarding = () => {
         </div>
 
         {/* Right Side - Onboarding Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-card/50 backdrop-blur-xl">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card/50 backdrop-blur-xl">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -79,7 +79,7 @@ const OrganizationOnboarding = () => {
           </Link>
 
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-foreground mb-2 font-display">Organization Details</h2>
             <p className="text-muted-foreground">
               Let's get your organization set up in just a few steps.
@@ -87,7 +87,7 @@ const OrganizationOnboarding = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5 w-full max-w-sm">
             <div className="space-y-2">
               <label htmlFor="orgName" className="text-sm text-foreground font-medium">
                 Organization Name

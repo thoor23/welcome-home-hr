@@ -66,7 +66,7 @@ const Login = () => {
         </div>
 
         {/* Right Side - Login Form */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-card/50 backdrop-blur-xl">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col items-center justify-center bg-card/50 backdrop-blur-xl">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -76,13 +76,13 @@ const Login = () => {
           </Link>
 
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-foreground mb-2 font-display">Welcome Back</h2>
             <p className="text-muted-foreground">Sign in to access your account</p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5 w-full max-w-sm">
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm text-foreground font-medium">
                 Email Address
