@@ -40,7 +40,7 @@ const Dashboard = () => {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted/50 border border-border rounded-lg">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium text-foreground tabular-nums">
-                  {format(currentTime, "M/dd hh:mm a")}
+                  {format(currentTime, "MM/dd/yyyy hh:mm a")}
                 </span>
               </div>
             </div>
