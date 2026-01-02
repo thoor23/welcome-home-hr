@@ -66,10 +66,10 @@ export function DashboardSidebar() {
       )}
       collapsible="icon"
     >
-      <SidebarContent className="py-4 px-2">
+      <SidebarContent className={cn("py-4", collapsed ? "px-1" : "px-2")}>
         {/* Logo */}
-        <div className={cn("px-2 mb-6 flex items-center gap-2", collapsed && "justify-center")}>
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+        <div className={cn("mb-6 flex items-center gap-2", collapsed ? "justify-center px-0" : "px-2")}>
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
             <Users className="w-4 h-4 text-primary-foreground" />
           </div>
           {!collapsed && (
@@ -93,8 +93,8 @@ export function DashboardSidebar() {
                         : "hover:bg-secondary"
                     )}
                   >
-                    <Link to={item.url} className="flex items-center gap-3">
-                      <item.icon className="h-5 w-5" />
+                    <Link to={item.url} className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
+                      <item.icon className="h-5 w-5 flex-shrink-0" />
                       {!collapsed && <span>{item.title}</span>}
                     </Link>
                   </SidebarMenuButton>
@@ -125,8 +125,8 @@ export function DashboardSidebar() {
                         : "hover:bg-secondary"
                     )}
                   >
-                    <Link to={item.url} className="flex items-center gap-3">
-                      <item.icon className="h-5 w-5" />
+                    <Link to={item.url} className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
+                      <item.icon className="h-5 w-5 flex-shrink-0" />
                       {!collapsed && <span>{item.title}</span>}
                     </Link>
                   </SidebarMenuButton>
@@ -157,8 +157,8 @@ export function DashboardSidebar() {
                         : "hover:bg-secondary"
                     )}
                   >
-                    <Link to={item.url} className="flex items-center gap-3">
-                      <item.icon className="h-5 w-5" />
+                    <Link to={item.url} className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
+                      <item.icon className="h-5 w-5 flex-shrink-0" />
                       {!collapsed && <span>{item.title}</span>}
                     </Link>
                   </SidebarMenuButton>
