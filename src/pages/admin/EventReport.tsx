@@ -1,24 +1,17 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, TrendingUp, MapPin, Users } from "lucide-react";
+import { Pie, PieChart, Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-  LineChart,
-  Line,
-} from "recharts";
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 
-// Sample data for charts
 const eventsByMonth = [
   { month: "Jan", events: 12 },
   { month: "Feb", events: 15 },
@@ -34,15 +27,30 @@ const eventsByMonth = [
   { month: "Dec", events: 15 },
 ];
 
+const monthlyConfig = {
+  events: { label: "Events", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
+
 const eventsByCategory = [
-  { name: "Meeting", value: 45, color: "#3B82F6" },
-  { name: "Training", value: 23, color: "#8B5CF6" },
-  { name: "Workshop", value: 18, color: "#10B981" },
-  { name: "Conference", value: 8, color: "#F59E0B" },
-  { name: "Holiday", value: 12, color: "#EF4444" },
-  { name: "Team Building", value: 15, color: "#EC4899" },
-  { name: "Webinar", value: 32, color: "#06B6D4" },
+  { category: "meeting", value: 45, fill: "var(--color-meeting)" },
+  { category: "training", value: 23, fill: "var(--color-training)" },
+  { category: "workshop", value: 18, fill: "var(--color-workshop)" },
+  { category: "conference", value: 8, fill: "var(--color-conference)" },
+  { category: "holiday", value: 12, fill: "var(--color-holiday)" },
+  { category: "teambuilding", value: 15, fill: "var(--color-teambuilding)" },
+  { category: "webinar", value: 32, fill: "var(--color-webinar)" },
 ];
+
+const categoryConfig = {
+  value: { label: "Events" },
+  meeting: { label: "Meeting", color: "hsl(217 91% 60%)" },
+  training: { label: "Training", color: "hsl(262 83% 58%)" },
+  workshop: { label: "Workshop", color: "hsl(142 76% 36%)" },
+  conference: { label: "Conference", color: "hsl(38 92% 50%)" },
+  holiday: { label: "Holiday", color: "hsl(0 84% 60%)" },
+  teambuilding: { label: "Team Building", color: "hsl(330 81% 60%)" },
+  webinar: { label: "Webinar", color: "hsl(186 94% 41%)" },
+} satisfies ChartConfig;
 
 const eventsByLocation = [
   { location: "HQ Office", events: 45 },
@@ -51,6 +59,10 @@ const eventsByLocation = [
   { location: "Virtual", events: 35 },
   { location: "Training Room", events: 18 },
 ];
+
+const locationConfig = {
+  events: { label: "Events", color: "hsl(142 76% 36%)" },
+} satisfies ChartConfig;
 
 const attendanceTrends = [
   { month: "Jan", attendees: 120 },
@@ -67,6 +79,10 @@ const attendanceTrends = [
   { month: "Dec", attendees: 150 },
 ];
 
+const attendanceConfig = {
+  attendees: { label: "Attendees", color: "hsl(262 83% 58%)" },
+} satisfies ChartConfig;
+
 const EventReport = () => {
   const totalEventsYear = eventsByMonth.reduce((sum, m) => sum + m.events, 0);
   const avgEventsMonth = Math.round(totalEventsYear / 12);
@@ -77,31 +93,16 @@ const EventReport = () => {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Event Report</h1>
-        <p className="text-muted-foreground">Analytics and insights for events</p>
+        <h1 className="text-3xl font-bold text-foreground font-display">Event Report</h1>
+        <p className="text-muted-foreground mt-1">Analytics and insights for events</p>
       </div>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <StatsCard
-          title="Total Events (Year)"
-          value={totalEventsYear.toString()}
-          icon={CalendarDays}
-        />
-        <StatsCard
-          title="Avg Events/Month"
-          value={avgEventsMonth.toString()}
-          icon={TrendingUp}
-        />
-        <StatsCard
-          title="Most Active Location"
-          value="HQ Office"
-          icon={MapPin}
-        />
-        <StatsCard
-          title="Avg Attendees"
-          value={avgAttendees.toString()}
-          icon={Users}
-        />
+        <StatsCard title="Total Events (Year)" value={totalEventsYear.toString()} icon={CalendarDays} />
+        <StatsCard title="Avg Events/Month" value={avgEventsMonth.toString()} icon={TrendingUp} />
+        <StatsCard title="Most Active Location" value="HQ Office" icon={MapPin} />
+        <StatsCard title="Avg Attendees" value={avgAttendees.toString()} icon={Users} />
       </div>
 
       {/* Charts Grid */}
@@ -109,132 +110,74 @@ const EventReport = () => {
         {/* Events by Month */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold">
-              Events by Month
-            </CardTitle>
+            <CardTitle>Events by Month</CardTitle>
+            <CardDescription>Monthly event distribution</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={eventsByMonth}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis dataKey="month" className="text-xs" />
-                  <YAxis className="text-xs" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Bar dataKey="events" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <ChartContainer config={monthlyConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={eventsByMonth}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="events" fill="var(--color-events)" radius={4} />
+              </BarChart>
+            </ChartContainer>
           </CardContent>
         </Card>
 
         {/* Events by Category */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold">
-              Events by Category
-            </CardTitle>
+            <CardTitle>Events by Category</CardTitle>
+            <CardDescription>Event type distribution</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={eventsByCategory}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={2}
-                    dataKey="value"
-                    label={({ name, percent }) =>
-                      `${name} ${(percent * 100).toFixed(0)}%`
-                    }
-                    labelLine={false}
-                  >
-                    {eventsByCategory.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+            <ChartContainer config={categoryConfig} className="mx-auto aspect-square max-h-[300px]">
+              <PieChart>
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                <Pie data={eventsByCategory} dataKey="value" nameKey="category" innerRadius={60} outerRadius={100} strokeWidth={5} />
+                <ChartLegend content={<ChartLegendContent nameKey="category" />} className="-translate-y-2 flex-wrap gap-2" />
+              </PieChart>
+            </ChartContainer>
           </CardContent>
         </Card>
 
         {/* Events by Location */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold">
-              Events by Location
-            </CardTitle>
+            <CardTitle>Events by Location</CardTitle>
+            <CardDescription>Venue-wise event distribution</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={eventsByLocation} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis type="number" className="text-xs" />
-                  <YAxis dataKey="location" type="category" width={100} className="text-xs" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Bar dataKey="events" fill="#10B981" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <ChartContainer config={locationConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={eventsByLocation} layout="vertical">
+                <CartesianGrid horizontal={false} />
+                <XAxis type="number" tickLine={false} axisLine={false} />
+                <YAxis dataKey="location" type="category" tickLine={false} axisLine={false} width={100} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="events" fill="var(--color-events)" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ChartContainer>
           </CardContent>
         </Card>
 
         {/* Attendance Trends */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold">
-              Attendance Trends
-            </CardTitle>
+            <CardTitle>Attendance Trends</CardTitle>
+            <CardDescription>Monthly attendee counts</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={attendanceTrends}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis dataKey="month" className="text-xs" />
-                  <YAxis className="text-xs" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="attendees"
-                    stroke="#8B5CF6"
-                    strokeWidth={2}
-                    dot={{ fill: "#8B5CF6", strokeWidth: 2 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <ChartContainer config={attendanceConfig} className="h-[300px] w-full">
+              <LineChart accessibilityLayer data={attendanceTrends}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Line type="monotone" dataKey="attendees" stroke="var(--color-attendees)" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ChartContainer>
           </CardContent>
         </Card>
       </div>

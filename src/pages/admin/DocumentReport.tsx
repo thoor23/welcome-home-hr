@@ -17,50 +17,50 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  FileText,
-  HardDrive,
-  Upload,
-  Users,
-  Download,
-  TrendingUp,
-  FolderOpen,
-} from "lucide-react";
+import { FileText, HardDrive, Upload, Users, Download, TrendingUp, FolderOpen } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/StatsCard";
+import { Pie, PieChart, Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  Legend,
-} from "recharts";
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 
 const categoryData = [
-  { name: "Payslips", count: 890, storage: 156 },
-  { name: "Invoices", count: 234, storage: 89 },
-  { name: "ID Proofs", count: 156, storage: 78 },
-  { name: "Photos", count: 234, storage: 567 },
-  { name: "Certificates", count: 89, storage: 34 },
-  { name: "Contracts", count: 67, storage: 45 },
-  { name: "Offer Letters", count: 45, storage: 12 },
+  { name: "Payslips", count: 890 },
+  { name: "Invoices", count: 234 },
+  { name: "ID Proofs", count: 156 },
+  { name: "Photos", count: 234 },
+  { name: "Certificates", count: 89 },
+  { name: "Contracts", count: 67 },
+  { name: "Offer Letters", count: 45 },
 ];
 
+const categoryConfig = {
+  count: { label: "Documents", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
+
 const storageByCategory = [
-  { name: "Photos", value: 567, color: "#8b5cf6" },
-  { name: "Payslips", value: 156, color: "#3b82f6" },
-  { name: "Invoices", value: 89, color: "#10b981" },
-  { name: "ID Proofs", value: 78, color: "#f59e0b" },
-  { name: "Contracts", value: 45, color: "#ef4444" },
-  { name: "Others", value: 104, color: "#6b7280" },
+  { category: "photos", value: 567, fill: "var(--color-photos)" },
+  { category: "payslips", value: 156, fill: "var(--color-payslips)" },
+  { category: "invoices", value: 89, fill: "var(--color-invoices)" },
+  { category: "idproofs", value: 78, fill: "var(--color-idproofs)" },
+  { category: "contracts", value: 45, fill: "var(--color-contracts)" },
+  { category: "others", value: 104, fill: "var(--color-others)" },
 ];
+
+const storageConfig = {
+  value: { label: "Storage (MB)" },
+  photos: { label: "Photos", color: "hsl(262 83% 58%)" },
+  payslips: { label: "Payslips", color: "hsl(217 91% 60%)" },
+  invoices: { label: "Invoices", color: "hsl(142 76% 36%)" },
+  idproofs: { label: "ID Proofs", color: "hsl(38 92% 50%)" },
+  contracts: { label: "Contracts", color: "hsl(0 84% 60%)" },
+  others: { label: "Others", color: "hsl(var(--muted))" },
+} satisfies ChartConfig;
 
 const uploadTrends = [
   { month: "Jul", uploads: 120, downloads: 89 },
@@ -72,13 +72,10 @@ const uploadTrends = [
   { month: "Jan", uploads: 234, downloads: 198 },
 ];
 
-const moduleData = [
-  { name: "Payroll", count: 890 },
-  { name: "Employees", count: 450 },
-  { name: "Billing", count: 234 },
-  { name: "Recruitment", count: 89 },
-  { name: "General", count: 58 },
-];
+const trendConfig = {
+  uploads: { label: "Uploads", color: "hsl(var(--primary))" },
+  downloads: { label: "Downloads", color: "hsl(142 76% 36%)" },
+} satisfies ChartConfig;
 
 const recentUploads = [
   { name: "Payslip_Jan_2026.pdf", category: "Payslips", size: "120 KB", uploadedBy: "System", date: "Jan 2, 2026" },
@@ -111,10 +108,8 @@ export default function DocumentReport() {
       {/* Page Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Document Report</h1>
-          <p className="text-muted-foreground">
-            Analytics and insights for document management
-          </p>
+          <h1 className="text-3xl font-bold text-foreground font-display">Document Report</h1>
+          <p className="text-muted-foreground mt-1">Analytics and insights for document management</p>
         </div>
         <div className="flex gap-3">
           <Select value={period} onValueChange={setPeriod}>
@@ -137,26 +132,10 @@ export default function DocumentReport() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatsCard
-          title="Total Documents"
-          value="1,721"
-          icon={FileText}
-        />
-        <StatsCard
-          title="Storage Used"
-          value="1.04 GB"
-          icon={HardDrive}
-        />
-        <StatsCard
-          title="Uploads This Month"
-          value="234"
-          icon={Upload}
-        />
-        <StatsCard
-          title="Active Users"
-          value="45"
-          icon={Users}
-        />
+        <StatsCard title="Total Documents" value="1,721" icon={FileText} />
+        <StatsCard title="Storage Used" value="1.04 GB" icon={HardDrive} />
+        <StatsCard title="Uploads This Month" value="234" icon={Upload} />
+        <StatsCard title="Active Users" value="45" icon={Users} />
       </div>
 
       {/* Charts Row 1 */}
@@ -168,23 +147,18 @@ export default function DocumentReport() {
               <FolderOpen className="h-5 w-5 text-primary" />
               Documents by Category
             </CardTitle>
+            <CardDescription>Document count per category</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={categoryData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+            <ChartContainer config={categoryConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={categoryData}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="name" tickLine={false} tickMargin={10} axisLine={false} tick={{ fontSize: 12 }} />
+                <YAxis tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="count" fill="var(--color-count)" radius={4} />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
 
@@ -195,34 +169,16 @@ export default function DocumentReport() {
               <HardDrive className="h-5 w-5 text-primary" />
               Storage by Category
             </CardTitle>
+            <CardDescription>Storage consumption breakdown</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ChartContainer config={storageConfig} className="mx-auto aspect-square max-h-[300px]">
               <PieChart>
-                <Pie
-                  data={storageByCategory}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                >
-                  {storageByCategory.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: number) => [`${value} MB`, "Storage"]}
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel formatter={(value) => `${value} MB`} />} />
+                <Pie data={storageByCategory} dataKey="value" nameKey="category" innerRadius={60} outerRadius={100} strokeWidth={5} />
+                <ChartLegend content={<ChartLegendContent nameKey="category" />} className="-translate-y-2 flex-wrap gap-2" />
               </PieChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
       </div>
@@ -234,37 +190,20 @@ export default function DocumentReport() {
             <TrendingUp className="h-5 w-5 text-primary" />
             Upload & Download Trends
           </CardTitle>
+          <CardDescription>Monthly document activity</CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={uploadTrends}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="month" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-              <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: "8px",
-                }}
-              />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="uploads"
-                stroke="hsl(var(--primary))"
-                strokeWidth={2}
-                dot={{ fill: "hsl(var(--primary))" }}
-              />
-              <Line
-                type="monotone"
-                dataKey="downloads"
-                stroke="#10b981"
-                strokeWidth={2}
-                dot={{ fill: "#10b981" }}
-              />
+          <ChartContainer config={trendConfig} className="h-[300px] w-full">
+            <LineChart accessibilityLayer data={uploadTrends}>
+              <CartesianGrid vertical={false} />
+              <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+              <YAxis tickLine={false} axisLine={false} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Line type="monotone" dataKey="uploads" stroke="var(--color-uploads)" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="downloads" stroke="var(--color-downloads)" strokeWidth={2} dot={false} />
             </LineChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
 

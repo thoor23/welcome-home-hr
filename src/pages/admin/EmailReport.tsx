@@ -1,28 +1,17 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DataTable, Column } from "@/components/ui/data-table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Send, CheckCircle, FileText, Clock } from "lucide-react";
+import { Pie, PieChart, Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  Send,
-  CheckCircle,
-  FileText,
-  Clock,
-} from "lucide-react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  Legend,
-} from "recharts";
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 
 const monthlyData = [
   { month: "Aug", sent: 45, downloaded: 32 },
@@ -33,14 +22,29 @@ const monthlyData = [
   { month: "Jan", sent: 68, downloaded: 51 },
 ];
 
+const monthlyConfig = {
+  sent: { label: "Sent", color: "hsl(var(--primary))" },
+  downloaded: { label: "Downloaded", color: "hsl(var(--chart-2))" },
+} satisfies ChartConfig;
+
 const typeDistribution = [
-  { name: "Offer Letter", value: 45, color: "hsl(var(--primary))" },
-  { name: "Relieving Letter", value: 32, color: "hsl(var(--chart-2))" },
-  { name: "Experience Letter", value: 28, color: "hsl(var(--chart-3))" },
-  { name: "Welcome Email", value: 38, color: "hsl(var(--chart-4))" },
-  { name: "Interview Invite", value: 25, color: "hsl(var(--chart-5))" },
-  { name: "Others", value: 15, color: "hsl(var(--muted))" },
+  { type: "offer", value: 45, fill: "var(--color-offer)" },
+  { type: "relieving", value: 32, fill: "var(--color-relieving)" },
+  { type: "experience", value: 28, fill: "var(--color-experience)" },
+  { type: "welcome", value: 38, fill: "var(--color-welcome)" },
+  { type: "interview", value: 25, fill: "var(--color-interview)" },
+  { type: "others", value: 15, fill: "var(--color-others)" },
 ];
+
+const typeConfig = {
+  value: { label: "Count" },
+  offer: { label: "Offer Letter", color: "hsl(var(--primary))" },
+  relieving: { label: "Relieving Letter", color: "hsl(var(--chart-2))" },
+  experience: { label: "Experience Letter", color: "hsl(var(--chart-3))" },
+  welcome: { label: "Welcome Email", color: "hsl(var(--chart-4))" },
+  interview: { label: "Interview Invite", color: "hsl(var(--chart-5))" },
+  others: { label: "Others", color: "hsl(var(--muted))" },
+} satisfies ChartConfig;
 
 const departmentData = [
   { department: "Engineering", count: 42 },
@@ -51,12 +55,24 @@ const departmentData = [
   { department: "Finance", count: 15 },
 ];
 
+const departmentConfig = {
+  count: { label: "Count", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
+
 const statusData = [
-  { name: "Sent", value: 156, color: "hsl(142, 76%, 36%)" },
-  { name: "Downloaded", value: 89, color: "hsl(217, 91%, 60%)" },
-  { name: "Draft", value: 12, color: "hsl(var(--muted))" },
-  { name: "Failed", value: 5, color: "hsl(var(--destructive))" },
+  { status: "sent", value: 156, fill: "var(--color-sent)" },
+  { status: "downloaded", value: 89, fill: "var(--color-downloaded)" },
+  { status: "draft", value: 12, fill: "var(--color-draft)" },
+  { status: "failed", value: 5, fill: "var(--color-failed)" },
 ];
+
+const statusConfig = {
+  value: { label: "Count" },
+  sent: { label: "Sent", color: "hsl(142 76% 36%)" },
+  downloaded: { label: "Downloaded", color: "hsl(217 91% 60%)" },
+  draft: { label: "Draft", color: "hsl(var(--muted))" },
+  failed: { label: "Failed", color: "hsl(var(--destructive))" },
+} satisfies ChartConfig;
 
 interface TypeSummary {
   id: string;
@@ -110,32 +126,16 @@ const EmailReport = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Email & Letter Report</h1>
-          <p className="text-muted-foreground">Analytics for communications and document generation</p>
+          <h1 className="text-3xl font-bold text-foreground font-display">Email & Letter Report</h1>
+          <p className="text-muted-foreground mt-1">Analytics for communications and document generation</p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <StatsCard
-            title="Total Sent (Month)"
-            value="68"
-            icon={Send}
-          />
-          <StatsCard
-            title="Delivery Rate"
-            value="98.2%"
-            icon={CheckCircle}
-          />
-          <StatsCard
-            title="Most Common"
-            value="Offer Letter"
-            icon={FileText}
-          />
-          <StatsCard
-            title="Avg Response Time"
-            value="2.4 days"
-            icon={Clock}
-          />
+          <StatsCard title="Total Sent (Month)" value="68" icon={Send} />
+          <StatsCard title="Delivery Rate" value="98.2%" icon={CheckCircle} />
+          <StatsCard title="Most Common" value="Offer Letter" icon={FileText} />
+          <StatsCard title="Avg Response Time" value="2.4 days" icon={Clock} />
         </div>
 
         {/* Charts Row 1 */}
@@ -143,59 +143,36 @@ const EmailReport = () => {
           <Card>
             <CardHeader>
               <CardTitle>Monthly Trends</CardTitle>
+              <CardDescription>Email sent and download activity</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Legend />
-                  <Line type="monotone" dataKey="sent" stroke="hsl(var(--primary))" strokeWidth={2} name="Sent" />
-                  <Line type="monotone" dataKey="downloaded" stroke="hsl(var(--chart-2))" strokeWidth={2} name="Downloaded" />
+              <ChartContainer config={monthlyConfig} className="h-[300px] w-full">
+                <LineChart accessibilityLayer data={monthlyData}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                  <YAxis tickLine={false} axisLine={false} />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <ChartLegend content={<ChartLegendContent />} />
+                  <Line type="monotone" dataKey="sent" stroke="var(--color-sent)" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="downloaded" stroke="var(--color-downloaded)" strokeWidth={2} dot={false} />
                 </LineChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
               <CardTitle>Distribution by Type</CardTitle>
+              <CardDescription>Breakdown of letter and email types</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ChartContainer config={typeConfig} className="mx-auto aspect-square max-h-[300px]">
                 <PieChart>
-                  <Pie
-                    data={typeDistribution}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={5}
-                    dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    labelLine={false}
-                  >
-                    {typeDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                  <Pie data={typeDistribution} dataKey="value" nameKey="type" innerRadius={60} outerRadius={100} strokeWidth={5} />
+                  <ChartLegend content={<ChartLegendContent nameKey="type" />} className="-translate-y-2 flex-wrap gap-2" />
                 </PieChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             </CardContent>
           </Card>
         </div>
@@ -205,54 +182,34 @@ const EmailReport = () => {
           <Card>
             <CardHeader>
               <CardTitle>By Department</CardTitle>
+              <CardDescription>Communications by department</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={departmentData} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis type="number" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis type="category" dataKey="department" stroke="hsl(var(--muted-foreground))" width={100} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+              <ChartContainer config={departmentConfig} className="h-[300px] w-full">
+                <BarChart accessibilityLayer data={departmentData} layout="vertical">
+                  <CartesianGrid horizontal={false} />
+                  <XAxis type="number" tickLine={false} axisLine={false} />
+                  <YAxis dataKey="department" type="category" tickLine={false} axisLine={false} width={100} />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Bar dataKey="count" fill="var(--color-count)" radius={[0, 4, 4, 0]} />
                 </BarChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
               <CardTitle>Status Breakdown</CardTitle>
+              <CardDescription>Current status of all communications</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ChartContainer config={statusConfig} className="mx-auto aspect-square max-h-[300px]">
                 <PieChart>
-                  <Pie
-                    data={statusData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    dataKey="value"
-                    label={({ name, value }) => `${name}: ${value}`}
-                  >
-                    {statusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                  <Pie data={statusData} dataKey="value" nameKey="status" outerRadius={100} strokeWidth={5} />
+                  <ChartLegend content={<ChartLegendContent nameKey="status" />} className="-translate-y-2 flex-wrap gap-2" />
                 </PieChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             </CardContent>
           </Card>
         </div>
@@ -261,6 +218,7 @@ const EmailReport = () => {
         <Card>
           <CardHeader>
             <CardTitle>Type-wise Summary</CardTitle>
+            <CardDescription>Detailed breakdown by letter type</CardDescription>
           </CardHeader>
           <CardContent>
             <DataTable columns={columns} data={typeSummary} />

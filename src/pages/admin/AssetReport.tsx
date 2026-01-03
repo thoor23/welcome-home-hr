@@ -1,18 +1,36 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable, Column } from "@/components/ui/data-table";
 import { Package, TrendingDown, Wrench, IndianRupee } from "lucide-react";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from "recharts";
+import { Pie, PieChart, Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 
 const categoryData = [
-  { name: "Laptops", value: 45, color: "hsl(var(--chart-1))" },
-  { name: "Desktops", value: 30, color: "hsl(var(--chart-2))" },
-  { name: "Monitors", value: 60, color: "hsl(var(--chart-3))" },
-  { name: "Phones", value: 85, color: "hsl(var(--chart-4))" },
-  { name: "Furniture", value: 200, color: "hsl(var(--chart-5))" },
-  { name: "Vehicles", value: 10, color: "hsl(var(--primary))" },
+  { category: "laptops", value: 45, fill: "var(--color-laptops)" },
+  { category: "desktops", value: 30, fill: "var(--color-desktops)" },
+  { category: "monitors", value: 60, fill: "var(--color-monitors)" },
+  { category: "phones", value: 85, fill: "var(--color-phones)" },
+  { category: "furniture", value: 200, fill: "var(--color-furniture)" },
+  { category: "vehicles", value: 10, fill: "var(--color-vehicles)" },
 ];
+
+const categoryConfig = {
+  value: { label: "Assets" },
+  laptops: { label: "Laptops", color: "hsl(var(--chart-1))" },
+  desktops: { label: "Desktops", color: "hsl(var(--chart-2))" },
+  monitors: { label: "Monitors", color: "hsl(var(--chart-3))" },
+  phones: { label: "Phones", color: "hsl(var(--chart-4))" },
+  furniture: { label: "Furniture", color: "hsl(var(--chart-5))" },
+  vehicles: { label: "Vehicles", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
 
 const locationData = [
   { location: "Mumbai HQ", assets: 180 },
@@ -21,6 +39,10 @@ const locationData = [
   { location: "Chennai Store", assets: 45 },
   { location: "Pune Warehouse", assets: 60 },
 ];
+
+const locationConfig = {
+  assets: { label: "Assets", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
 
 const acquisitionTrend = [
   { month: "Jan", acquired: 12, retired: 3 },
@@ -36,6 +58,11 @@ const acquisitionTrend = [
   { month: "Nov", acquired: 16, retired: 3 },
   { month: "Dec", acquired: 22, retired: 5 },
 ];
+
+const trendConfig = {
+  acquired: { label: "Acquired", color: "hsl(var(--chart-1))" },
+  retired: { label: "Retired", color: "hsl(var(--chart-4))" },
+} satisfies ChartConfig;
 
 interface CategorySummary {
   id: string;
@@ -85,112 +112,87 @@ const columns: Column<CategorySummary>[] = [
 
 export default function AssetReport() {
   const totalAssets = categoryData.reduce((acc, c) => acc + c.value, 0);
-  const totalPurchaseValue = categorySummary.reduce((acc, c) => acc + c.purchaseValue, 0);
   const totalCurrentValue = categorySummary.reduce((acc, c) => acc + c.currentValue, 0);
   const totalDepreciation = categorySummary.reduce((acc, c) => acc + c.depreciation, 0);
 
   return (
     <AdminLayout>
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold">Asset Report</h1>
-              <p className="text-muted-foreground">Analytics and insights for your asset portfolio</p>
-            </div>
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-foreground font-display">Asset Report</h1>
+        <p className="text-muted-foreground mt-1">Analytics and insights for your asset portfolio</p>
+      </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <StatsCard
-                title="Total Assets"
-                value={String(totalAssets)}
-                icon={Package}
-              />
-              <StatsCard
-                title="Total Value"
-                value={`₹${(totalCurrentValue / 10000000).toFixed(1)}Cr`}
-                icon={IndianRupee}
-              />
-              <StatsCard
-                title="Depreciation"
-                value={`₹${(totalDepreciation / 10000000).toFixed(2)}Cr`}
-                icon={TrendingDown}
-              />
-              <StatsCard
-                title="Maintenance Costs"
-                value="₹4.2L"
-                icon={Wrench}
-              />
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <StatsCard title="Total Assets" value={String(totalAssets)} icon={Package} />
+        <StatsCard title="Total Value" value={`₹${(totalCurrentValue / 10000000).toFixed(1)}Cr`} icon={IndianRupee} />
+        <StatsCard title="Depreciation" value={`₹${(totalDepreciation / 10000000).toFixed(2)}Cr`} icon={TrendingDown} />
+        <StatsCard title="Maintenance Costs" value="₹4.2L" icon={Wrench} />
+      </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Assets by Category</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={categoryData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={100}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {categoryData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Assets by Category</CardTitle>
+            <CardDescription>Distribution across asset types</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={categoryConfig} className="mx-auto aspect-square max-h-[300px]">
+              <PieChart>
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                <Pie data={categoryData} dataKey="value" nameKey="category" outerRadius={100} strokeWidth={5} />
+                <ChartLegend content={<ChartLegendContent nameKey="category" />} className="-translate-y-2 flex-wrap gap-2" />
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Assets by Location</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={locationData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="location" tick={{ fontSize: 12 }} />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="assets" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Assets by Location</CardTitle>
+            <CardDescription>Distribution across office locations</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={locationConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={locationData}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="location" tickLine={false} tickMargin={10} axisLine={false} tick={{ fontSize: 12 }} />
+                <YAxis tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="assets" fill="var(--color-assets)" radius={4} />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      </div>
 
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle>Asset Acquisition & Retirement Trend</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={acquisitionTrend}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="acquired" stroke="hsl(var(--chart-1))" strokeWidth={2} name="Acquired" />
-                    <Line type="monotone" dataKey="retired" stroke="hsl(var(--chart-4))" strokeWidth={2} name="Retired" />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Asset Acquisition & Retirement Trend</CardTitle>
+          <CardDescription>Monthly asset lifecycle activity</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer config={trendConfig} className="h-[300px] w-full">
+            <LineChart accessibilityLayer data={acquisitionTrend}>
+              <CartesianGrid vertical={false} />
+              <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+              <YAxis tickLine={false} axisLine={false} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Line type="monotone" dataKey="acquired" stroke="var(--color-acquired)" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="retired" stroke="var(--color-retired)" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Category-wise Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <DataTable data={categorySummary} columns={columns} searchPlaceholder="Search categories..." />
-              </CardContent>
+      <Card>
+        <CardHeader>
+          <CardTitle>Category-wise Summary</CardTitle>
+          <CardDescription>Detailed asset information by category</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataTable data={categorySummary} columns={columns} searchPlaceholder="Search categories..." />
+        </CardContent>
       </Card>
     </AdminLayout>
   );

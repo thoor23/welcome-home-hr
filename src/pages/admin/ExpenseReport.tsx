@@ -1,30 +1,18 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
+import { IndianRupee, Users, TrendingUp, Clock, Download } from "lucide-react";
+import { Pie, PieChart, Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  IndianRupee,
-  Users,
-  TrendingUp,
-  Clock,
-  Download,
-} from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  Legend,
-} from "recharts";
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 import type { Column } from "@/components/ui/data-table";
 
 const monthlyExpenseData = [
@@ -36,14 +24,28 @@ const monthlyExpenseData = [
   { month: "Dec", amount: 142000 },
 ];
 
+const monthlyConfig = {
+  amount: { label: "Amount", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
+
 const categoryData = [
-  { name: "Travel", value: 245000, color: "hsl(var(--chart-1))" },
-  { name: "Food & Meals", value: 85000, color: "hsl(var(--chart-2))" },
-  { name: "Accommodation", value: 120000, color: "hsl(var(--chart-3))" },
-  { name: "Client Entertainment", value: 95000, color: "hsl(var(--chart-4))" },
-  { name: "Office Supplies", value: 45000, color: "hsl(var(--chart-5))" },
-  { name: "Training", value: 75000, color: "hsl(var(--primary))" },
+  { category: "travel", value: 245000, fill: "var(--color-travel)" },
+  { category: "food", value: 85000, fill: "var(--color-food)" },
+  { category: "accommodation", value: 120000, fill: "var(--color-accommodation)" },
+  { category: "client", value: 95000, fill: "var(--color-client)" },
+  { category: "supplies", value: 45000, fill: "var(--color-supplies)" },
+  { category: "training", value: 75000, fill: "var(--color-training)" },
 ];
+
+const categoryConfig = {
+  value: { label: "Amount" },
+  travel: { label: "Travel", color: "hsl(var(--chart-1))" },
+  food: { label: "Food & Meals", color: "hsl(var(--chart-2))" },
+  accommodation: { label: "Accommodation", color: "hsl(var(--chart-3))" },
+  client: { label: "Client Entertainment", color: "hsl(var(--chart-4))" },
+  supplies: { label: "Office Supplies", color: "hsl(var(--chart-5))" },
+  training: { label: "Training", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
 
 const departmentData = [
   { department: "Engineering", amount: 185000 },
@@ -53,6 +55,10 @@ const departmentData = [
   { department: "Finance", amount: 85000 },
   { department: "Operations", amount: 95000 },
 ];
+
+const departmentConfig = {
+  amount: { label: "Amount", color: "hsl(var(--chart-2))" },
+} satisfies ChartConfig;
 
 const yearOverYearData = [
   { month: "Jan", current: 120000, previous: 95000 },
@@ -69,6 +75,11 @@ const yearOverYearData = [
   { month: "Dec", current: 142000, previous: 125000 },
 ];
 
+const yoyConfig = {
+  current: { label: "2025", color: "hsl(var(--primary))" },
+  previous: { label: "2024", color: "hsl(var(--muted-foreground))" },
+} satisfies ChartConfig;
+
 interface CategorySummary {
   category: string;
   totalExpenses: number;
@@ -79,54 +90,12 @@ interface CategorySummary {
 }
 
 const categorySummaryData: CategorySummary[] = [
-  {
-    category: "Travel",
-    totalExpenses: 45,
-    totalAmount: 245000,
-    approved: 38,
-    pending: 7,
-    avgAmount: 5444,
-  },
-  {
-    category: "Food & Meals",
-    totalExpenses: 85,
-    totalAmount: 85000,
-    approved: 78,
-    pending: 7,
-    avgAmount: 1000,
-  },
-  {
-    category: "Accommodation",
-    totalExpenses: 18,
-    totalAmount: 120000,
-    approved: 15,
-    pending: 3,
-    avgAmount: 6667,
-  },
-  {
-    category: "Client Entertainment",
-    totalExpenses: 25,
-    totalAmount: 95000,
-    approved: 22,
-    pending: 3,
-    avgAmount: 3800,
-  },
-  {
-    category: "Office Supplies",
-    totalExpenses: 42,
-    totalAmount: 45000,
-    approved: 40,
-    pending: 2,
-    avgAmount: 1071,
-  },
-  {
-    category: "Training",
-    totalExpenses: 12,
-    totalAmount: 75000,
-    approved: 10,
-    pending: 2,
-    avgAmount: 6250,
-  },
+  { category: "Travel", totalExpenses: 45, totalAmount: 245000, approved: 38, pending: 7, avgAmount: 5444 },
+  { category: "Food & Meals", totalExpenses: 85, totalAmount: 85000, approved: 78, pending: 7, avgAmount: 1000 },
+  { category: "Accommodation", totalExpenses: 18, totalAmount: 120000, approved: 15, pending: 3, avgAmount: 6667 },
+  { category: "Client Entertainment", totalExpenses: 25, totalAmount: 95000, approved: 22, pending: 3, avgAmount: 3800 },
+  { category: "Office Supplies", totalExpenses: 42, totalAmount: 45000, approved: 40, pending: 2, avgAmount: 1071 },
+  { category: "Training", totalExpenses: 12, totalAmount: 75000, approved: 10, pending: 2, avgAmount: 6250 },
 ];
 
 const ExpenseReport = () => {
@@ -157,10 +126,8 @@ const ExpenseReport = () => {
     <AdminLayout>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Expense Report</h1>
-          <p className="text-muted-foreground">
-            Analytics and insights on expense spending
-          </p>
+          <h1 className="text-3xl font-bold text-foreground font-display">Expense Report</h1>
+          <p className="text-muted-foreground mt-1">Analytics and insights on expense spending</p>
         </div>
         <Button variant="outline">
           <Download className="mr-2 h-4 w-4" />
@@ -169,184 +136,93 @@ const ExpenseReport = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-4 mb-6">
-        <StatsCard
-          title="Total Expenses (Year)"
-          value={`₹${totalExpenses.toLocaleString()}`}
-          icon={IndianRupee}
-        />
-        <StatsCard
-          title="Avg per Employee"
-          value={`₹${avgPerEmployee.toLocaleString()}`}
-          icon={Users}
-        />
-        <StatsCard
-          title="Top Category"
-          value="Travel"
-          icon={TrendingUp}
-        />
-        <StatsCard
-          title="Pending Reimbursements"
-          value={`₹${pendingReimbursements.toLocaleString()}`}
-          icon={Clock}
-        />
+        <StatsCard title="Total Expenses (Year)" value={`₹${totalExpenses.toLocaleString()}`} icon={IndianRupee} />
+        <StatsCard title="Avg per Employee" value={`₹${avgPerEmployee.toLocaleString()}`} icon={Users} />
+        <StatsCard title="Top Category" value="Travel" icon={TrendingUp} />
+        <StatsCard title="Pending Reimbursements" value={`₹${pendingReimbursements.toLocaleString()}`} icon={Clock} />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 mb-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Monthly Expense Trend</CardTitle>
+            <CardTitle>Monthly Expense Trend</CardTitle>
+            <CardDescription>Expense spending over the months</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={monthlyExpenseData}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="month" className="text-xs" />
-                <YAxis
-                  className="text-xs"
-                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-                />
-                <Tooltip
-                  formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Bar
-                  dataKey="amount"
-                  fill="hsl(var(--primary))"
-                  radius={[4, 4, 0, 0]}
-                />
+            <ChartContainer config={monthlyConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={monthlyExpenseData}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`} />
+                <ChartTooltip content={<ChartTooltipContent formatter={(value) => `₹${Number(value).toLocaleString()}`} />} />
+                <Bar dataKey="amount" fill="var(--color-amount)" radius={4} />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Expenses by Category</CardTitle>
+            <CardTitle>Expenses by Category</CardTitle>
+            <CardDescription>Distribution across expense categories</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ChartContainer config={categoryConfig} className="mx-auto aspect-square max-h-[300px]">
               <PieChart>
-                <Pie
-                  data={categoryData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={2}
-                  dataKey="value"
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
-                  labelLine={false}
-                >
-                  {categoryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel formatter={(value) => `₹${Number(value).toLocaleString()}`} />} />
+                <Pie data={categoryData} dataKey="value" nameKey="category" innerRadius={60} outerRadius={100} strokeWidth={5} />
+                <ChartLegend content={<ChartLegendContent nameKey="category" />} className="-translate-y-2 flex-wrap gap-2" />
               </PieChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Expenses by Department</CardTitle>
+            <CardTitle>Expenses by Department</CardTitle>
+            <CardDescription>Department-wise expense distribution</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={departmentData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis
-                  type="number"
-                  className="text-xs"
-                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-                />
-                <YAxis dataKey="department" type="category" className="text-xs" width={80} />
-                <Tooltip
-                  formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Bar
-                  dataKey="amount"
-                  fill="hsl(var(--chart-2))"
-                  radius={[0, 4, 4, 0]}
-                />
+            <ChartContainer config={departmentConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={departmentData} layout="vertical">
+                <CartesianGrid horizontal={false} />
+                <XAxis type="number" tickLine={false} axisLine={false} tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`} />
+                <YAxis dataKey="department" type="category" tickLine={false} axisLine={false} width={80} />
+                <ChartTooltip content={<ChartTooltipContent formatter={(value) => `₹${Number(value).toLocaleString()}`} />} />
+                <Bar dataKey="amount" fill="var(--color-amount)" radius={[0, 4, 4, 0]} />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Year-over-Year Comparison</CardTitle>
+            <CardTitle>Year-over-Year Comparison</CardTitle>
+            <CardDescription>Expense trends compared to last year</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={yearOverYearData}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="month" className="text-xs" />
-                <YAxis
-                  className="text-xs"
-                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-                />
-                <Tooltip
-                  formatter={(value: number) => [`₹${value.toLocaleString()}`, ""]}
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="current"
-                  name="2025"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth={2}
-                  dot={{ fill: "hsl(var(--primary))" }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="previous"
-                  name="2024"
-                  stroke="hsl(var(--muted-foreground))"
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                  dot={{ fill: "hsl(var(--muted-foreground))" }}
-                />
+            <ChartContainer config={yoyConfig} className="h-[300px] w-full">
+              <LineChart accessibilityLayer data={yearOverYearData}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`} />
+                <ChartTooltip content={<ChartTooltipContent formatter={(value) => `₹${Number(value).toLocaleString()}`} />} />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Line type="monotone" dataKey="current" stroke="var(--color-current)" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="previous" stroke="var(--color-previous)" strokeWidth={2} strokeDasharray="5 5" dot={false} />
               </LineChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Category-wise Summary</CardTitle>
+          <CardTitle>Category-wise Summary</CardTitle>
+          <CardDescription>Detailed breakdown by expense category</CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable
-            data={categorySummaryData}
-            columns={columns}
-            searchPlaceholder="Search categories..."
-          />
+          <DataTable data={categorySummaryData} columns={columns} searchPlaceholder="Search categories..." />
         </CardContent>
       </Card>
     </AdminLayout>
