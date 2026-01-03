@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -947,10 +948,10 @@ const CompanySettings = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar />
-        <main className="flex-1 p-6 overflow-auto">
-          <SidebarTrigger className="mb-4" />
-          
-          <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex-1 flex flex-col min-h-screen">
+          <DashboardHeader />
+          <main className="flex-1 p-6 overflow-auto">
+            <div className="max-w-6xl mx-auto space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold">Company Settings</h1>
@@ -1009,6 +1010,7 @@ const CompanySettings = () => {
           </div>
         </main>
       </div>
+    </div>
     </SidebarProvider>
   );
 };
