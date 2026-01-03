@@ -33,11 +33,11 @@ interface ShiftSummary {
 }
 
 const employeeDistribution = [
-  { name: "general", value: 45, fill: "var(--color-general)" },
-  { name: "morning", value: 20, fill: "var(--color-morning)" },
-  { name: "evening", value: 18, fill: "var(--color-evening)" },
-  { name: "night", value: 12, fill: "var(--color-night)" },
-  { name: "flexible", value: 8, fill: "var(--color-flexible)" },
+  { name: "general", value: 45, fill: "hsl(var(--chart-1))" },
+  { name: "morning", value: 20, fill: "hsl(var(--chart-2))" },
+  { name: "evening", value: 18, fill: "hsl(var(--chart-3))" },
+  { name: "night", value: 12, fill: "hsl(var(--chart-4))" },
+  { name: "flexible", value: 8, fill: "hsl(var(--chart-5))" },
 ];
 
 const distributionConfig = {

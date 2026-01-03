@@ -33,10 +33,10 @@ interface DepartmentSummary {
 }
 
 const exitsByType = [
-  { type: "resignation", value: 45, fill: "var(--color-resignation)" },
-  { type: "termination", value: 8, fill: "var(--color-termination)" },
-  { type: "retirement", value: 5, fill: "var(--color-retirement)" },
-  { type: "contract", value: 12, fill: "var(--color-contract)" },
+  { type: "resignation", value: 45, fill: "hsl(var(--chart-1))" },
+  { type: "termination", value: 8, fill: "hsl(var(--chart-2))" },
+  { type: "retirement", value: 5, fill: "hsl(var(--chart-3))" },
+  { type: "contract", value: 12, fill: "hsl(var(--chart-4))" },
 ];
 
 const typeConfig = {
@@ -48,11 +48,11 @@ const typeConfig = {
 } satisfies ChartConfig;
 
 const exitsByDepartment = [
-  { department: "engineering", value: 20, fill: "var(--color-engineering)" },
-  { department: "marketing", value: 15, fill: "var(--color-marketing)" },
-  { department: "operations", value: 18, fill: "var(--color-operations)" },
-  { department: "hr", value: 5, fill: "var(--color-hr)" },
-  { department: "finance", value: 12, fill: "var(--color-finance)" },
+  { department: "engineering", value: 20, fill: "hsl(var(--chart-1))" },
+  { department: "marketing", value: 15, fill: "hsl(var(--chart-2))" },
+  { department: "operations", value: 18, fill: "hsl(var(--chart-3))" },
+  { department: "hr", value: 5, fill: "hsl(var(--chart-4))" },
+  { department: "finance", value: 12, fill: "hsl(var(--chart-5))" },
 ];
 
 const deptConfig = {

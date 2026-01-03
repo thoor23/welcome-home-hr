@@ -44,12 +44,12 @@ const categoryConfig = {
 } satisfies ChartConfig;
 
 const storageByCategory = [
-  { category: "photos", value: 567, fill: "var(--color-photos)" },
-  { category: "payslips", value: 156, fill: "var(--color-payslips)" },
-  { category: "invoices", value: 89, fill: "var(--color-invoices)" },
-  { category: "idproofs", value: 78, fill: "var(--color-idproofs)" },
-  { category: "contracts", value: 45, fill: "var(--color-contracts)" },
-  { category: "others", value: 104, fill: "var(--color-others)" },
+  { category: "photos", value: 567, fill: "hsl(262 83% 58%)" },
+  { category: "payslips", value: 156, fill: "hsl(217 91% 60%)" },
+  { category: "invoices", value: 89, fill: "hsl(142 76% 36%)" },
+  { category: "idproofs", value: 78, fill: "hsl(38 92% 50%)" },
+  { category: "contracts", value: 45, fill: "hsl(330 81% 60%)" },
+  { category: "others", value: 104, fill: "hsl(var(--muted))" },
 ];
 
 const storageConfig = {

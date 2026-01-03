@@ -29,12 +29,12 @@ const monthlyConfig = {
 } satisfies ChartConfig;
 
 const categoryData = [
-  { category: "travel", value: 245000, fill: "var(--color-travel)" },
-  { category: "food", value: 85000, fill: "var(--color-food)" },
-  { category: "accommodation", value: 120000, fill: "var(--color-accommodation)" },
-  { category: "client", value: 95000, fill: "var(--color-client)" },
-  { category: "supplies", value: 45000, fill: "var(--color-supplies)" },
-  { category: "training", value: 75000, fill: "var(--color-training)" },
+  { category: "travel", value: 245000, fill: "hsl(var(--chart-1))" },
+  { category: "food", value: 85000, fill: "hsl(var(--chart-2))" },
+  { category: "accommodation", value: 120000, fill: "hsl(var(--chart-3))" },
+  { category: "client", value: 95000, fill: "hsl(var(--chart-4))" },
+  { category: "supplies", value: 45000, fill: "hsl(var(--chart-5))" },
+  { category: "training", value: 75000, fill: "hsl(var(--primary))" },
 ];
 
 const categoryConfig = {

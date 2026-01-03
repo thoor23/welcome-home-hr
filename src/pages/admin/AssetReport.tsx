@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/chart";
 
 const categoryData = [
-  { category: "laptops", value: 45, fill: "var(--color-laptops)" },
-  { category: "desktops", value: 30, fill: "var(--color-desktops)" },
-  { category: "monitors", value: 60, fill: "var(--color-monitors)" },
-  { category: "phones", value: 85, fill: "var(--color-phones)" },
-  { category: "furniture", value: 200, fill: "var(--color-furniture)" },
-  { category: "vehicles", value: 10, fill: "var(--color-vehicles)" },
+  { category: "laptops", value: 45, fill: "hsl(var(--chart-1))" },
+  { category: "desktops", value: 30, fill: "hsl(var(--chart-2))" },
+  { category: "monitors", value: 60, fill: "hsl(var(--chart-3))" },
+  { category: "phones", value: 85, fill: "hsl(var(--chart-4))" },
+  { category: "furniture", value: 200, fill: "hsl(var(--chart-5))" },
+  { category: "vehicles", value: 10, fill: "hsl(var(--primary))" },
 ];
 
 const categoryConfig = {
