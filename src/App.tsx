@@ -120,6 +120,9 @@ import ESSExpenseClaims from "./pages/ess/ExpenseClaims";
 import ESSDocuments from "./pages/ess/Documents";
 import ESSAssets from "./pages/ess/Assets";
 import ESSEvents from "./pages/ess/Events";
+import ESSSupportTickets from "./pages/ess/SupportTickets";
+import ESSNewTicket from "./pages/ess/NewTicket";
+import ESSKnowledgeBase from "./pages/ess/KnowledgeBase";
 
 const queryClient = new QueryClient();
 
@@ -269,6 +272,10 @@ const App = () => (
             <Route path="/ess/documents" element={<ESSDocuments />} />
             <Route path="/ess/assets" element={<ESSAssets />} />
             <Route path="/ess/events" element={<ESSEvents />} />
+            <Route path="/ess/support" element={<Navigate to="/ess/support/tickets" replace />} />
+            <Route path="/ess/support/tickets" element={<ESSSupportTickets />} />
+            <Route path="/ess/support/new" element={<ESSNewTicket />} />
+            <Route path="/ess/support/kb" element={<ESSKnowledgeBase />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
