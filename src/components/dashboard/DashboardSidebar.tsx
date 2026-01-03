@@ -68,7 +68,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -433,7 +433,7 @@ export function DashboardSidebar() {
       </div>
 
       {/* Content */}
-      <ScrollArea className="flex-1 py-4 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto py-4 scrollbar-hide">
         <div className={cn("space-y-6", collapsed ? "px-2" : "px-3")}>
           {/* Dashboard Link */}
           <div>
@@ -526,7 +526,7 @@ export function DashboardSidebar() {
             )}
           </div>
         </div>
-      </ScrollArea>
+      </div>
 
     </aside>
   );
