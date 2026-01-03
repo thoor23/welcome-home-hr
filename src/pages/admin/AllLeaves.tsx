@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -276,14 +274,7 @@ const AllLeaves = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-
-        <div className="flex-1 flex flex-col min-w-0">
-          <DashboardHeader />
-
-          <main className="flex-1 p-6 overflow-auto min-w-0">
+    <AdminLayout>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-3xl font-bold text-foreground font-display">All Leaves</h1>
@@ -307,10 +298,7 @@ const AllLeaves = () => {
               pageSizeOptions={[10, 25, 50, 100]}
               getRowId={(record) => record.id}
             />
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

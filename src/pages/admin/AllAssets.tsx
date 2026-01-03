@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DataTable, Column, Filter } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
@@ -272,124 +270,118 @@ export default function AllAssets() {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-2xl font-bold">All Assets</h1>
-                <p className="text-muted-foreground">Manage your organization's asset inventory</p>
+    <AdminLayout noPadding>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold">All Assets</h1>
+            <p className="text-muted-foreground">Manage your organization's asset inventory</p>
+          </div>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => { setEditingAsset(null); setFormData({ name: "", category: "", brand: "", model: "", serialNumber: "", purchaseDate: "", purchasePrice: "", location: "", status: "Available", condition: "Good" }); }}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Asset
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>{editingAsset ? "Edit Asset" : "Add New Asset"}</DialogTitle>
+              </DialogHeader>
+              <div className="grid grid-cols-2 gap-4 py-4">
+                <div className="space-y-2">
+                  <Label>Asset Name</Label>
+                  <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="e.g., MacBook Pro 14" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
+                    <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Laptop">Laptop</SelectItem>
+                      <SelectItem value="Desktop">Desktop</SelectItem>
+                      <SelectItem value="Monitor">Monitor</SelectItem>
+                      <SelectItem value="Mobile Phone">Mobile Phone</SelectItem>
+                      <SelectItem value="Vehicle">Vehicle</SelectItem>
+                      <SelectItem value="Furniture">Furniture</SelectItem>
+                      <SelectItem value="Printer">Printer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Brand</Label>
+                  <Input value={formData.brand} onChange={(e) => setFormData({ ...formData, brand: e.target.value })} placeholder="e.g., Apple" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Model</Label>
+                  <Input value={formData.model} onChange={(e) => setFormData({ ...formData, model: e.target.value })} placeholder="e.g., MacBook Pro M3" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Serial Number</Label>
+                  <Input value={formData.serialNumber} onChange={(e) => setFormData({ ...formData, serialNumber: e.target.value })} placeholder="e.g., C02XL1TYJGH5" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Date</Label>
+                  <Input type="date" value={formData.purchaseDate} onChange={(e) => setFormData({ ...formData, purchaseDate: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Price (₹)</Label>
+                  <Input type="number" value={formData.purchasePrice} onChange={(e) => setFormData({ ...formData, purchasePrice: e.target.value })} placeholder="e.g., 199999" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Location</Label>
+                  <Select value={formData.location} onValueChange={(v) => setFormData({ ...formData, location: v })}>
+                    <SelectTrigger><SelectValue placeholder="Select location" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Mumbai HQ">Mumbai HQ</SelectItem>
+                      <SelectItem value="Delhi Branch">Delhi Branch</SelectItem>
+                      <SelectItem value="Bangalore Branch">Bangalore Branch</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Status</Label>
+                  <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v as Asset["status"] })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Available">Available</SelectItem>
+                      <SelectItem value="Assigned">Assigned</SelectItem>
+                      <SelectItem value="Under Maintenance">Under Maintenance</SelectItem>
+                      <SelectItem value="Retired">Retired</SelectItem>
+                      <SelectItem value="Lost">Lost</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Condition</Label>
+                  <Select value={formData.condition} onValueChange={(v) => setFormData({ ...formData, condition: v as Asset["condition"] })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Excellent">Excellent</SelectItem>
+                      <SelectItem value="Good">Good</SelectItem>
+                      <SelectItem value="Fair">Fair</SelectItem>
+                      <SelectItem value="Poor">Poor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button onClick={() => { setEditingAsset(null); setFormData({ name: "", category: "", brand: "", model: "", serialNumber: "", purchaseDate: "", purchasePrice: "", location: "", status: "Available", condition: "Good" }); }}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Asset
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>{editingAsset ? "Edit Asset" : "Add New Asset"}</DialogTitle>
-                  </DialogHeader>
-                  <div className="grid grid-cols-2 gap-4 py-4">
-                    <div className="space-y-2">
-                      <Label>Asset Name</Label>
-                      <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="e.g., MacBook Pro 14" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Category</Label>
-                      <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
-                        <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Laptop">Laptop</SelectItem>
-                          <SelectItem value="Desktop">Desktop</SelectItem>
-                          <SelectItem value="Monitor">Monitor</SelectItem>
-                          <SelectItem value="Mobile Phone">Mobile Phone</SelectItem>
-                          <SelectItem value="Vehicle">Vehicle</SelectItem>
-                          <SelectItem value="Furniture">Furniture</SelectItem>
-                          <SelectItem value="Printer">Printer</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Brand</Label>
-                      <Input value={formData.brand} onChange={(e) => setFormData({ ...formData, brand: e.target.value })} placeholder="e.g., Apple" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Model</Label>
-                      <Input value={formData.model} onChange={(e) => setFormData({ ...formData, model: e.target.value })} placeholder="e.g., MacBook Pro M3" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Serial Number</Label>
-                      <Input value={formData.serialNumber} onChange={(e) => setFormData({ ...formData, serialNumber: e.target.value })} placeholder="e.g., C02XL1TYJGH5" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Purchase Date</Label>
-                      <Input type="date" value={formData.purchaseDate} onChange={(e) => setFormData({ ...formData, purchaseDate: e.target.value })} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Purchase Price (₹)</Label>
-                      <Input type="number" value={formData.purchasePrice} onChange={(e) => setFormData({ ...formData, purchasePrice: e.target.value })} placeholder="e.g., 199999" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Location</Label>
-                      <Select value={formData.location} onValueChange={(v) => setFormData({ ...formData, location: v })}>
-                        <SelectTrigger><SelectValue placeholder="Select location" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Mumbai HQ">Mumbai HQ</SelectItem>
-                          <SelectItem value="Delhi Branch">Delhi Branch</SelectItem>
-                          <SelectItem value="Bangalore Branch">Bangalore Branch</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Status</Label>
-                      <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v as Asset["status"] })}>
-                        <SelectTrigger><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Available">Available</SelectItem>
-                          <SelectItem value="Assigned">Assigned</SelectItem>
-                          <SelectItem value="Under Maintenance">Under Maintenance</SelectItem>
-                          <SelectItem value="Retired">Retired</SelectItem>
-                          <SelectItem value="Lost">Lost</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Condition</Label>
-                      <Select value={formData.condition} onValueChange={(v) => setFormData({ ...formData, condition: v as Asset["condition"] })}>
-                        <SelectTrigger><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Excellent">Excellent</SelectItem>
-                          <SelectItem value="Good">Good</SelectItem>
-                          <SelectItem value="Fair">Fair</SelectItem>
-                          <SelectItem value="Poor">Poor</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                    <Button onClick={handleSubmit}>{editingAsset ? "Update" : "Add"} Asset</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <StatsCard title="Total Assets" value={String(totalAssets)} icon={Package} />
-              <StatsCard title="Assigned" value={String(assignedAssets)} icon={Package} />
-              <StatsCard title="Available" value={String(availableAssets)} icon={Package} />
-              <StatsCard title="Under Maintenance" value={String(maintenanceAssets)} icon={Wrench} />
-            </div>
-
-            <DataTable data={assets} columns={columns} filters={filters} searchPlaceholder="Search assets..." />
-          </main>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button onClick={handleSubmit}>{editingAsset ? "Update" : "Add"} Asset</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <StatsCard title="Total Assets" value={String(totalAssets)} icon={Package} />
+          <StatsCard title="Assigned" value={String(assignedAssets)} icon={Package} />
+          <StatsCard title="Available" value={String(availableAssets)} icon={Package} />
+          <StatsCard title="Under Maintenance" value={String(maintenanceAssets)} icon={Wrench} />
+        </div>
+
+        <DataTable data={assets} columns={columns} filters={filters} searchPlaceholder="Search assets..." />
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 }
