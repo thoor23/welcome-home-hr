@@ -333,7 +333,7 @@ function CollapsibleMenuItem({
             <item.icon className="h-5 w-5" />
           </button>
         </TooltipTrigger>
-        <TooltipContent side="right" className="flex flex-col gap-1 p-2">
+        <TooltipContent side="right" className="flex flex-col gap-1 p-2 z-[100] bg-popover border border-border shadow-lg">
           <span className="font-medium">{item.title}</span>
           <div className="flex flex-col gap-0.5">
             {item.subItems.map((sub) => (
