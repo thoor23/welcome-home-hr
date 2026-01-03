@@ -97,6 +97,8 @@ import SystemLogs from "./pages/admin/SystemLogs";
 import APILogs from "./pages/admin/APILogs";
 import AuditSettings from "./pages/admin/AuditSettings";
 import CompanySettings from "./pages/admin/CompanySettings";
+import UserProfile from "./pages/admin/UserProfile";
+import PersonalSettings from "./pages/admin/PersonalSettings";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 
@@ -219,6 +221,8 @@ const App = () => (
             <Route path="/admin/audit/api" element={<APILogs />} />
             <Route path="/admin/audit/settings" element={<AuditSettings />} />
             <Route path="/admin/settings" element={<CompanySettings />} />
+            <Route path="/admin/profile" element={<UserProfile />} />
+            <Route path="/admin/personal-settings" element={<PersonalSettings />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
