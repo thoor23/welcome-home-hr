@@ -527,55 +527,6 @@ export function DashboardSidebar() {
         </div>
       </ScrollArea>
 
-      {/* Footer */}
-      <div className={cn(
-        "border-t border-border p-3 shrink-0",
-        collapsed && "flex flex-col items-center gap-2"
-      )}>
-        {/* Collapse Toggle */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setCollapsed(!collapsed)}
-          className={cn(
-            "w-full justify-start gap-2 text-muted-foreground hover:text-foreground",
-            collapsed && "w-10 h-10 p-0 justify-center"
-          )}
-        >
-          <ChevronLeft
-            className={cn(
-              "h-4 w-4 transition-transform duration-300",
-              collapsed && "rotate-180"
-            )}
-          />
-          {!collapsed && <span className="text-sm">Collapse</span>}
-        </Button>
-
-        {/* Logout */}
-        {collapsed ? (
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-10 h-10 p-0 text-muted-foreground hover:text-destructive"
-              >
-                <LogOut className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">Logout</TooltipContent>
-          </Tooltip>
-        ) : (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-full justify-start gap-2 text-muted-foreground hover:text-destructive mt-1"
-          >
-            <LogOut className="h-4 w-4" />
-            <span className="text-sm">Logout</span>
-          </Button>
-        )}
-      </div>
     </aside>
   );
 }
