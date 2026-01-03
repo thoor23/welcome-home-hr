@@ -15,6 +15,7 @@ import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb-nav";
+import { ClockButton } from "@/components/ui/clock-button";
 
 const notifications = [
   {
@@ -74,6 +75,8 @@ export function DashboardHeader() {
 
       {/* Right Side */}
       <div className="flex items-center gap-2">
+        {/* Clock In/Out */}
+        <ClockButton />
         {/* Theme Toggle */}
         <Button
           variant="ghost"
