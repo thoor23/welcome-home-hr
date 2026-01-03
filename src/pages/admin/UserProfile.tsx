@@ -18,7 +18,7 @@ const UserProfile = () => {
         <DashboardSidebar />
         <SidebarInset className="flex-1">
           <DashboardHeader />
-          <main className="flex-1 p-6 bg-background">
+          <main className="p-6">
             <div className="mb-6">
               <h1 className="text-2xl font-semibold text-foreground">My Profile</h1>
               <p className="text-muted-foreground">View and manage your profile information</p>
