@@ -103,6 +103,9 @@ import PersonalSettings from "./pages/admin/PersonalSettings";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
 import ESSDashboard from "./pages/ess/Dashboard";
+import ESSAttendanceToday from "./pages/ess/AttendanceToday";
+import ESSAttendanceHistory from "./pages/ess/AttendanceHistory";
+import ESSAttendanceRegularization from "./pages/ess/AttendanceRegularization";
 
 const queryClient = new QueryClient();
 
@@ -230,6 +233,10 @@ const App = () => (
             {/* ESS Portal Routes */}
             <Route path="/ess" element={<Navigate to="/ess/dashboard" replace />} />
             <Route path="/ess/dashboard" element={<ESSDashboard />} />
+            <Route path="/ess/attendance" element={<Navigate to="/ess/attendance/today" replace />} />
+            <Route path="/ess/attendance/today" element={<ESSAttendanceToday />} />
+            <Route path="/ess/attendance/history" element={<ESSAttendanceHistory />} />
+            <Route path="/ess/attendance/regularization" element={<ESSAttendanceRegularization />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
