@@ -433,7 +433,7 @@ export function DashboardSidebar() {
       </div>
 
       {/* Content */}
-      <ScrollArea className="flex-1 py-4">
+      <ScrollArea className="flex-1 py-4 scrollbar-hide">
         <div className={cn("space-y-6", collapsed ? "px-2" : "px-3")}>
           {/* Dashboard Link */}
           <div>
