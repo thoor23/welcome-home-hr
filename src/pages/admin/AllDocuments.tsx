@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -200,236 +198,228 @@ export default function AllDocuments() {
   const isInFolder = currentPath.length > 0;
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            {/* Page Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground">Documents</h1>
-                <p className="text-muted-foreground">
-                  Manage and organize all your files in one place
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={() => toast.info("Create folder clicked")}>
-                  <FolderPlus className="h-4 w-4 mr-2" />
-                  New Folder
-                </Button>
-                <Button onClick={() => setUploadDialogOpen(true)}>
-                  <Upload className="h-4 w-4 mr-2" />
-                  Upload Files
-                </Button>
-              </div>
-            </div>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <StatsCard
-                title="Total Documents"
-                value="1,721"
-                icon={FileText}
-              />
-              <StatsCard
-                title="Storage Used"
-                value="4.8 GB"
-                icon={FolderOpen}
-              />
-              <StatsCard
-                title="Uploaded This Month"
-                value="156"
-                icon={Upload}
-              />
-              <StatsCard
-                title="Shared Files"
-                value="89"
-                icon={Eye}
-              />
-            </div>
-
-            {/* Breadcrumb & Controls */}
-            <div className="flex items-center justify-between mb-4">
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink
-                      onClick={() => setCurrentPath([])}
-                      className="cursor-pointer flex items-center gap-1"
-                    >
-                      <Home className="h-4 w-4" />
-                      Documents
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  {currentPath.map((path, index) => (
-                    <BreadcrumbItem key={path}>
-                      <BreadcrumbSeparator />
-                      {index === currentPath.length - 1 ? (
-                        <BreadcrumbPage>{path}</BreadcrumbPage>
-                      ) : (
-                        <BreadcrumbLink
-                          onClick={() => handleBreadcrumbClick(index + 1)}
-                          className="cursor-pointer"
-                        >
-                          {path}
-                        </BreadcrumbLink>
-                      )}
-                    </BreadcrumbItem>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
-
-              <div className="flex items-center gap-3">
-                <div className="relative w-64">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search files..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="w-40">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    {folders.map((folder) => (
-                      <SelectItem key={folder.id} value={folder.name}>
-                        {folder.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <div className="flex border border-border rounded-lg overflow-hidden">
-                  <Button
-                    variant={viewMode === "grid" ? "secondary" : "ghost"}
-                    size="icon"
-                    className="rounded-none"
-                    onClick={() => setViewMode("grid")}
-                  >
-                    <LayoutGrid className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "secondary" : "ghost"}
-                    size="icon"
-                    className="rounded-none"
-                    onClick={() => setViewMode("list")}
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Content */}
-            {viewMode === "grid" ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {!isInFolder &&
-                  folders.map((folder) => (
-                    <FolderCard
-                      key={folder.id}
-                      name={folder.name}
-                      itemsCount={folder.items}
-                      onClick={() => handleFolderClick(folder.name)}
-                    />
-                  ))}
-                {files.map((file) => (
-                  <FileCard
-                    key={file.id}
-                    name={file.name}
-                    type={file.type}
-                    size={file.size}
-                    date={file.uploadedAt}
-                    onView={() => handleFileView(file)}
-                    onDownload={() => handleFileDownload(file.name)}
-                    onDelete={() => handleFileDelete(file.name)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-xl border border-border overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-muted/50">
-                      <TableHead>Name</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Size</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Uploaded By</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Access</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {files.map((file) => (
-                      <TableRow key={file.id} className="hover:bg-muted/50">
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            {getFileIcon(file.type)}
-                            <span className="font-medium">{file.name}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="uppercase text-xs">
-                          {file.type}
-                        </TableCell>
-                        <TableCell>{file.size}</TableCell>
-                        <TableCell>{file.category}</TableCell>
-                        <TableCell>{file.uploadedBy}</TableCell>
-                        <TableCell>{file.uploadedAt}</TableCell>
-                        <TableCell>
-                          <Badge
-                            variant="outline"
-                            className={
-                              file.accessLevel === "public"
-                                ? "border-green-500 text-green-500"
-                                : file.accessLevel === "department"
-                                ? "border-yellow-500 text-yellow-500"
-                                : "border-red-500 text-red-500"
-                            }
-                          >
-                            {file.accessLevel}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleFileView(file)}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleFileDownload(file.name)}>
-                                <Download className="h-4 w-4 mr-2" />
-                                Download
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleFileDelete(file.name)}
-                                className="text-destructive"
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </main>
+    <AdminLayout>
+      {/* Page Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Documents</h1>
+          <p className="text-muted-foreground">
+            Manage and organize all your files in one place
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => toast.info("Create folder clicked")}>
+            <FolderPlus className="h-4 w-4 mr-2" />
+            New Folder
+          </Button>
+          <Button onClick={() => setUploadDialogOpen(true)}>
+            <Upload className="h-4 w-4 mr-2" />
+            Upload Files
+          </Button>
         </div>
       </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <StatsCard
+          title="Total Documents"
+          value="1,721"
+          icon={FileText}
+        />
+        <StatsCard
+          title="Storage Used"
+          value="4.8 GB"
+          icon={FolderOpen}
+        />
+        <StatsCard
+          title="Uploaded This Month"
+          value="156"
+          icon={Upload}
+        />
+        <StatsCard
+          title="Shared Files"
+          value="89"
+          icon={Eye}
+        />
+      </div>
+
+      {/* Breadcrumb & Controls */}
+      <div className="flex items-center justify-between mb-4">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                onClick={() => setCurrentPath([])}
+                className="cursor-pointer flex items-center gap-1"
+              >
+                <Home className="h-4 w-4" />
+                Documents
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            {currentPath.map((path, index) => (
+              <BreadcrumbItem key={path}>
+                <BreadcrumbSeparator />
+                {index === currentPath.length - 1 ? (
+                  <BreadcrumbPage>{path}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink
+                    onClick={() => handleBreadcrumbClick(index + 1)}
+                    className="cursor-pointer"
+                  >
+                    {path}
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        <div className="flex items-center gap-3">
+          <div className="relative w-64">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search files..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {folders.map((folder) => (
+                <SelectItem key={folder.id} value={folder.name}>
+                  {folder.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="flex border border-border rounded-lg overflow-hidden">
+            <Button
+              variant={viewMode === "grid" ? "secondary" : "ghost"}
+              size="icon"
+              className="rounded-none"
+              onClick={() => setViewMode("grid")}
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "list" ? "secondary" : "ghost"}
+              size="icon"
+              className="rounded-none"
+              onClick={() => setViewMode("list")}
+            >
+              <List className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      {viewMode === "grid" ? (
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {!isInFolder &&
+            folders.map((folder) => (
+              <FolderCard
+                key={folder.id}
+                name={folder.name}
+                itemsCount={folder.items}
+                onClick={() => handleFolderClick(folder.name)}
+              />
+            ))}
+          {files.map((file) => (
+            <FileCard
+              key={file.id}
+              name={file.name}
+              type={file.type}
+              size={file.size}
+              date={file.uploadedAt}
+              onView={() => handleFileView(file)}
+              onDownload={() => handleFileDownload(file.name)}
+              onDelete={() => handleFileDelete(file.name)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-xl border border-border overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead>Name</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Size</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Uploaded By</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Access</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {files.map((file) => (
+                <TableRow key={file.id} className="hover:bg-muted/50">
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {getFileIcon(file.type)}
+                      <span className="font-medium">{file.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="uppercase text-xs">
+                    {file.type}
+                  </TableCell>
+                  <TableCell>{file.size}</TableCell>
+                  <TableCell>{file.category}</TableCell>
+                  <TableCell>{file.uploadedBy}</TableCell>
+                  <TableCell>{file.uploadedAt}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      className={
+                        file.accessLevel === "public"
+                          ? "border-green-500 text-green-500"
+                          : file.accessLevel === "department"
+                          ? "border-yellow-500 text-yellow-500"
+                          : "border-red-500 text-red-500"
+                      }
+                    >
+                      {file.accessLevel}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleFileView(file)}>
+                          <Eye className="h-4 w-4 mr-2" />
+                          View
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleFileDownload(file.name)}>
+                          <Download className="h-4 w-4 mr-2" />
+                          Download
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleFileDelete(file.name)}
+                          className="text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
       <FileUploadDialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen} />
       <FilePreviewDrawer
@@ -437,6 +427,6 @@ export default function AllDocuments() {
         onOpenChange={setPreviewDrawerOpen}
         file={selectedFile}
       />
-    </SidebarProvider>
+    </AdminLayout>
   );
 }

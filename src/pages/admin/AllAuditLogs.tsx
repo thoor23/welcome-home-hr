@@ -1,6 +1,4 @@
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DataTable, Column } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
@@ -193,57 +191,51 @@ export default function AllAuditLogs() {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <main className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <div className="flex-1 p-6 space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">All Audit Logs</h1>
-                <p className="text-muted-foreground">
-                  Unified view of all system activities and events
-                </p>
-              </div>
-              <Button>
-                <Download className="h-4 w-4 mr-2" />
-                Export Logs
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <StatsCard
-                title="Total Logs Today"
-                value="1,247"
-                icon={History}
-                iconColor="text-blue-600"
-              />
-              <StatsCard
-                title="User Activities"
-                value="856"
-                icon={Activity}
-                iconColor="text-green-600"
-              />
-              <StatsCard
-                title="Data Changes"
-                value="234"
-                icon={Database}
-                iconColor="text-purple-600"
-              />
-              <StatsCard
-                title="Security Alerts"
-                value="12"
-                icon={Shield}
-                iconColor="text-red-600"
-              />
-            </div>
-
-            <LogFilterPanel onFilterChange={(filters) => console.log(filters)} />
-
-            <DataTable columns={columns} data={sampleLogs} />
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">All Audit Logs</h1>
+            <p className="text-muted-foreground">
+              Unified view of all system activities and events
+            </p>
           </div>
-        </main>
+          <Button>
+            <Download className="h-4 w-4 mr-2" />
+            Export Logs
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatsCard
+            title="Total Logs Today"
+            value="1,247"
+            icon={History}
+            iconColor="text-blue-600"
+          />
+          <StatsCard
+            title="User Activities"
+            value="856"
+            icon={Activity}
+            iconColor="text-green-600"
+          />
+          <StatsCard
+            title="Data Changes"
+            value="234"
+            icon={Database}
+            iconColor="text-purple-600"
+          />
+          <StatsCard
+            title="Security Alerts"
+            value="12"
+            icon={Shield}
+            iconColor="text-red-600"
+          />
+        </div>
+
+        <LogFilterPanel onFilterChange={(filters) => console.log(filters)} />
+
+        <DataTable columns={columns} data={sampleLogs} />
       </div>
 
       <LogDetailsDrawer
@@ -251,6 +243,6 @@ export default function AllAuditLogs() {
         onOpenChange={setDrawerOpen}
         log={selectedLog}
       />
-    </SidebarProvider>
+    </AdminLayout>
   );
 }

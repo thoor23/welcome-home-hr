@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { EventCalendar, CalendarEvent, EventCategory } from "@/components/events/EventCalendar";
@@ -137,57 +135,49 @@ const AllEvents = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-foreground">Events Calendar</h1>
-              <p className="text-muted-foreground">Manage all office and store events</p>
-            </div>
-            <div className="mb-6 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                {defaultCategories.slice(0, 6).map((category) => (
-                  <div key={category.id} className="flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: category.color }}
-                    />
-                    <span className="text-sm text-muted-foreground">
-                      {category.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <Button onClick={handleCreateEvent}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Event
-              </Button>
-            </div>
-
-            <EventCalendar
-              events={events}
-              categories={defaultCategories}
-              onEventClick={handleEventClick}
-              onSlotClick={handleSlotClick}
-            />
-
-            <EventDialog
-              open={dialogOpen}
-              onOpenChange={setDialogOpen}
-              event={selectedEvent}
-              categories={defaultCategories}
-              defaultDate={defaultDate}
-              defaultHour={defaultHour}
-              onSave={handleSaveEvent}
-              onDelete={handleDeleteEvent}
-            />
-          </main>
-        </div>
+    <AdminLayout>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-foreground">Events Calendar</h1>
+        <p className="text-muted-foreground">Manage all office and store events</p>
       </div>
-    </SidebarProvider>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          {defaultCategories.slice(0, 6).map((category) => (
+            <div key={category.id} className="flex items-center gap-2">
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: category.color }}
+              />
+              <span className="text-sm text-muted-foreground">
+                {category.name}
+              </span>
+            </div>
+          ))}
+        </div>
+        <Button onClick={handleCreateEvent}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Event
+        </Button>
+      </div>
+
+      <EventCalendar
+        events={events}
+        categories={defaultCategories}
+        onEventClick={handleEventClick}
+        onSlotClick={handleSlotClick}
+      />
+
+      <EventDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        event={selectedEvent}
+        categories={defaultCategories}
+        defaultDate={defaultDate}
+        defaultHour={defaultHour}
+        onSave={handleSaveEvent}
+        onDelete={handleDeleteEvent}
+      />
+    </AdminLayout>
   );
 };
 

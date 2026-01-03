@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
@@ -351,131 +349,123 @@ const AllExpenses = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">All Expenses</h1>
-                <p className="text-muted-foreground">
-                  Manage and track all expense submissions
-                </p>
-              </div>
-              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Expense
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Submit New Expense</DialogTitle>
-                    <DialogDescription>
-                      Add a new expense for reimbursement
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                      <Label>Category</Label>
-                      <Select
-                        value={newExpense.category}
-                        onValueChange={(value) =>
-                          setNewExpense({ ...newExpense, category: value })
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((cat) => (
-                            <SelectItem key={cat} value={cat}>
-                              {cat}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Description</Label>
-                      <Textarea
-                        placeholder="Expense description"
-                        value={newExpense.description}
-                        onChange={(e) =>
-                          setNewExpense({ ...newExpense, description: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="grid gap-2">
-                        <Label>Amount (₹)</Label>
-                        <Input
-                          type="number"
-                          placeholder="0"
-                          value={newExpense.amount}
-                          onChange={(e) =>
-                            setNewExpense({ ...newExpense, amount: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label>Expense Date</Label>
-                        <Input
-                          type="date"
-                          value={newExpense.expenseDate}
-                          onChange={(e) =>
-                            setNewExpense({ ...newExpense, expenseDate: e.target.value })
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button onClick={handleAddExpense}>Submit Expense</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-4 mb-6">
-              <StatsCard
-                title="Total Expenses"
-                value={`₹${totalExpenses.toLocaleString()}`}
-                icon={CreditCard}
-              />
-              <StatsCard
-                title="Pending Approval"
-                value={`₹${pendingAmount.toLocaleString()}`}
-                icon={Clock}
-              />
-              <StatsCard
-                title="Approved"
-                value={`₹${approvedAmount.toLocaleString()}`}
-                icon={CheckCircle}
-              />
-              <StatsCard
-                title="Reimbursed"
-                value={`₹${reimbursedAmount.toLocaleString()}`}
-                icon={IndianRupee}
-              />
-            </div>
-
-            <DataTable
-              data={expenses}
-              columns={columns}
-              filters={filters}
-              searchPlaceholder="Search by employee name..."
-            />
-          </main>
+    <AdminLayout>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">All Expenses</h1>
+          <p className="text-muted-foreground">
+            Manage and track all expense submissions
+          </p>
         </div>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Expense
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Submit New Expense</DialogTitle>
+              <DialogDescription>
+                Add a new expense for reimbursement
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label>Category</Label>
+                <Select
+                  value={newExpense.category}
+                  onValueChange={(value) =>
+                    setNewExpense({ ...newExpense, category: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label>Description</Label>
+                <Textarea
+                  placeholder="Expense description"
+                  value={newExpense.description}
+                  onChange={(e) =>
+                    setNewExpense({ ...newExpense, description: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Amount (₹)</Label>
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    value={newExpense.amount}
+                    onChange={(e) =>
+                      setNewExpense({ ...newExpense, amount: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Expense Date</Label>
+                  <Input
+                    type="date"
+                    value={newExpense.expenseDate}
+                    onChange={(e) =>
+                      setNewExpense({ ...newExpense, expenseDate: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddExpense}>Submit Expense</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-    </SidebarProvider>
+
+      <div className="grid gap-4 md:grid-cols-4 mb-6">
+        <StatsCard
+          title="Total Expenses"
+          value={`₹${totalExpenses.toLocaleString()}`}
+          icon={CreditCard}
+        />
+        <StatsCard
+          title="Pending Approval"
+          value={`₹${pendingAmount.toLocaleString()}`}
+          icon={Clock}
+        />
+        <StatsCard
+          title="Approved"
+          value={`₹${approvedAmount.toLocaleString()}`}
+          icon={CheckCircle}
+        />
+        <StatsCard
+          title="Reimbursed"
+          value={`₹${reimbursedAmount.toLocaleString()}`}
+          icon={IndianRupee}
+        />
+      </div>
+
+      <DataTable
+        data={expenses}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search by employee name..."
+      />
+    </AdminLayout>
   );
 };
 

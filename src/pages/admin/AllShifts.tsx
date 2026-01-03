@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, MoreHorizontal, Edit, Trash2, Users, Clock, MapPin, CheckCircle } from "lucide-react";
@@ -374,185 +372,162 @@ const AllShifts = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col min-w-0">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto min-w-0">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground font-display">All Shifts</h1>
-                <p className="text-muted-foreground mt-1">Manage shift types and schedules</p>
-              </div>
-              <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) resetForm(); }}>
-                <DialogTrigger asChild>
-                  <Button className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    Add Shift
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>{editingShift ? "Edit Shift" : "Add New Shift"}</DialogTitle>
-                    <DialogDescription>
-                      {editingShift ? "Update shift details" : "Create a new shift type"}
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Shift Name</Label>
-                        <Input
-                          id="name"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="e.g., Morning Shift"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="code">Shift Code</Label>
-                        <Input
-                          id="code"
-                          value={formData.code}
-                          onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                          placeholder="e.g., MS-001"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="startTime">Start Time</Label>
-                        <Input
-                          id="startTime"
-                          type="time"
-                          value={formData.startTime}
-                          onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="endTime">End Time</Label>
-                        <Input
-                          id="endTime"
-                          type="time"
-                          value={formData.endTime}
-                          onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="breakDuration">Break Duration (mins)</Label>
-                        <Input
-                          id="breakDuration"
-                          type="number"
-                          value={formData.breakDuration}
-                          onChange={(e) => setFormData({ ...formData, breakDuration: Number(e.target.value) })}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="gracePeriod">Grace Period (mins)</Label>
-                        <Input
-                          id="gracePeriod"
-                          type="number"
-                          value={formData.gracePeriod}
-                          onChange={(e) => setFormData({ ...formData, gracePeriod: Number(e.target.value) })}
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Applicable Days</Label>
-                      <div className="flex flex-wrap gap-2">
-                        {daysOfWeek.map((day) => (
-                          <div key={day} className="flex items-center gap-2">
-                            <Checkbox
-                              id={`day-${day}`}
-                              checked={formData.applicableDays.includes(day)}
-                              onCheckedChange={() => toggleDay(day)}
-                            />
-                            <Label htmlFor={`day-${day}`} className="text-sm cursor-pointer">{day}</Label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label htmlFor="nightShift">Night Shift</Label>
-                        <p className="text-xs text-muted-foreground">Enable for overnight shifts</p>
-                      </div>
-                      <Switch
-                        id="nightShift"
-                        checked={formData.isNightShift}
-                        onCheckedChange={(checked) => setFormData({ ...formData, isNightShift: checked })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Description</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        placeholder="Brief description of this shift"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="status">Status</Label>
-                      <Switch
-                        id="status"
-                        checked={formData.status === "Active"}
-                        onCheckedChange={(checked) => setFormData({ ...formData, status: checked ? "Active" : "Inactive" })}
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => { setIsDialogOpen(false); resetForm(); }}>
-                      Cancel
-                    </Button>
-                    <Button onClick={handleSubmit}>
-                      {editingShift ? "Update Shift" : "Create Shift"}
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              <StatsCard
-                title="Total Shifts"
-                value={String(shifts.length)}
-                icon={Clock}
-              />
-              <StatsCard
-                title="Active Shifts"
-                value={String(activeShifts)}
-                icon={CheckCircle}
-              />
-              <StatsCard
-                title="Employees on Shift"
-                value={String(totalEmployeesOnShift)}
-                icon={Users}
-              />
-              <StatsCard
-                title="Locations"
-                value={String(locationsCount)}
-                icon={MapPin}
-              />
-            </div>
-
-            <DataTable
-              data={shifts}
-              columns={columns}
-              filters={filters}
-              searchPlaceholder="Search shifts..."
-              selectable
-              pageSize={10}
-              pageSizeOptions={[10, 25, 50]}
-              getRowId={(shift) => shift.id}
-            />
-          </main>
+    <AdminLayout>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">All Shifts</h1>
+          <p className="text-muted-foreground mt-1">Manage shift types and schedules</p>
         </div>
+        <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) resetForm(); }}>
+          <DialogTrigger asChild>
+            <Button className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Shift
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{editingShift ? "Edit Shift" : "Add New Shift"}</DialogTitle>
+              <DialogDescription>
+                {editingShift ? "Update shift details" : "Create a new shift type"}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Shift Name</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g., Morning Shift"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="code">Shift Code</Label>
+                  <Input
+                    id="code"
+                    value={formData.code}
+                    onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                    placeholder="e.g., MS-001"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="startTime">Start Time</Label>
+                  <Input
+                    id="startTime"
+                    type="time"
+                    value={formData.startTime}
+                    onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="endTime">End Time</Label>
+                  <Input
+                    id="endTime"
+                    type="time"
+                    value={formData.endTime}
+                    onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="breakDuration">Break Duration (mins)</Label>
+                  <Input
+                    id="breakDuration"
+                    type="number"
+                    value={formData.breakDuration}
+                    onChange={(e) => setFormData({ ...formData, breakDuration: Number(e.target.value) })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="gracePeriod">Grace Period (mins)</Label>
+                  <Input
+                    id="gracePeriod"
+                    type="number"
+                    value={formData.gracePeriod}
+                    onChange={(e) => setFormData({ ...formData, gracePeriod: Number(e.target.value) })}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Applicable Days</Label>
+                <div className="flex flex-wrap gap-2">
+                  {daysOfWeek.map((day) => (
+                    <div key={day} className="flex items-center gap-2">
+                      <Checkbox
+                        id={`day-${day}`}
+                        checked={formData.applicableDays.includes(day)}
+                        onCheckedChange={() => toggleDay(day)}
+                      />
+                      <Label htmlFor={`day-${day}`} className="text-sm cursor-pointer">{day}</Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label htmlFor="nightShift">Night Shift</Label>
+                  <p className="text-xs text-muted-foreground">Enable for overnight shifts</p>
+                </div>
+                <Switch
+                  id="nightShift"
+                  checked={formData.isNightShift}
+                  onCheckedChange={(checked) => setFormData({ ...formData, isNightShift: checked })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Brief description of this shift"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="status">Status</Label>
+                <Switch
+                  id="status"
+                  checked={formData.status === "Active"}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, status: checked ? "Active" : "Inactive" })
+                  }
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit}>
+                {editingShift ? "Update Shift" : "Create Shift"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-    </SidebarProvider>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <StatsCard title="Total Shifts" value={shifts.length.toString()} icon={Clock} />
+        <StatsCard title="Active Shifts" value={activeShifts.toString()} icon={CheckCircle} />
+        <StatsCard title="Total Employees" value={totalEmployeesOnShift.toString()} icon={Users} />
+        <StatsCard title="Locations" value={locationsCount.toString()} icon={MapPin} />
+      </div>
+
+      <DataTable
+        data={shifts}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search shifts..."
+        pageSize={10}
+        pageSizeOptions={[10, 25, 50]}
+        getRowId={(shift) => shift.id}
+      />
+    </AdminLayout>
   );
 };
 

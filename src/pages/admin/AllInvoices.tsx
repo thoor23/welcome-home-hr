@@ -1,6 +1,4 @@
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,29 +46,21 @@ const AllInvoices = () => {
   const stats = { total: mockInvoices.length, pending: mockInvoices.filter(i => i.status === "Sent").length, paid: mockInvoices.filter(i => i.status === "Paid").length, overdue: mockInvoices.filter(i => i.status === "Overdue").length };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div><h1 className="text-2xl font-bold text-foreground">All Invoices</h1><p className="text-muted-foreground">View and manage all generated invoices</p></div>
-                <Button asChild><Link to="/admin/billing/generate-invoice"><Plus className="h-4 w-4 mr-2" />Generate Invoice</Link></Button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Total Invoices</CardTitle><FileText className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.total}</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Pending Payment</CardTitle><Clock className="h-4 w-4 text-blue-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.pending}</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Paid</CardTitle><CheckCircle className="h-4 w-4 text-emerald-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.paid}</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Overdue</CardTitle><AlertTriangle className="h-4 w-4 text-rose-500" /></CardHeader><CardContent><div className="text-2xl font-bold text-destructive">{stats.overdue}</div></CardContent></Card>
-              </div>
-              <Card><CardHeader><CardTitle>Invoice List</CardTitle></CardHeader><CardContent><DataTable columns={columns} data={mockInvoices} /></CardContent></Card>
-            </div>
-          </main>
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div><h1 className="text-2xl font-bold text-foreground">All Invoices</h1><p className="text-muted-foreground">View and manage all generated invoices</p></div>
+          <Button asChild><Link to="/admin/billing/generate-invoice"><Plus className="h-4 w-4 mr-2" />Generate Invoice</Link></Button>
         </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Total Invoices</CardTitle><FileText className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.total}</div></CardContent></Card>
+          <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Pending Payment</CardTitle><Clock className="h-4 w-4 text-blue-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.pending}</div></CardContent></Card>
+          <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Paid</CardTitle><CheckCircle className="h-4 w-4 text-emerald-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.paid}</div></CardContent></Card>
+          <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Overdue</CardTitle><AlertTriangle className="h-4 w-4 text-rose-500" /></CardHeader><CardContent><div className="text-2xl font-bold text-destructive">{stats.overdue}</div></CardContent></Card>
+        </div>
+        <Card><CardHeader><CardTitle>Invoice List</CardTitle></CardHeader><CardContent><DataTable columns={columns} data={mockInvoices} /></CardContent></Card>
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 
