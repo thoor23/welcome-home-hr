@@ -39,6 +39,10 @@
     --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 214 32% 91%;
     --sidebar-ring: 174 100% 29%;
+    /* Super Admin Theme */
+    --superadmin: 262 83% 58%;
+    --superadmin-foreground: 0 0% 100%;
+    --superadmin-muted: 262 40% 95%;
   }
 
   .dark {
@@ -74,6 +78,10 @@
     --sidebar-accent-foreground: 210 40% 96%;
     --sidebar-border: 222 12% 22%;
     --sidebar-ring: 174 65% 48%;
+    /* Super Admin Theme */
+    --superadmin: 262 83% 68%;
+    --superadmin-foreground: 0 0% 100%;
+    --superadmin-muted: 262 30% 20%;
   }
 }
 

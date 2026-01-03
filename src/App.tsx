@@ -126,6 +126,29 @@ import ESSKnowledgeBase from "./pages/ess/KnowledgeBase";
 import ESSSettings from "./pages/ess/Settings";
 import ESSProfile from "./pages/ess/Profile";
 import ESSNotifications from "./pages/ess/Notifications";
+// Super Admin imports
+import SuperAdminDashboard from "./pages/superadmin/Dashboard";
+import AllOrganizationsSA from "./pages/superadmin/AllOrganizations";
+import PendingOrganizations from "./pages/superadmin/PendingOrganizations";
+import SuspendedOrganizations from "./pages/superadmin/SuspendedOrganizations";
+import AllUsersSA from "./pages/superadmin/AllUsers";
+import SuperAdmins from "./pages/superadmin/SuperAdmins";
+import ImpersonationLogs from "./pages/superadmin/ImpersonationLogs";
+import PlansSA from "./pages/superadmin/Plans";
+import InvoicesSA from "./pages/superadmin/Invoices";
+import PaymentsSA from "./pages/superadmin/Payments";
+import CouponsSA from "./pages/superadmin/Coupons";
+import AnalyticsOverviewSA from "./pages/superadmin/AnalyticsOverview";
+import UsageAnalytics from "./pages/superadmin/UsageAnalytics";
+import GrowthAnalytics from "./pages/superadmin/GrowthAnalytics";
+import FeatureFlags from "./pages/superadmin/FeatureFlags";
+import PlatformEmails from "./pages/superadmin/PlatformEmails";
+import MaintenanceMode from "./pages/superadmin/MaintenanceMode";
+import SecurityOverviewSA from "./pages/superadmin/SecurityOverview";
+import LoginAttempts from "./pages/superadmin/LoginAttempts";
+import IPBlocklist from "./pages/superadmin/IPBlocklist";
+import PlatformLogs from "./pages/superadmin/PlatformLogs";
+import PlatformSettings from "./pages/superadmin/PlatformSettings";
 
 const queryClient = new QueryClient();
 
@@ -282,6 +305,32 @@ const App = () => (
             <Route path="/ess/settings" element={<ESSSettings />} />
             <Route path="/ess/profile" element={<ESSProfile />} />
             <Route path="/ess/notifications" element={<ESSNotifications />} />
+            {/* Super Admin Routes */}
+            <Route path="/superadmin" element={<Navigate to="/superadmin/dashboard" replace />} />
+            <Route path="/superadmin/dashboard" element={<SuperAdminDashboard />} />
+            <Route path="/superadmin/organizations/all" element={<AllOrganizationsSA />} />
+            <Route path="/superadmin/organizations/pending" element={<PendingOrganizations />} />
+            <Route path="/superadmin/organizations/suspended" element={<SuspendedOrganizations />} />
+            <Route path="/superadmin/users/all" element={<AllUsersSA />} />
+            <Route path="/superadmin/users/admins" element={<SuperAdmins />} />
+            <Route path="/superadmin/users/impersonation" element={<ImpersonationLogs />} />
+            <Route path="/superadmin/billing/plans" element={<PlansSA />} />
+            <Route path="/superadmin/billing/invoices" element={<InvoicesSA />} />
+            <Route path="/superadmin/billing/payments" element={<PaymentsSA />} />
+            <Route path="/superadmin/billing/coupons" element={<CouponsSA />} />
+            <Route path="/superadmin/analytics/overview" element={<AnalyticsOverviewSA />} />
+            <Route path="/superadmin/analytics/usage" element={<UsageAnalytics />} />
+            <Route path="/superadmin/analytics/growth" element={<GrowthAnalytics />} />
+            <Route path="/superadmin/system/features" element={<FeatureFlags />} />
+            <Route path="/superadmin/system/emails" element={<PlatformEmails />} />
+            <Route path="/superadmin/system/maintenance" element={<MaintenanceMode />} />
+            <Route path="/superadmin/security/overview" element={<SecurityOverviewSA />} />
+            <Route path="/superadmin/security/logins" element={<LoginAttempts />} />
+            <Route path="/superadmin/security/blocklist" element={<IPBlocklist />} />
+            <Route path="/superadmin/logs/all" element={<PlatformLogs />} />
+            <Route path="/superadmin/logs/system" element={<PlatformLogs />} />
+            <Route path="/superadmin/logs/security" element={<PlatformLogs />} />
+            <Route path="/superadmin/settings" element={<PlatformSettings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
