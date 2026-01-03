@@ -102,6 +102,7 @@ import UserProfile from "./pages/admin/UserProfile";
 import PersonalSettings from "./pages/admin/PersonalSettings";
 import ProfileUpdateRequest from "./pages/ProfileUpdateRequest";
 import NotFound from "./pages/NotFound";
+import ESSDashboard from "./pages/ess/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -226,6 +227,9 @@ const App = () => (
             <Route path="/admin/profile" element={<UserProfile />} />
             <Route path="/admin/personal-settings" element={<PersonalSettings />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
+            {/* ESS Portal Routes */}
+            <Route path="/ess" element={<Navigate to="/ess/dashboard" replace />} />
+            <Route path="/ess/dashboard" element={<ESSDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
