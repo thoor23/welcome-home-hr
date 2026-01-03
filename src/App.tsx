@@ -115,6 +115,8 @@ import ESSShiftSwapRequests from "./pages/ess/ShiftSwapRequests";
 import ESSPayslips from "./pages/ess/Payslips";
 import ESSSalaryDetails from "./pages/ess/SalaryDetails";
 import ESSTaxDocuments from "./pages/ess/TaxDocuments";
+import ESSExpenseSubmit from "./pages/ess/ExpenseSubmit";
+import ESSExpenseClaims from "./pages/ess/ExpenseClaims";
 
 const queryClient = new QueryClient();
 
@@ -258,6 +260,9 @@ const App = () => (
             <Route path="/ess/payroll/payslips" element={<ESSPayslips />} />
             <Route path="/ess/payroll/salary" element={<ESSSalaryDetails />} />
             <Route path="/ess/payroll/tax" element={<ESSTaxDocuments />} />
+            <Route path="/ess/expenses" element={<Navigate to="/ess/expenses/submit" replace />} />
+            <Route path="/ess/expenses/submit" element={<ESSExpenseSubmit />} />
+            <Route path="/ess/expenses/claims" element={<ESSExpenseClaims />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
