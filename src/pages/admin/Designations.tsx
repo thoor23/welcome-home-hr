@@ -226,68 +226,23 @@ const Designations = () => {
 
   return (
     <AdminLayout>
-      <div className="flex flex-col gap-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold">Designations</h1>
-            <p className="text-muted-foreground">
-              Manage job titles and designations
-            </p>
-          </div>
-          <Button onClick={() => { setEditingDesignation(null); setDialogOpen(true); }} className="gap-2">
-            <Plus className="h-4 w-4" />
-            Add Designation
-          </Button>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Designations</h1>
+          <p className="text-muted-foreground mt-1">Manage job titles and designations</p>
         </div>
-
-        {/* Stats */}
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-lg border bg-card p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Briefcase className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Total Designations</p>
-                <p className="text-2xl font-bold">{designations.length}</p>
-              </div>
-            </div>
-          </div>
-          <div className="rounded-lg border bg-card p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-green-500/10 flex items-center justify-center">
-                <Briefcase className="h-5 w-5 text-green-500" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Active</p>
-                <p className="text-2xl font-bold">{designations.filter(d => d.status === "active").length}</p>
-              </div>
-            </div>
-          </div>
-          <div className="rounded-lg border bg-card p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <Users className="h-5 w-5 text-blue-500" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Total Employees</p>
-                <p className="text-2xl font-bold">{designations.reduce((sum, d) => sum + d.employees, 0)}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Data Table */}
-        <div className="rounded-lg border bg-card">
-          <DataTable
-            data={designations}
-            columns={columns}
-            filters={filters}
-            searchPlaceholder="Search designations..."
-          />
-        </div>
+        <Button onClick={() => { setEditingDesignation(null); setDialogOpen(true); }} className="gap-2">
+          <Plus className="h-4 w-4" />
+          Add Designation
+        </Button>
       </div>
+
+      <DataTable
+        data={designations}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search designations..."
+      />
 
       {/* Add/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
