@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -126,15 +124,9 @@ const NewHireOnboarding = () => {
         return <CheckCircle2 className="h-4 w-4" />;
     }
   };
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col min-w-0">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto min-w-0">
-            <div className="flex items-center justify-between mb-6">
+    <AdminLayout>
+      <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-3xl font-bold text-foreground font-display">New Hire Onboarding</h1>
                 <p className="text-muted-foreground mt-1">Manage individual employee onboarding process</p>
@@ -331,13 +323,10 @@ const NewHireOnboarding = () => {
                     </TabsContent>
                   </CardContent>
                 </Tabs>
-              </Card>
-            </div>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
-  );
+            </Card>
+          </div>
+        </AdminLayout>
+      );
 };
 
 export default NewHireOnboarding;

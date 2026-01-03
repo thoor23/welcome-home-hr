@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -206,20 +204,14 @@ const GeneratePayslip = () => {
       ),
     },
   ];
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Generate Payslip</h1>
-                <p className="text-muted-foreground">Generate and manage employee payslips</p>
-              </div>
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Generate Payslip</h1>
+          <p className="text-muted-foreground">Generate and manage employee payslips</p>
+        </div>
 
               <Tabs defaultValue="generate" className="space-y-4">
                 <TabsList>
@@ -295,13 +287,10 @@ const GeneratePayslip = () => {
                       <DataTable columns={requestColumns} data={requests} />
                     </CardContent>
                   </Card>
-                </TabsContent>
-              </Tabs>
-            </div>
-          </main>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

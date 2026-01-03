@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,20 +63,14 @@ const GenerateInvoice = () => {
   const handleGenerate = () => {
     toast.success("Invoice generated successfully!");
   };
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Generate Invoice</h1>
-                <p className="text-muted-foreground">Create invoices for approved budget requests</p>
-              </div>
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Generate Invoice</h1>
+          <p className="text-muted-foreground">Create invoices for approved budget requests</p>
+        </div>
 
               {/* Stats */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -345,16 +337,13 @@ const GenerateInvoice = () => {
                       <p><span className="text-muted-foreground">Invoice No:</span> INV-2026-025</p>
                       <p><span className="text-muted-foreground">Created By:</span> Admin User</p>
                       <p><span className="text-muted-foreground">Status:</span> Draft</p>
-                    </CardContent>
-                  </Card>
-                </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
-  );
+          </div>
+        </AdminLayout>
+      );
 };
 
 export default GenerateInvoice;

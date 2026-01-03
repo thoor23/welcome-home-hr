@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { DataTable, Column } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
@@ -206,18 +204,12 @@ export default function KnowledgeBase() {
       ),
     },
   ];
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold">Knowledge Base</h1>
-              <p className="text-muted-foreground">Self-help articles and FAQs for employees</p>
-            </div>
+    <AdminLayout>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold">Knowledge Base</h1>
+        <p className="text-muted-foreground">Self-help articles and FAQs for employees</p>
+      </div>
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
@@ -289,10 +281,7 @@ export default function KnowledgeBase() {
                   New Article
                 </Button>
               }
-            />
-          </main>
-        </div>
-      </div>
+        />
 
       {/* Add/Edit Article Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -356,6 +345,6 @@ export default function KnowledgeBase() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </SidebarProvider>
+    </AdminLayout>
   );
 }

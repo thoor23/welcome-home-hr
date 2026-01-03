@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable, Column, Filter } from "@/components/ui/data-table";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { Badge } from "@/components/ui/badge";
@@ -597,15 +595,9 @@ const Locations = () => {
       </div>
     </div>
   );
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <AdminLayout>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h1 className="text-2xl font-bold">Location Management</h1>
                 <p className="text-muted-foreground">
@@ -683,11 +675,8 @@ const Locations = () => {
                   <Button onClick={handleEdit}>Save Changes</Button>
                 </DialogFooter>
               </DialogContent>
-            </Dialog>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+      </Dialog>
+    </AdminLayout>
   );
 };
 

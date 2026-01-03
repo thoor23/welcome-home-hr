@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -215,16 +213,10 @@ export default function MyDocuments() {
     myDocuments.payslips.length +
     myDocuments.idDocuments.length +
     myDocuments.certificates.length;
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            {/* Page Header */}
-            <div className="flex items-center justify-between mb-6">
+    <AdminLayout>
+      {/* Page Header */}
+      <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-3xl font-bold text-foreground">My Documents</h1>
                 <p className="text-muted-foreground">
@@ -302,16 +294,13 @@ export default function MyDocuments() {
                 onView={handleView}
                 onDownload={handleDownload}
               />
-            </div>
-          </main>
         </div>
-      </div>
 
-      <FilePreviewDrawer
-        open={previewDrawerOpen}
-        onOpenChange={setPreviewDrawerOpen}
-        file={selectedFile}
-      />
-    </SidebarProvider>
-  );
+        <FilePreviewDrawer
+          open={previewDrawerOpen}
+          onOpenChange={setPreviewDrawerOpen}
+          file={selectedFile}
+        />
+      </AdminLayout>
+    );
 }

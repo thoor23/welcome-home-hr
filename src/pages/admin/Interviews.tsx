@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable, Column, Filter } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -361,17 +359,11 @@ export default function Interviews() {
     });
     toast.success("Interview scheduled successfully");
   };
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="flex items-center justify-between">
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-2xl font-bold text-foreground">Interviews</h1>
                   <p className="text-muted-foreground">Schedule and manage candidate interviews</p>
@@ -565,12 +557,9 @@ export default function Interviews() {
                     filters={filters}
                     searchPlaceholder="Search interviews..."
                   />
-                </TabsContent>
-              </Tabs>
-            </div>
-          </main>
+            </TabsContent>
+          </Tabs>
         </div>
-      </div>
-    </SidebarProvider>
-  );
+      </AdminLayout>
+    );
 }
