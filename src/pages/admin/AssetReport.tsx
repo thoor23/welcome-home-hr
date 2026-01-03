@@ -1,6 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable, Column } from "@/components/ui/data-table";
@@ -92,12 +90,7 @@ export default function AssetReport() {
   const totalDepreciation = categorySummary.reduce((acc, c) => acc + c.depreciation, 0);
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
+    <AdminLayout>
             <div className="mb-6">
               <h1 className="text-2xl font-bold">Asset Report</h1>
               <p className="text-muted-foreground">Analytics and insights for your asset portfolio</p>
@@ -198,10 +191,7 @@ export default function AssetReport() {
               <CardContent>
                 <DataTable data={categorySummary} columns={columns} searchPlaceholder="Search categories..." />
               </CardContent>
-            </Card>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+      </Card>
+    </AdminLayout>
   );
 }

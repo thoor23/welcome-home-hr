@@ -1,6 +1,4 @@
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DataTable, Column } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
@@ -204,12 +202,8 @@ export default function APILogs() {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <main className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <div className="flex-1 p-6 space-y-6">
+    <AdminLayout>
+      <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-foreground">API Logs</h1>
@@ -256,8 +250,6 @@ export default function APILogs() {
             />
 
             <DataTable columns={columns} data={sampleLogs} />
-          </div>
-        </main>
       </div>
 
       <LogDetailsDrawer
@@ -282,6 +274,6 @@ export default function APILogs() {
             : null
         }
       />
-    </SidebarProvider>
+    </AdminLayout>
   );
 }

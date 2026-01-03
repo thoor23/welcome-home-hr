@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -50,13 +48,8 @@ const BillingCategories = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div><h1 className="text-2xl font-bold text-foreground">Billing Categories</h1><p className="text-muted-foreground">Manage request categories and budget limits</p></div>
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}><DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Add Category</Button></DialogTrigger><DialogContent className="max-w-lg"><DialogHeader><DialogTitle>Add Billing Category</DialogTitle></DialogHeader><div className="space-y-4 py-4"><div className="space-y-2"><Label>Category Name</Label><Input placeholder="e.g., Equipment Purchase" /></div><div className="space-y-2"><Label>Description</Label><Textarea placeholder="Describe what this category covers..." /></div><div className="grid grid-cols-2 gap-4"><div className="space-y-2"><Label>Per Request Limit (₹)</Label><Input type="number" placeholder="0" /></div><div className="space-y-2"><Label>Monthly Limit (₹)</Label><Input type="number" placeholder="0" /></div></div><div className="space-y-2"><Label>Auto-Approve Below (₹)</Label><Input type="number" placeholder="0" /></div><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button><Button onClick={() => setIsDialogOpen(false)}>Add Category</Button></div></div></DialogContent></Dialog>
@@ -67,11 +60,8 @@ const BillingCategories = () => {
                 <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Inactive Categories</CardTitle></CardHeader><CardContent><div className="text-2xl font-bold text-muted-foreground">{categories.filter(c => !c.isActive).length}</div></CardContent></Card>
               </div>
               <Card><CardHeader><CardTitle>All Categories</CardTitle></CardHeader><CardContent><DataTable columns={columns} data={categories} /></CardContent></Card>
-            </div>
-          </main>
-        </div>
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

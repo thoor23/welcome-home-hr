@@ -1,6 +1,4 @@
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DataTable, Column } from "@/components/ui/data-table";
@@ -30,13 +28,8 @@ const BillingReport = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div><h1 className="text-2xl font-bold text-foreground">Billing Report</h1><p className="text-muted-foreground">Analytics and insights for internal billing</p></div>
                 <div className="flex items-center gap-2"><Select defaultValue="fy2025"><SelectTrigger className="w-[140px]"><SelectValue placeholder="Financial Year" /></SelectTrigger><SelectContent><SelectItem value="fy2025">FY 2025-26</SelectItem><SelectItem value="fy2024">FY 2024-25</SelectItem></SelectContent></Select><Button variant="outline"><Download className="h-4 w-4 mr-2" />Export</Button></div>
@@ -56,11 +49,8 @@ const BillingReport = () => {
                 <Card><CardHeader><CardTitle>Year-over-Year Comparison</CardTitle></CardHeader><CardContent><ResponsiveContainer width="100%" height={300}><LineChart data={yearlyComparison}><CartesianGrid strokeDasharray="3 3" className="stroke-muted" /><XAxis dataKey="month" /><YAxis /><Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }} /><Legend /><Line type="monotone" dataKey="current" stroke="hsl(var(--primary))" name="FY 2025-26" strokeWidth={2} /><Line type="monotone" dataKey="previous" stroke="hsl(var(--muted-foreground))" name="FY 2024-25" strokeWidth={2} strokeDasharray="5 5" /></LineChart></ResponsiveContainer></CardContent></Card>
               </div>
               <Card><CardHeader><CardTitle>Location-wise Summary</CardTitle></CardHeader><CardContent><DataTable columns={columns} data={locationSummary} /></CardContent></Card>
-            </div>
-          </main>
-        </div>
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

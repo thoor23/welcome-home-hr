@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -184,12 +182,7 @@ export default function DocumentCategories() {
   const totalStorage = "1.04 GB";
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
+    <AdminLayout>
             {/* Page Header */}
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -385,10 +378,7 @@ export default function DocumentCategories() {
                   })}
                 </TableBody>
               </Table>
-            </div>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+          </div>
+    </AdminLayout>
   );
 }
