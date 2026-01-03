@@ -1,6 +1,4 @@
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,12 +28,8 @@ export default function AuditSettings() {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <main className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <div className="flex-1 p-6 space-y-6">
+    <AdminLayout>
+      <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-foreground">Audit Settings</h1>
@@ -352,9 +346,7 @@ export default function AuditSettings() {
                 </div>
               </div>
             </div>
-          </div>
-        </main>
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 }

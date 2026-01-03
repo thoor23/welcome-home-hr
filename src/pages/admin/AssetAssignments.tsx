@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable, Column, Filter } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -184,12 +182,7 @@ export default function AssetAssignments() {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
+    <AdminLayout>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-2xl font-bold">Asset Assignments</h1>
@@ -267,10 +260,7 @@ export default function AssetAssignments() {
               </div>
             </div>
 
-            <DataTable data={assignments} columns={columns} filters={filters} searchPlaceholder="Search assignments..." />
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+      <DataTable data={assignments} columns={columns} filters={filters} searchPlaceholder="Search assignments..." />
+    </AdminLayout>
   );
 }

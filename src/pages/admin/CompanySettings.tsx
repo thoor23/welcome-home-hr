@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -945,73 +943,65 @@ const CompanySettings = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col min-h-screen">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-6xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold">Company Settings</h1>
-                <p className="text-muted-foreground">Manage your organization's configuration and preferences</p>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={handleReset}>
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Reset
-                </Button>
-                <Button onClick={handleSave}>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Changes
-                </Button>
-              </div>
-            </div>
-
-            <div className="flex gap-6">
-              {/* Settings Sidebar Navigation */}
-              <aside className="w-64 shrink-0">
-                <nav className="sticky top-6 space-y-1">
-                  {menuItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = activeSection === item.id;
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => setActiveSection(item.id)}
-                        className={cn(
-                          "w-full flex items-start gap-3 p-3 rounded-lg text-left transition-colors",
-                          isActive
-                            ? "bg-primary/10 text-foreground border-l-2 border-primary"
-                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                        )}
-                      >
-                        <Icon className={cn("h-5 w-5 mt-0.5 shrink-0", isActive && "text-primary")} />
-                        <div>
-                          <p className={cn("font-medium text-sm", isActive && "text-foreground")}>
-                            {item.label}
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-0.5">
-                            {item.description}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </nav>
-              </aside>
-
-              {/* Content Area */}
-              <div className="flex-1 min-w-0">
-                {renderContent()}
-              </div>
-            </div>
+    <AdminLayout>
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Company Settings</h1>
+            <p className="text-muted-foreground">Manage your organization's configuration and preferences</p>
           </div>
-        </main>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleReset}>
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Reset
+            </Button>
+            <Button onClick={handleSave}>
+              <Save className="h-4 w-4 mr-2" />
+              Save Changes
+            </Button>
+          </div>
+        </div>
+
+        <div className="flex gap-6">
+          {/* Settings Sidebar Navigation */}
+          <aside className="w-64 shrink-0">
+            <nav className="sticky top-6 space-y-1">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeSection === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveSection(item.id)}
+                    className={cn(
+                      "w-full flex items-start gap-3 p-3 rounded-lg text-left transition-colors",
+                      isActive
+                        ? "bg-primary/10 text-foreground border-l-2 border-primary"
+                        : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                    )}
+                  >
+                    <Icon className={cn("h-5 w-5 mt-0.5 shrink-0", isActive && "text-primary")} />
+                    <div>
+                      <p className={cn("font-medium text-sm", isActive && "text-foreground")}>
+                        {item.label}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {item.description}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </nav>
+          </aside>
+
+          {/* Content Area */}
+          <div className="flex-1 min-w-0">
+            {renderContent()}
+          </div>
+        </div>
       </div>
-    </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

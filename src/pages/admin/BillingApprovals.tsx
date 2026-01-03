@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -91,13 +89,8 @@ const BillingApprovals = () => {
   const pendingAmount = mockPendingRequests.reduce((sum, r) => sum + r.amount, 0);
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
               <div><h1 className="text-2xl font-bold text-foreground">Budget Approvals</h1><p className="text-muted-foreground">Review and approve budget requests from branches</p></div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Pending Approvals</CardTitle><Clock className="h-4 w-4 text-yellow-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{mockPendingRequests.length}</div></CardContent></Card>
@@ -113,11 +106,8 @@ const BillingApprovals = () => {
               </Tabs>
               <Dialog open={isApproveDialogOpen} onOpenChange={setIsApproveDialogOpen}><DialogContent><DialogHeader><DialogTitle>Approve Request</DialogTitle></DialogHeader><div className="space-y-4 py-4"><div className="p-4 bg-muted rounded-lg"><div className="grid grid-cols-2 gap-2 text-sm"><p className="text-muted-foreground">Request ID:</p><p className="font-medium">{selectedRequest?.requestId}</p><p className="text-muted-foreground">Branch:</p><p className="font-medium">{selectedRequest?.branch}</p><p className="text-muted-foreground">Requested Amount:</p><p className="font-medium">₹{selectedRequest?.amount.toLocaleString("en-IN")}</p></div></div><div className="space-y-2"><Label>Approved Amount (₹)</Label><Input type="number" defaultValue={selectedRequest?.amount} /></div><div className="space-y-2"><Label>Remarks</Label><Textarea placeholder="Add any comments..." /></div><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setIsApproveDialogOpen(false)}>Cancel</Button><Button onClick={handleApprove}>Approve</Button></div></div></DialogContent></Dialog>
               <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}><DialogContent><DialogHeader><DialogTitle>Reject Request</DialogTitle></DialogHeader><div className="space-y-4 py-4"><div className="p-4 bg-muted rounded-lg"><div className="grid grid-cols-2 gap-2 text-sm"><p className="text-muted-foreground">Request ID:</p><p className="font-medium">{selectedRequest?.requestId}</p><p className="text-muted-foreground">Branch:</p><p className="font-medium">{selectedRequest?.branch}</p></div></div><div className="space-y-2"><Label>Reason for Rejection</Label><Textarea placeholder="Please provide a reason..." /></div><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setIsRejectDialogOpen(false)}>Cancel</Button><Button variant="destructive" onClick={handleReject}>Reject</Button></div></div></DialogContent></Dialog>
-            </div>
-          </main>
-        </div>
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

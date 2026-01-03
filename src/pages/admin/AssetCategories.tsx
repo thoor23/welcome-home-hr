@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable, Column, Filter } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -173,12 +171,7 @@ export default function AssetCategories() {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
+    <AdminLayout>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-2xl font-bold">Asset Categories</h1>
@@ -233,10 +226,7 @@ export default function AssetCategories() {
               </Dialog>
             </div>
 
-            <DataTable data={categories} columns={columns} filters={filters} searchPlaceholder="Search categories..." />
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+      <DataTable data={categories} columns={columns} filters={filters} searchPlaceholder="Search categories..." />
+    </AdminLayout>
   );
 }
