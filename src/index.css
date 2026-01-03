@@ -26,6 +26,11 @@
     --input: 214 32% 91%;
     --ring: 174 100% 29%;
     --radius: 0.5rem;
+    --chart-1: 174 100% 29%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 262 83% 58%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 0 84% 60%;
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222 47% 11%;
     --sidebar-primary: 174 100% 29%;
@@ -56,6 +61,11 @@
     --border: 222 12% 22%;
     --input: 222 12% 22%;
     --ring: 174 65% 48%;
+    --chart-1: 174 65% 48%;
+    --chart-2: 142 70% 45%;
+    --chart-3: 262 83% 68%;
+    --chart-4: 38 92% 60%;
+    --chart-5: 0 75% 60%;
     --sidebar-background: 222 14% 10%;
     --sidebar-foreground: 210 40% 96%;
     --sidebar-primary: 174 65% 48%;
