@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DataTable, Column } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
@@ -312,185 +310,179 @@ const EmailTemplates = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 space-y-6 overflow-auto">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Email Templates</h1>
-                <p className="text-muted-foreground">Create and manage reusable email & letter templates</p>
-              </div>
-              <Button onClick={() => { resetForm(); setDialogOpen(true); }}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Template
-              </Button>
-            </div>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Email Templates</h1>
+            <p className="text-muted-foreground">Create and manage reusable email & letter templates</p>
+          </div>
+          <Button onClick={() => { resetForm(); setDialogOpen(true); }}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Template
+          </Button>
+        </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <StatsCard
-                title="Total Templates"
-                value={stats.total.toString()}
-                icon={FileText}
-              />
-              <StatsCard
-                title="Active Templates"
-                value={stats.active.toString()}
-                icon={CheckCircle}
-              />
-              <StatsCard
-                title="Email Templates"
-                value={stats.emails.toString()}
-                icon={Mail}
-              />
-              <StatsCard
-                title="Letter Templates"
-                value={stats.letters.toString()}
-                icon={FileText}
-              />
-            </div>
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StatsCard
+            title="Total Templates"
+            value={stats.total.toString()}
+            icon={FileText}
+          />
+          <StatsCard
+            title="Active Templates"
+            value={stats.active.toString()}
+            icon={CheckCircle}
+          />
+          <StatsCard
+            title="Email Templates"
+            value={stats.emails.toString()}
+            icon={Mail}
+          />
+          <StatsCard
+            title="Letter Templates"
+            value={stats.letters.toString()}
+            icon={FileText}
+          />
+        </div>
 
-            {/* Data Table */}
-            <DataTable columns={columns} data={templates} />
+        {/* Data Table */}
+        <DataTable columns={columns} data={templates} />
 
-            {/* Add/Edit Dialog */}
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>
-                    {editingTemplate ? "Edit Template" : "Create New Template"}
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Template Name</Label>
-                      <Input
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="e.g., Offer Letter"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Category</Label>
-                      <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((cat) => (
-                            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Type</Label>
-                      <Select value={formData.type} onValueChange={(v: "Email" | "Letter") => setFormData({ ...formData, type: v })}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Email">Email</SelectItem>
-                          <SelectItem value="Letter">Letter</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2 flex items-end">
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          checked={formData.status}
-                          onCheckedChange={(checked) => setFormData({ ...formData, status: checked })}
-                        />
-                        <Label>Active</Label>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Subject Line</Label>
-                    <Input
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      placeholder="e.g., Job Offer - {{position}} at {{company_name}}"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Body Content</Label>
-                    <Textarea
-                      value={formData.body}
-                      onChange={(e) => setFormData({ ...formData, body: e.target.value })}
-                      placeholder="Enter template body with variables like {{employee_name}}..."
-                      className="min-h-[200px]"
-                    />
-                  </div>
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <p className="text-sm font-medium mb-2">Available Variables:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {availableVariables.map((v) => (
-                        <Badge key={v} variant="outline" className="cursor-pointer" onClick={() => setFormData({ ...formData, body: formData.body + `{{${v}}}` })}>
-                          {`{{${v}}}`}
-                        </Badge>
+        {/* Add/Edit Dialog */}
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>
+                {editingTemplate ? "Edit Template" : "Create New Template"}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Template Name</Label>
+                  <Input
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g., Offer Letter"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                       ))}
-                    </div>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Type</Label>
+                  <Select value={formData.type} onValueChange={(v: "Email" | "Letter") => setFormData({ ...formData, type: v })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Email">Email</SelectItem>
+                      <SelectItem value="Letter">Letter</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2 flex items-end">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      checked={formData.status}
+                      onCheckedChange={(checked) => setFormData({ ...formData, status: checked })}
+                    />
+                    <Label>Active</Label>
                   </div>
                 </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                  <Button onClick={handleSubmit}>
-                    {editingTemplate ? "Update Template" : "Create Template"}
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+              </div>
+              <div className="space-y-2">
+                <Label>Subject Line</Label>
+                <Input
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  placeholder="e.g., Job Offer - {{position}} at {{company_name}}"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Body Content</Label>
+                <Textarea
+                  value={formData.body}
+                  onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+                  placeholder="Enter template body with variables like {{employee_name}}..."
+                  className="min-h-[200px]"
+                />
+              </div>
+              <div className="p-3 bg-muted/50 rounded-lg">
+                <p className="text-sm font-medium mb-2">Available Variables:</p>
+                <div className="flex flex-wrap gap-2">
+                  {availableVariables.map((v) => (
+                    <Badge key={v} variant="outline" className="cursor-pointer" onClick={() => setFormData({ ...formData, body: formData.body + `{{${v}}}` })}>
+                      {`{{${v}}}`}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+              <Button onClick={handleSubmit}>
+                {editingTemplate ? "Update Template" : "Create Template"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-            {/* View Dialog */}
-            <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>{editingTemplate?.name}</DialogTitle>
-                </DialogHeader>
-                {editingTemplate && (
-                  <div className="space-y-4">
-                    <div className="flex gap-2">
-                      <Badge variant="outline">{editingTemplate.category}</Badge>
-                      <Badge className={editingTemplate.type === "Email" ? "bg-blue-500/10 text-blue-500" : "bg-purple-500/10 text-purple-500"}>
-                        {editingTemplate.type}
-                      </Badge>
-                      <Badge className={editingTemplate.status === "Active" ? "bg-emerald-500/10 text-emerald-500" : "bg-muted text-muted-foreground"}>
-                        {editingTemplate.status}
-                      </Badge>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Subject:</p>
-                      <p className="font-medium">{editingTemplate.subject}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Body:</p>
-                      <div className="bg-muted/50 rounded-lg p-4 whitespace-pre-wrap text-sm">
-                        {editingTemplate.body}
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Variables Used:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {editingTemplate.variables.map((v) => (
-                          <Badge key={v} variant="outline">{`{{${v}}}`}</Badge>
-                        ))}
-                      </div>
-                    </div>
+        {/* View Dialog */}
+        <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{editingTemplate?.name}</DialogTitle>
+            </DialogHeader>
+            {editingTemplate && (
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <Badge variant="outline">{editingTemplate.category}</Badge>
+                  <Badge className={editingTemplate.type === "Email" ? "bg-blue-500/10 text-blue-500" : "bg-purple-500/10 text-purple-500"}>
+                    {editingTemplate.type}
+                  </Badge>
+                  <Badge className={editingTemplate.status === "Active" ? "bg-emerald-500/10 text-emerald-500" : "bg-muted text-muted-foreground"}>
+                    {editingTemplate.status}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Subject:</p>
+                  <p className="font-medium">{editingTemplate.subject}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Body:</p>
+                  <div className="bg-muted/50 rounded-lg p-4 whitespace-pre-wrap text-sm">
+                    {editingTemplate.body}
                   </div>
-                )}
-              </DialogContent>
-            </Dialog>
-          </main>
-        </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Variables Used:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {editingTemplate.variables.map((v) => (
+                      <Badge key={v} variant="outline">{`{{${v}}}`}</Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

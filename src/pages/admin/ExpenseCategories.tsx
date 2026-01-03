@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -323,151 +321,143 @@ const ExpenseCategories = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Expense Categories</h1>
-                <p className="text-muted-foreground">
-                  Manage expense categories and spending limits
-                </p>
+    <AdminLayout>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Expense Categories</h1>
+          <p className="text-muted-foreground">
+            Manage expense categories and spending limits
+          </p>
+        </div>
+        <Dialog
+          open={isAddDialogOpen}
+          onOpenChange={(open) => {
+            setIsAddDialogOpen(open);
+            if (!open) resetForm();
+          }}
+        >
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Category
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>
+                {editingCategory ? "Edit Category" : "Add New Category"}
+              </DialogTitle>
+              <DialogDescription>
+                {editingCategory
+                  ? "Update expense category details"
+                  : "Create a new expense category with spending limits"}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label>Category Name *</Label>
+                <Input
+                  placeholder="e.g., Travel"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                />
               </div>
-              <Dialog
-                open={isAddDialogOpen}
-                onOpenChange={(open) => {
-                  setIsAddDialogOpen(open);
-                  if (!open) resetForm();
+              <div className="grid gap-2">
+                <Label>Description</Label>
+                <Textarea
+                  placeholder="Category description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Per Transaction Limit (₹) *</Label>
+                  <Input
+                    type="number"
+                    placeholder="50000"
+                    value={formData.perTransactionLimit}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        perTransactionLimit: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Monthly Limit (₹) *</Label>
+                  <Input
+                    type="number"
+                    placeholder="100000"
+                    value={formData.monthlyLimit}
+                    onChange={(e) =>
+                      setFormData({ ...formData, monthlyLimit: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label>Auto-approve Below (₹)</Label>
+                <Input
+                  type="number"
+                  placeholder="2000"
+                  value={formData.autoApproveBelow}
+                  onChange={(e) =>
+                    setFormData({ ...formData, autoApproveBelow: e.target.value })
+                  }
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <Label>Requires Receipt</Label>
+                <Switch
+                  checked={formData.requiresReceipt}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, requiresReceipt: checked })
+                  }
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <Label>Active Status</Label>
+                <Switch
+                  checked={formData.status === "Active"}
+                  onCheckedChange={(checked) =>
+                    setFormData({
+                      ...formData,
+                      status: checked ? "Active" : "Inactive",
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  resetForm();
+                  setIsAddDialogOpen(false);
                 }}
               >
-                <DialogTrigger asChild>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Category
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>
-                      {editingCategory ? "Edit Category" : "Add New Category"}
-                    </DialogTitle>
-                    <DialogDescription>
-                      {editingCategory
-                        ? "Update expense category details"
-                        : "Create a new expense category with spending limits"}
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                      <Label>Category Name *</Label>
-                      <Input
-                        placeholder="e.g., Travel"
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Description</Label>
-                      <Textarea
-                        placeholder="Category description"
-                        value={formData.description}
-                        onChange={(e) =>
-                          setFormData({ ...formData, description: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="grid gap-2">
-                        <Label>Per Transaction Limit (₹) *</Label>
-                        <Input
-                          type="number"
-                          placeholder="50000"
-                          value={formData.perTransactionLimit}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              perTransactionLimit: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label>Monthly Limit (₹) *</Label>
-                        <Input
-                          type="number"
-                          placeholder="100000"
-                          value={formData.monthlyLimit}
-                          onChange={(e) =>
-                            setFormData({ ...formData, monthlyLimit: e.target.value })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Auto-approve Below (₹)</Label>
-                      <Input
-                        type="number"
-                        placeholder="2000"
-                        value={formData.autoApproveBelow}
-                        onChange={(e) =>
-                          setFormData({ ...formData, autoApproveBelow: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label>Requires Receipt</Label>
-                      <Switch
-                        checked={formData.requiresReceipt}
-                        onCheckedChange={(checked) =>
-                          setFormData({ ...formData, requiresReceipt: checked })
-                        }
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label>Active Status</Label>
-                      <Switch
-                        checked={formData.status === "Active"}
-                        onCheckedChange={(checked) =>
-                          setFormData({
-                            ...formData,
-                            status: checked ? "Active" : "Inactive",
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        resetForm();
-                        setIsAddDialogOpen(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button onClick={handleSubmit}>
-                      {editingCategory ? "Update" : "Add"} Category
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            <DataTable
-              data={categories}
-              columns={columns}
-              searchPlaceholder="Search categories..."
-            />
-          </main>
-        </div>
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit}>
+                {editingCategory ? "Update" : "Add"} Category
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-    </SidebarProvider>
+
+      <DataTable
+        data={categories}
+        columns={columns}
+        searchPlaceholder="Search categories..."
+      />
+    </AdminLayout>
   );
 };
 

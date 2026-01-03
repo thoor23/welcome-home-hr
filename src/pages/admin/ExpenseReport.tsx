@@ -1,6 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
@@ -156,210 +154,202 @@ const ExpenseReport = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Expense Report</h1>
-                <p className="text-muted-foreground">
-                  Analytics and insights on expense spending
-                </p>
-              </div>
-              <Button variant="outline">
-                <Download className="mr-2 h-4 w-4" />
-                Export Report
-              </Button>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-4 mb-6">
-              <StatsCard
-                title="Total Expenses (Year)"
-                value={`₹${totalExpenses.toLocaleString()}`}
-                icon={IndianRupee}
-              />
-              <StatsCard
-                title="Avg per Employee"
-                value={`₹${avgPerEmployee.toLocaleString()}`}
-                icon={Users}
-              />
-              <StatsCard
-                title="Top Category"
-                value="Travel"
-                icon={TrendingUp}
-              />
-              <StatsCard
-                title="Pending Reimbursements"
-                value={`₹${pendingReimbursements.toLocaleString()}`}
-                icon={Clock}
-              />
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2 mb-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Monthly Expense Trend</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={monthlyExpenseData}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis dataKey="month" className="text-xs" />
-                      <YAxis
-                        className="text-xs"
-                        tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-                      />
-                      <Tooltip
-                        formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
-                        contentStyle={{
-                          backgroundColor: "hsl(var(--card))",
-                          border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <Bar
-                        dataKey="amount"
-                        fill="hsl(var(--primary))"
-                        radius={[4, 4, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Expenses by Category</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={categoryData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={2}
-                        dataKey="value"
-                        label={({ name, percent }) =>
-                          `${name} ${(percent * 100).toFixed(0)}%`
-                        }
-                        labelLine={false}
-                      >
-                        {categoryData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
-                        contentStyle={{
-                          backgroundColor: "hsl(var(--card))",
-                          border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px",
-                        }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Expenses by Department</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={departmentData} layout="vertical">
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis
-                        type="number"
-                        className="text-xs"
-                        tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-                      />
-                      <YAxis dataKey="department" type="category" className="text-xs" width={80} />
-                      <Tooltip
-                        formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
-                        contentStyle={{
-                          backgroundColor: "hsl(var(--card))",
-                          border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <Bar
-                        dataKey="amount"
-                        fill="hsl(var(--chart-2))"
-                        radius={[0, 4, 4, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Year-over-Year Comparison</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={yearOverYearData}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis dataKey="month" className="text-xs" />
-                      <YAxis
-                        className="text-xs"
-                        tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-                      />
-                      <Tooltip
-                        formatter={(value: number) => [`₹${value.toLocaleString()}`, ""]}
-                        contentStyle={{
-                          backgroundColor: "hsl(var(--card))",
-                          border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="current"
-                        name="2025"
-                        stroke="hsl(var(--primary))"
-                        strokeWidth={2}
-                        dot={{ fill: "hsl(var(--primary))" }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="previous"
-                        name="2024"
-                        stroke="hsl(var(--muted-foreground))"
-                        strokeWidth={2}
-                        strokeDasharray="5 5"
-                        dot={{ fill: "hsl(var(--muted-foreground))" }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Category-wise Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-              <DataTable
-                  data={categorySummaryData}
-                  columns={columns}
-                  searchPlaceholder="Search categories..."
-                />
-              </CardContent>
-            </Card>
-          </main>
+    <AdminLayout>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Expense Report</h1>
+          <p className="text-muted-foreground">
+            Analytics and insights on expense spending
+          </p>
         </div>
+        <Button variant="outline">
+          <Download className="mr-2 h-4 w-4" />
+          Export Report
+        </Button>
       </div>
-    </SidebarProvider>
+
+      <div className="grid gap-4 md:grid-cols-4 mb-6">
+        <StatsCard
+          title="Total Expenses (Year)"
+          value={`₹${totalExpenses.toLocaleString()}`}
+          icon={IndianRupee}
+        />
+        <StatsCard
+          title="Avg per Employee"
+          value={`₹${avgPerEmployee.toLocaleString()}`}
+          icon={Users}
+        />
+        <StatsCard
+          title="Top Category"
+          value="Travel"
+          icon={TrendingUp}
+        />
+        <StatsCard
+          title="Pending Reimbursements"
+          value={`₹${pendingReimbursements.toLocaleString()}`}
+          icon={Clock}
+        />
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Monthly Expense Trend</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={monthlyExpenseData}>
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis dataKey="month" className="text-xs" />
+                <YAxis
+                  className="text-xs"
+                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
+                />
+                <Tooltip
+                  formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Bar
+                  dataKey="amount"
+                  fill="hsl(var(--primary))"
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Expenses by Category</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={categoryData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
+                  labelLine={false}
+                >
+                  {categoryData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                  }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Expenses by Department</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={departmentData} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis
+                  type="number"
+                  className="text-xs"
+                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
+                />
+                <YAxis dataKey="department" type="category" className="text-xs" width={80} />
+                <Tooltip
+                  formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Bar
+                  dataKey="amount"
+                  fill="hsl(var(--chart-2))"
+                  radius={[0, 4, 4, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Year-over-Year Comparison</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={yearOverYearData}>
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis dataKey="month" className="text-xs" />
+                <YAxis
+                  className="text-xs"
+                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
+                />
+                <Tooltip
+                  formatter={(value: number) => [`₹${value.toLocaleString()}`, ""]}
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="current"
+                  name="2025"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={2}
+                  dot={{ fill: "hsl(var(--primary))" }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="previous"
+                  name="2024"
+                  stroke="hsl(var(--muted-foreground))"
+                  strokeWidth={2}
+                  strokeDasharray="5 5"
+                  dot={{ fill: "hsl(var(--muted-foreground))" }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Category-wise Summary</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            data={categorySummaryData}
+            columns={columns}
+            searchPlaceholder="Search categories..."
+          />
+        </CardContent>
+      </Card>
+    </AdminLayout>
   );
 };
 

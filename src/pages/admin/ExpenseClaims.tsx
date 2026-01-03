@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -261,103 +259,95 @@ const ExpenseClaims = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Expense Claims</h1>
-                <p className="text-muted-foreground">
-                  Submit and manage expense reimbursement claims
-                </p>
-              </div>
-              <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create Claim
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Claim</DialogTitle>
-                    <DialogDescription>
-                      Group your expenses into a claim for reimbursement
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                      <Label>Claim Period</Label>
-                      <Input
-                        type="month"
-                        value={newClaim.claimPeriod}
-                        onChange={(e) =>
-                          setNewClaim({ ...newClaim, claimPeriod: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Description (Optional)</Label>
-                      <Input
-                        placeholder="e.g., December business expenses"
-                        value={newClaim.description}
-                        onChange={(e) =>
-                          setNewClaim({ ...newClaim, description: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button onClick={handleCreateClaim}>Create Claim</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            <Tabs defaultValue="my-claims" className="space-y-6">
-              <TabsList>
-                <TabsTrigger value="my-claims">My Claims</TabsTrigger>
-                <TabsTrigger value="team-claims">Team Claims</TabsTrigger>
-                <TabsTrigger value="all-claims">All Claims</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="my-claims">
-                <DataTable
-                  data={myClaims}
-                  columns={columns}
-                  filters={filters}
-                  searchPlaceholder="Search claims..."
-                />
-              </TabsContent>
-
-              <TabsContent value="team-claims">
-                <DataTable
-                  data={teamClaims}
-                  columns={columns}
-                  filters={filters}
-                  searchPlaceholder="Search by employee..."
-                />
-              </TabsContent>
-
-              <TabsContent value="all-claims">
-                <DataTable
-                  data={allClaims}
-                  columns={columns}
-                  filters={filters}
-                  searchPlaceholder="Search by employee..."
-                />
-              </TabsContent>
-            </Tabs>
-          </main>
+    <AdminLayout>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Expense Claims</h1>
+          <p className="text-muted-foreground">
+            Submit and manage expense reimbursement claims
+          </p>
         </div>
+        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Create Claim
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Create New Claim</DialogTitle>
+              <DialogDescription>
+                Group your expenses into a claim for reimbursement
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label>Claim Period</Label>
+                <Input
+                  type="month"
+                  value={newClaim.claimPeriod}
+                  onChange={(e) =>
+                    setNewClaim({ ...newClaim, claimPeriod: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>Description (Optional)</Label>
+                <Input
+                  placeholder="e.g., December business expenses"
+                  value={newClaim.description}
+                  onChange={(e) =>
+                    setNewClaim({ ...newClaim, description: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleCreateClaim}>Create Claim</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-    </SidebarProvider>
+
+      <Tabs defaultValue="my-claims" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="my-claims">My Claims</TabsTrigger>
+          <TabsTrigger value="team-claims">Team Claims</TabsTrigger>
+          <TabsTrigger value="all-claims">All Claims</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="my-claims">
+          <DataTable
+            data={myClaims}
+            columns={columns}
+            filters={filters}
+            searchPlaceholder="Search claims..."
+          />
+        </TabsContent>
+
+        <TabsContent value="team-claims">
+          <DataTable
+            data={teamClaims}
+            columns={columns}
+            filters={filters}
+            searchPlaceholder="Search by employee..."
+          />
+        </TabsContent>
+
+        <TabsContent value="all-claims">
+          <DataTable
+            data={allClaims}
+            columns={columns}
+            filters={filters}
+            searchPlaceholder="Search by employee..."
+          />
+        </TabsContent>
+      </Tabs>
+    </AdminLayout>
   );
 };
 
