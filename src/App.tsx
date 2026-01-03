@@ -106,6 +106,10 @@ import ESSDashboard from "./pages/ess/Dashboard";
 import ESSAttendanceToday from "./pages/ess/AttendanceToday";
 import ESSAttendanceHistory from "./pages/ess/AttendanceHistory";
 import ESSAttendanceRegularization from "./pages/ess/AttendanceRegularization";
+import ESSLeaveBalance from "./pages/ess/LeaveBalance";
+import ESSApplyLeave from "./pages/ess/ApplyLeave";
+import ESSLeaveRequests from "./pages/ess/LeaveRequests";
+import ESSLeaveHistory from "./pages/ess/LeaveHistory";
 
 const queryClient = new QueryClient();
 
@@ -237,6 +241,11 @@ const App = () => (
             <Route path="/ess/attendance/today" element={<ESSAttendanceToday />} />
             <Route path="/ess/attendance/history" element={<ESSAttendanceHistory />} />
             <Route path="/ess/attendance/regularization" element={<ESSAttendanceRegularization />} />
+            <Route path="/ess/leaves" element={<Navigate to="/ess/leaves/balance" replace />} />
+            <Route path="/ess/leaves/balance" element={<ESSLeaveBalance />} />
+            <Route path="/ess/leaves/apply" element={<ESSApplyLeave />} />
+            <Route path="/ess/leaves/requests" element={<ESSLeaveRequests />} />
+            <Route path="/ess/leaves/history" element={<ESSLeaveHistory />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
