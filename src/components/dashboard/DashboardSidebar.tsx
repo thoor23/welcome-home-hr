@@ -410,7 +410,7 @@ export function DashboardSidebar() {
   return (
     <aside
       className={cn(
-        "h-screen bg-sidebar border-r border-border flex flex-col transition-all duration-300 ease-in-out",
+        "h-screen bg-sidebar border-r border-border flex flex-col transition-all duration-300 ease-in-out sticky top-0",
         collapsed ? "w-16" : "w-64"
       )}
     >
