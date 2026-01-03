@@ -32,13 +32,13 @@ const monthlyConfig = {
 } satisfies ChartConfig;
 
 const eventsByCategory = [
-  { category: "meeting", value: 45, fill: "var(--color-meeting)" },
-  { category: "training", value: 23, fill: "var(--color-training)" },
-  { category: "workshop", value: 18, fill: "var(--color-workshop)" },
-  { category: "conference", value: 8, fill: "var(--color-conference)" },
-  { category: "holiday", value: 12, fill: "var(--color-holiday)" },
-  { category: "teambuilding", value: 15, fill: "var(--color-teambuilding)" },
-  { category: "webinar", value: 32, fill: "var(--color-webinar)" },
+  { category: "meeting", value: 45, fill: "hsl(217 91% 60%)" },
+  { category: "training", value: 23, fill: "hsl(262 83% 58%)" },
+  { category: "workshop", value: 18, fill: "hsl(142 76% 36%)" },
+  { category: "conference", value: 8, fill: "hsl(38 92% 50%)" },
+  { category: "holiday", value: 12, fill: "hsl(0 84% 60%)" },
+  { category: "teambuilding", value: 15, fill: "hsl(330 81% 60%)" },
+  { category: "webinar", value: 32, fill: "hsl(var(--primary))" },
 ];
 
 const categoryConfig = {

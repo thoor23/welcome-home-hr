@@ -28,12 +28,12 @@ const monthlyConfig = {
 } satisfies ChartConfig;
 
 const typeDistribution = [
-  { type: "offer", value: 45, fill: "var(--color-offer)" },
-  { type: "relieving", value: 32, fill: "var(--color-relieving)" },
-  { type: "experience", value: 28, fill: "var(--color-experience)" },
-  { type: "welcome", value: 38, fill: "var(--color-welcome)" },
-  { type: "interview", value: 25, fill: "var(--color-interview)" },
-  { type: "others", value: 15, fill: "var(--color-others)" },
+  { type: "offer", value: 45, fill: "hsl(var(--primary))" },
+  { type: "relieving", value: 32, fill: "hsl(var(--chart-2))" },
+  { type: "experience", value: 28, fill: "hsl(var(--chart-3))" },
+  { type: "welcome", value: 38, fill: "hsl(var(--chart-4))" },
+  { type: "interview", value: 25, fill: "hsl(var(--chart-5))" },
+  { type: "others", value: 15, fill: "hsl(var(--muted))" },
 ];
 
 const typeConfig = {
@@ -60,10 +60,10 @@ const departmentConfig = {
 } satisfies ChartConfig;
 
 const statusData = [
-  { status: "sent", value: 156, fill: "var(--color-sent)" },
-  { status: "downloaded", value: 89, fill: "var(--color-downloaded)" },
-  { status: "draft", value: 12, fill: "var(--color-draft)" },
-  { status: "failed", value: 5, fill: "var(--color-failed)" },
+  { status: "sent", value: 156, fill: "hsl(142 76% 36%)" },
+  { status: "downloaded", value: 89, fill: "hsl(217 91% 60%)" },
+  { status: "draft", value: 12, fill: "hsl(var(--muted))" },
+  { status: "failed", value: 5, fill: "hsl(var(--destructive))" },
 ];
 
 const statusConfig = {

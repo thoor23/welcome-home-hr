@@ -27,12 +27,12 @@ const ticketConfig = {
 } satisfies ChartConfig;
 
 const categoryData = [
-  { category: "it", value: 45, fill: "var(--color-it)" },
-  { category: "hr", value: 32, fill: "var(--color-hr)" },
-  { category: "facilities", value: 18, fill: "var(--color-facilities)" },
-  { category: "payroll", value: 28, fill: "var(--color-payroll)" },
-  { category: "leave", value: 56, fill: "var(--color-leave)" },
-  { category: "general", value: 12, fill: "var(--color-general)" },
+  { category: "it", value: 45, fill: "hsl(217 91% 60%)" },
+  { category: "hr", value: 32, fill: "hsl(262 83% 58%)" },
+  { category: "facilities", value: 18, fill: "hsl(142 76% 36%)" },
+  { category: "payroll", value: 28, fill: "hsl(38 92% 50%)" },
+  { category: "leave", value: 56, fill: "hsl(330 81% 60%)" },
+  { category: "general", value: 12, fill: "hsl(var(--muted))" },
 ];
 
 const categoryConfig = {
