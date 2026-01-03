@@ -1,4 +1,5 @@
-import { Bell, Moon, Sun, Settings, MessageSquare, Clock, ArrowRight, User, PanelLeftClose, PanelLeft, CreditCard, FileText, HelpCircle } from "lucide-react";
+import { useState } from "react";
+import { Bell, Moon, Sun, Settings, MessageSquare, Clock, ArrowRight, User, PanelLeftClose, PanelLeft, CreditCard, FileText, HelpCircle, Check, CheckCheck } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,7 +16,21 @@ import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 
-const notifications = [
+interface Notification {
+  id: number;
+  title: string;
+  badge?: string;
+  badgeColor?: string;
+  time: string;
+  avatar?: boolean;
+  icon?: React.ComponentType<{ className?: string }>;
+  iconBg?: string;
+  iconColor?: string;
+  hasArrow?: boolean;
+  read: boolean;
+}
+
+const initialNotifications: Notification[] = [
   {
     id: 1,
     title: "Your leave request has been approved",
@@ -24,6 +39,7 @@ const notifications = [
     time: "Today, 10:14 PM",
     avatar: true,
     hasArrow: true,
+    read: false,
   },
   {
     id: 2,
@@ -31,6 +47,7 @@ const notifications = [
     time: "Today, 7:51 AM",
     icon: MessageSquare,
     iconBg: "bg-primary",
+    read: false,
   },
   {
     id: 3,
@@ -39,12 +56,14 @@ const notifications = [
     icon: Clock,
     iconBg: "bg-pink-100 dark:bg-pink-900",
     iconColor: "text-pink-500",
+    read: false,
   },
   {
     id: 4,
     title: "Your payslip for December is ready",
     time: "Today 10:14 PM",
     avatar: true,
+    read: true,
   },
 ];
 
@@ -52,6 +71,19 @@ export function ESSHeader() {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const { collapsed, toggleCollapsed } = useSidebarContext();
+  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAsRead = (id: number) => {
+    setNotifications(prev =>
+      prev.map(n => (n.id === id ? { ...n, read: true } : n))
+    );
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  };
 
   return (
     <header className="h-16 flex-shrink-0 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-50">
@@ -85,24 +117,52 @@ export function ESSHeader() {
           <PopoverTrigger asChild>
             <Button variant="ghost" size="icon" className="text-foreground hover:bg-transparent hover:text-foreground active:bg-transparent active:text-foreground relative">
               <Bell className="h-5 w-5" />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
-                4
-              </Badge>
+              {unreadCount > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary">
+                  {unreadCount}
+                </Badge>
+              )}
             </Button>
           </PopoverTrigger>
           <PopoverContent align="end" className="w-80 p-0 bg-card border-border">
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
               <span className="font-semibold text-foreground">Notifications</span>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-transparent">
-                <Settings className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-1">
+                {unreadCount > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={markAllAsRead}
+                    className="h-8 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  >
+                    <CheckCheck className="h-4 w-4 mr-1" />
+                    Mark all read
+                  </Button>
+                )}
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-transparent">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
             
             {/* Notification List */}
             <div className="max-h-80 overflow-y-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {notifications.map((notification) => (
-                <div key={notification.id} className="flex items-start gap-3 p-4 border-b border-border hover:bg-secondary/50 cursor-pointer">
+                <div
+                  key={notification.id}
+                  className={`flex items-start gap-3 p-4 border-b border-border hover:bg-secondary/50 cursor-pointer transition-colors ${
+                    !notification.read ? "bg-primary/5" : ""
+                  }`}
+                  onClick={() => markAsRead(notification.id)}
+                >
+                  {/* Unread indicator */}
+                  <div className="flex items-center justify-center w-2 pt-2">
+                    {!notification.read && (
+                      <div className="h-2 w-2 rounded-full bg-primary" />
+                    )}
+                  </div>
+
                   {notification.avatar ? (
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarImage src="/placeholder.svg" />
@@ -117,7 +177,9 @@ export function ESSHeader() {
                   ) : null}
                   
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-foreground leading-tight">{notification.title}</p>
+                    <p className={`text-sm leading-tight ${!notification.read ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                      {notification.title}
+                    </p>
                     <div className="flex items-center gap-2 mt-1">
                       {notification.badge && (
                         <Badge className={`${notification.badgeColor} text-primary-foreground text-xs px-2 py-0.5`}>
@@ -128,9 +190,21 @@ export function ESSHeader() {
                     </div>
                   </div>
                   
-                  {notification.hasArrow && (
+                  {!notification.read ? (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-primary flex-shrink-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        markAsRead(notification.id);
+                      }}
+                    >
+                      <Check className="h-4 w-4" />
+                    </Button>
+                  ) : notification.hasArrow ? (
                     <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-1" />
-                  )}
+                  ) : null}
                 </div>
               ))}
             </div>
