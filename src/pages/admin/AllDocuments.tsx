@@ -10,14 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -39,7 +31,6 @@ import {
   Search,
   LayoutGrid,
   List,
-  Home,
   MoreHorizontal,
   Download,
   Eye,
@@ -48,6 +39,7 @@ import {
   Image,
   FileSpreadsheet,
   File,
+  ChevronLeft,
 } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { FolderCard } from "@/components/documents/FolderCard";
@@ -178,9 +170,6 @@ export default function AllDocuments() {
     toast.info(`Opened folder: ${folderName}`);
   };
 
-  const handleBreadcrumbClick = (index: number) => {
-    setCurrentPath(currentPath.slice(0, index));
-  };
 
   const handleFileView = (file: typeof files[0]) => {
     setSelectedFile(file);
@@ -243,36 +232,23 @@ export default function AllDocuments() {
         />
       </div>
 
-      {/* Breadcrumb & Controls */}
+      {/* Controls */}
       <div className="flex items-center justify-between mb-4">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                onClick={() => setCurrentPath([])}
-                className="cursor-pointer flex items-center gap-1"
-              >
-                <Home className="h-4 w-4" />
-                Documents
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            {currentPath.map((path, index) => (
-              <BreadcrumbItem key={path}>
-                <BreadcrumbSeparator />
-                {index === currentPath.length - 1 ? (
-                  <BreadcrumbPage>{path}</BreadcrumbPage>
-                ) : (
-                  <BreadcrumbLink
-                    onClick={() => handleBreadcrumbClick(index + 1)}
-                    className="cursor-pointer"
-                  >
-                    {path}
-                  </BreadcrumbLink>
-                )}
-              </BreadcrumbItem>
-            ))}
-          </BreadcrumbList>
-        </Breadcrumb>
+        <div className="flex items-center gap-2">
+          {isInFolder && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPath(currentPath.slice(0, -1))}
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Back
+            </Button>
+          )}
+          <span className="text-sm text-muted-foreground">
+            {isInFolder ? `Documents / ${currentPath.join(" / ")}` : "Documents"}
+          </span>
+        </div>
 
         <div className="flex items-center gap-3">
           <div className="relative w-64">
