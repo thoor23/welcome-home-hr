@@ -1,8 +1,6 @@
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -348,105 +346,95 @@ const AllAttendance = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-
-        <div className="flex-1 flex flex-col min-w-0">
-          <DashboardHeader />
-
-          <main className="flex-1 p-6 overflow-auto min-w-0">
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground font-display">All Attendance</h1>
-                <p className="text-muted-foreground mt-1">View and manage employee attendance records</p>
-              </div>
-              
-              {/* Date Range Filter */}
-              <div className="flex items-center gap-2">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "justify-start text-left font-normal",
-                        !dateRange.from && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {dateRange.from ? format(dateRange.from, "MMM dd, yyyy") : "From Date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={dateRange.from}
-                      onSelect={(date) => setDateRange((prev) => ({ ...prev, from: date }))}
-                      initialFocus
-                      className={cn("p-3 pointer-events-auto")}
-                    />
-                  </PopoverContent>
-                </Popover>
-                
-                <span className="text-muted-foreground">to</span>
-                
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "justify-start text-left font-normal",
-                        !dateRange.to && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {dateRange.to ? format(dateRange.to, "MMM dd, yyyy") : "To Date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={dateRange.to}
-                      onSelect={(date) => setDateRange((prev) => ({ ...prev, to: date }))}
-                      initialFocus
-                      className={cn("p-3 pointer-events-auto")}
-                    />
-                  </PopoverContent>
-                </Popover>
-
-                {(dateRange.from || dateRange.to) && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setDateRange({ from: undefined, to: undefined })}
-                    className="h-9 w-9"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+    <AdminLayout>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">All Attendance</h1>
+          <p className="text-muted-foreground mt-1">View and manage employee attendance records</p>
+        </div>
+        
+        {/* Date Range Filter */}
+        <div className="flex items-center gap-2">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "justify-start text-left font-normal",
+                  !dateRange.from && "text-muted-foreground"
                 )}
-              </div>
-            </div>
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {dateRange.from ? format(dateRange.from, "MMM dd, yyyy") : "From Date"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={dateRange.from}
+                onSelect={(date) => setDateRange((prev) => ({ ...prev, from: date }))}
+                initialFocus
+                className={cn("p-3 pointer-events-auto")}
+              />
+            </PopoverContent>
+          </Popover>
+          
+          <span className="text-muted-foreground">to</span>
+          
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "justify-start text-left font-normal",
+                  !dateRange.to && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {dateRange.to ? format(dateRange.to, "MMM dd, yyyy") : "To Date"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={dateRange.to}
+                onSelect={(date) => setDateRange((prev) => ({ ...prev, to: date }))}
+                initialFocus
+                className={cn("p-3 pointer-events-auto")}
+              />
+            </PopoverContent>
+          </Popover>
 
-            <DataTable
-              data={records}
-              columns={columns}
-              filters={filters}
-              searchPlaceholder="Search attendance..."
-              selectable
-              toolbarActions={
-                <Button variant="outline" onClick={exportCsv}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Export CSV
-                </Button>
-              }
-              pageSize={10}
-              pageSizeOptions={[10, 25, 50, 100]}
-              getRowId={(record) => record.id}
-            />
-          </main>
+          {(dateRange.from || dateRange.to) && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setDateRange({ from: undefined, to: undefined })}
+              className="h-9 w-9"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       </div>
-    </SidebarProvider>
+
+      <DataTable
+        data={records}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search attendance..."
+        selectable
+        toolbarActions={
+          <Button variant="outline" onClick={exportCsv}>
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
+          </Button>
+        }
+        pageSize={10}
+        pageSizeOptions={[10, 25, 50, 100]}
+        getRowId={(record) => record.id}
+      />
+    </AdminLayout>
   );
 };
 

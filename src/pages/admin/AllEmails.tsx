@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DataTable, Column } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
@@ -261,140 +259,134 @@ const AllEmails = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 space-y-6 overflow-auto">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">All Emails & Letters</h1>
-                <p className="text-muted-foreground">View all generated and sent communications</p>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <StatsCard
-                title="Total Communications"
-                value={stats.total.toString()}
-                icon={Mail}
-              />
-              <StatsCard
-                title="Sent Today"
-                value={stats.sentToday.toString()}
-                icon={Send}
-              />
-              <StatsCard
-                title="Pending (Draft)"
-                value={stats.drafts.toString()}
-                icon={Clock}
-              />
-              <StatsCard
-                title="Failed"
-                value={stats.failed.toString()}
-                icon={AlertCircle}
-              />
-            </div>
-
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by recipient, subject, or reference ID..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter by type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  {types.map((type) => (
-                    <SelectItem key={type} value={type}>{type}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  {statuses.map((status) => (
-                    <SelectItem key={status} value={status}>{status}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Data Table */}
-            <DataTable columns={columns} data={filteredEmails} />
-
-            {/* View Dialog */}
-            <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5" />
-                    {selectedEmail?.type}
-                  </DialogTitle>
-                </DialogHeader>
-                {selectedEmail && (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-muted-foreground">Reference:</span>
-                        <span className="ml-2 font-mono">{selectedEmail.referenceId}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Status:</span>
-                        <span className="ml-2">{getStatusBadge(selectedEmail.status)}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">To:</span>
-                        <span className="ml-2">{selectedEmail.recipientName}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Email:</span>
-                        <span className="ml-2">{selectedEmail.recipientEmail}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-sm mb-1">Subject:</p>
-                      <p className="font-medium">{selectedEmail.subject}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-sm mb-1">Content:</p>
-                      <div className="bg-muted/50 rounded-lg p-4 whitespace-pre-wrap text-sm">
-                        {selectedEmail.content}
-                      </div>
-                    </div>
-                    <div className="flex justify-end gap-2">
-                      <Button variant="outline" onClick={() => handleDownload(selectedEmail)}>
-                        <Download className="h-4 w-4 mr-2" />
-                        Download PDF
-                      </Button>
-                      {selectedEmail.status === "Draft" && (
-                        <Button onClick={() => handleResend(selectedEmail)}>
-                          <Send className="h-4 w-4 mr-2" />
-                          Send Email
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </DialogContent>
-            </Dialog>
-          </main>
+    <AdminLayout>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">All Emails & Letters</h1>
+          <p className="text-muted-foreground">View all generated and sent communications</p>
         </div>
       </div>
-    </SidebarProvider>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+        <StatsCard
+          title="Total Communications"
+          value={stats.total.toString()}
+          icon={Mail}
+        />
+        <StatsCard
+          title="Sent Today"
+          value={stats.sentToday.toString()}
+          icon={Send}
+        />
+        <StatsCard
+          title="Pending (Draft)"
+          value={stats.drafts.toString()}
+          icon={Clock}
+        />
+        <StatsCard
+          title="Failed"
+          value={stats.failed.toString()}
+          icon={AlertCircle}
+        />
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-4 mt-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by recipient, subject, or reference ID..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <Select value={typeFilter} onValueChange={setTypeFilter}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Types</SelectItem>
+            {types.map((type) => (
+              <SelectItem key={type} value={type}>{type}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            {statuses.map((status) => (
+              <SelectItem key={status} value={status}>{status}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Data Table */}
+      <div className="mt-6">
+        <DataTable columns={columns} data={filteredEmails} />
+      </div>
+
+      {/* View Dialog */}
+      <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              {selectedEmail?.type}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedEmail && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Reference:</span>
+                  <span className="ml-2 font-mono">{selectedEmail.referenceId}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Status:</span>
+                  <span className="ml-2">{getStatusBadge(selectedEmail.status)}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">To:</span>
+                  <span className="ml-2">{selectedEmail.recipientName}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Email:</span>
+                  <span className="ml-2">{selectedEmail.recipientEmail}</span>
+                </div>
+              </div>
+              <div>
+                <p className="text-muted-foreground text-sm mb-1">Subject:</p>
+                <p className="font-medium">{selectedEmail.subject}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground text-sm mb-1">Content:</p>
+                <div className="bg-muted/50 rounded-lg p-4 whitespace-pre-wrap text-sm">
+                  {selectedEmail.content}
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => handleDownload(selectedEmail)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Download PDF
+                </Button>
+                {selectedEmail.status === "Draft" && (
+                  <Button onClick={() => handleResend(selectedEmail)}>
+                    <Send className="h-4 w-4 mr-2" />
+                    Send Email
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </AdminLayout>
   );
 };
 
