@@ -375,7 +375,7 @@ export function DashboardSidebar() {
   const currentPath = location.pathname;
 
   return (
-    <Sidebar className={cn("border-r border-border bg-card", collapsed ? "w-16" : "w-60")} collapsible="icon">
+    <Sidebar className={cn("border-r border-border bg-sidebar", collapsed ? "w-16" : "w-60")} collapsible="icon">
       {/* Header */}
       <SidebarHeader className={cn("p-4 border-b border-border", collapsed && "p-2")}>
         <div className={cn("flex items-center gap-2", collapsed && "justify-center")}>
