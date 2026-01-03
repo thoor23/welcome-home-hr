@@ -1,5 +1,4 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, Column } from "@/components/ui/data-table";
@@ -39,27 +38,28 @@ const AllInvoices = () => {
     { key: "status", header: "Status", render: (row) => getStatusBadge(row.status) },
     { key: "createdBy", header: "Created By" },
     { key: "actions", header: "Actions", render: (row) => (
-      <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="sm"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem><Eye className="h-4 w-4 mr-2" />View Invoice</DropdownMenuItem><DropdownMenuItem><Download className="h-4 w-4 mr-2" />Download PDF</DropdownMenuItem>{row.status === "Sent" && <DropdownMenuItem onClick={() => handleMarkAsPaid(row.invoiceNo)}><CheckCircle className="h-4 w-4 mr-2" />Mark as Paid</DropdownMenuItem>}</DropdownMenuContent></DropdownMenu>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild><Button variant="ghost" size="sm"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem><Eye className="h-4 w-4 mr-2" />View Invoice</DropdownMenuItem>
+          <DropdownMenuItem><Download className="h-4 w-4 mr-2" />Download PDF</DropdownMenuItem>
+          {row.status === "Sent" && <DropdownMenuItem onClick={() => handleMarkAsPaid(row.invoiceNo)}><CheckCircle className="h-4 w-4 mr-2" />Mark as Paid</DropdownMenuItem>}
+        </DropdownMenuContent>
+      </DropdownMenu>
     )}
   ];
 
-  const stats = { total: mockInvoices.length, pending: mockInvoices.filter(i => i.status === "Sent").length, paid: mockInvoices.filter(i => i.status === "Paid").length, overdue: mockInvoices.filter(i => i.status === "Overdue").length };
-
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div><h1 className="text-2xl font-bold text-foreground">All Invoices</h1><p className="text-muted-foreground">View and manage all generated invoices</p></div>
-          <Button asChild><Link to="/admin/billing/generate-invoice"><Plus className="h-4 w-4 mr-2" />Generate Invoice</Link></Button>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">All Invoices</h1>
+          <p className="text-muted-foreground mt-1">View and manage all generated invoices</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Total Invoices</CardTitle><FileText className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.total}</div></CardContent></Card>
-          <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Pending Payment</CardTitle><Clock className="h-4 w-4 text-blue-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.pending}</div></CardContent></Card>
-          <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Paid</CardTitle><CheckCircle className="h-4 w-4 text-emerald-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{stats.paid}</div></CardContent></Card>
-          <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Overdue</CardTitle><AlertTriangle className="h-4 w-4 text-rose-500" /></CardHeader><CardContent><div className="text-2xl font-bold text-destructive">{stats.overdue}</div></CardContent></Card>
-        </div>
-        <Card><CardHeader><CardTitle>Invoice List</CardTitle></CardHeader><CardContent><DataTable columns={columns} data={mockInvoices} /></CardContent></Card>
+        <Button asChild><Link to="/admin/billing/generate-invoice"><Plus className="h-4 w-4 mr-2" />Generate Invoice</Link></Button>
       </div>
+      
+      <DataTable columns={columns} data={mockInvoices} />
     </AdminLayout>
   );
 };

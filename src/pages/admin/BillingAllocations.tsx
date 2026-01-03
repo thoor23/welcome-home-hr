@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -10,7 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DataTable, Column } from "@/components/ui/data-table";
-import { Plus, Wallet, TrendingUp, Clock, Building2, Eye } from "lucide-react";
+import { Plus, Eye } from "lucide-react";
 
 interface BillingAllocation {
   id: string;
@@ -43,24 +42,40 @@ const BillingAllocations = () => {
     { key: "actions", header: "Actions", render: () => <div className="flex items-center gap-2"><Button variant="outline" size="sm"><Eye className="h-4 w-4 mr-1" />Details</Button><Button variant="outline" size="sm">Add Funds</Button></div> }
   ];
 
-  const totalAllocated = mockAllocations.reduce((sum, a) => sum + a.allocatedBudget, 0);
-  const totalDisbursed = mockAllocations.reduce((sum, a) => sum + a.used, 0);
-
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div><h1 className="text-2xl font-bold text-foreground">Budget Allocations</h1><p className="text-muted-foreground">Track approved budgets and fund allocations per location</p></div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}><DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Add Allocation</Button></DialogTrigger><DialogContent className="max-w-lg"><DialogHeader><DialogTitle>Add Budget Allocation</DialogTitle></DialogHeader><div className="space-y-4 py-4"><div className="space-y-2"><Label>Location</Label><Select><SelectTrigger><SelectValue placeholder="Select location" /></SelectTrigger><SelectContent><SelectItem value="del">Delhi Branch</SelectItem><SelectItem value="blr">Bangalore Hub</SelectItem></SelectContent></Select></div><div className="space-y-2"><Label>Allocation Type</Label><Select><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger><SelectContent><SelectItem value="annual">Annual Budget</SelectItem><SelectItem value="adhoc">Ad-hoc Allocation</SelectItem></SelectContent></Select></div><div className="space-y-2"><Label>Total Amount (₹)</Label><Input type="number" placeholder="0" /></div><div className="space-y-2"><Label>Remarks</Label><Textarea placeholder="Add any notes..." /></div><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button><Button onClick={() => setIsDialogOpen(false)}>Add Allocation</Button></div></div></DialogContent></Dialog>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Budget Allocations</h1>
+          <p className="text-muted-foreground mt-1">Track approved budgets and fund allocations per location</p>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button><Plus className="h-4 w-4 mr-2" />Add Allocation</Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg">
+            <DialogHeader><DialogTitle>Add Budget Allocation</DialogTitle></DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Location</Label>
+                <Select><SelectTrigger><SelectValue placeholder="Select location" /></SelectTrigger><SelectContent><SelectItem value="del">Delhi Branch</SelectItem><SelectItem value="blr">Bangalore Hub</SelectItem></SelectContent></Select>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Total Allocated (FY)</CardTitle><Wallet className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="text-2xl font-bold">₹{(totalAllocated / 10000000).toFixed(1)}Cr</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Disbursed Amount</CardTitle><TrendingUp className="h-4 w-4 text-emerald-500" /></CardHeader><CardContent><div className="text-2xl font-bold">₹{(totalDisbursed / 10000000).toFixed(1)}Cr</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Pending Disbursement</CardTitle><Clock className="h-4 w-4 text-yellow-500" /></CardHeader><CardContent><div className="text-2xl font-bold">₹20.5L</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Active Locations</CardTitle><Building2 className="h-4 w-4 text-blue-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{mockAllocations.length}</div></CardContent></Card>
+              <div className="space-y-2">
+                <Label>Allocation Type</Label>
+                <Select><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger><SelectContent><SelectItem value="annual">Annual Budget</SelectItem><SelectItem value="adhoc">Ad-hoc Allocation</SelectItem></SelectContent></Select>
               </div>
-              <Card><CardHeader><CardTitle>Location-wise Allocations</CardTitle></CardHeader><CardContent><DataTable columns={columns} data={mockAllocations} /></CardContent></Card>
+              <div className="space-y-2"><Label>Total Amount (₹)</Label><Input type="number" placeholder="0" /></div>
+              <div className="space-y-2"><Label>Remarks</Label><Textarea placeholder="Add any notes..." /></div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+                <Button onClick={() => setIsDialogOpen(false)}>Add Allocation</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
+      
+      <DataTable columns={columns} data={mockAllocations} />
     </AdminLayout>
   );
 };
