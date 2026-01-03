@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -9,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DataTable, Column } from "@/components/ui/data-table";
-import { Clock, CheckCircle, XCircle, FileCheck, AlertCircle, Timer } from "lucide-react";
+import { CheckCircle, XCircle, Timer } from "lucide-react";
 import { toast } from "sonner";
 
 interface ApprovalRequest {
@@ -86,27 +85,69 @@ const BillingApprovals = () => {
     { key: "status", header: "Status", render: (row) => row.status === "Approved" ? <Badge className="bg-emerald-500/10 text-emerald-600"><CheckCircle className="h-3 w-3 mr-1" />Approved</Badge> : <Badge className="bg-rose-500/10 text-rose-600"><XCircle className="h-3 w-3 mr-1" />Rejected</Badge> },
   ];
 
-  const pendingAmount = mockPendingRequests.reduce((sum, r) => sum + r.amount, 0);
-
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-              <div><h1 className="text-2xl font-bold text-foreground">Budget Approvals</h1><p className="text-muted-foreground">Review and approve budget requests from branches</p></div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Pending Approvals</CardTitle><Clock className="h-4 w-4 text-yellow-500" /></CardHeader><CardContent><div className="text-2xl font-bold">{mockPendingRequests.length}</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Approved Today</CardTitle><CheckCircle className="h-4 w-4 text-emerald-500" /></CardHeader><CardContent><div className="text-2xl font-bold">2</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Pending Amount</CardTitle><AlertCircle className="h-4 w-4 text-orange-500" /></CardHeader><CardContent><div className="text-2xl font-bold">₹{(pendingAmount / 100000).toFixed(1)}L</div></CardContent></Card>
-                <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Avg. Processing Time</CardTitle><FileCheck className="h-4 w-4 text-primary" /></CardHeader><CardContent><div className="text-2xl font-bold">1.5 days</div></CardContent></Card>
-              </div>
-              <Tabs defaultValue="pending">
-                <TabsList><TabsTrigger value="pending">Pending ({mockPendingRequests.length})</TabsTrigger><TabsTrigger value="approved">Approved ({mockApprovedRequests.length})</TabsTrigger><TabsTrigger value="rejected">Rejected ({mockRejectedRequests.length})</TabsTrigger></TabsList>
-                <TabsContent value="pending" className="mt-4"><Card><CardHeader><CardTitle>Pending Requests</CardTitle></CardHeader><CardContent><DataTable columns={pendingColumns} data={mockPendingRequests} /></CardContent></Card></TabsContent>
-                <TabsContent value="approved" className="mt-4"><Card><CardHeader><CardTitle>Approved Requests</CardTitle></CardHeader><CardContent><DataTable columns={historyColumns} data={mockApprovedRequests} /></CardContent></Card></TabsContent>
-                <TabsContent value="rejected" className="mt-4"><Card><CardHeader><CardTitle>Rejected Requests</CardTitle></CardHeader><CardContent><DataTable columns={historyColumns} data={mockRejectedRequests} /></CardContent></Card></TabsContent>
-              </Tabs>
-              <Dialog open={isApproveDialogOpen} onOpenChange={setIsApproveDialogOpen}><DialogContent><DialogHeader><DialogTitle>Approve Request</DialogTitle></DialogHeader><div className="space-y-4 py-4"><div className="p-4 bg-muted rounded-lg"><div className="grid grid-cols-2 gap-2 text-sm"><p className="text-muted-foreground">Request ID:</p><p className="font-medium">{selectedRequest?.requestId}</p><p className="text-muted-foreground">Branch:</p><p className="font-medium">{selectedRequest?.branch}</p><p className="text-muted-foreground">Requested Amount:</p><p className="font-medium">₹{selectedRequest?.amount.toLocaleString("en-IN")}</p></div></div><div className="space-y-2"><Label>Approved Amount (₹)</Label><Input type="number" defaultValue={selectedRequest?.amount} /></div><div className="space-y-2"><Label>Remarks</Label><Textarea placeholder="Add any comments..." /></div><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setIsApproveDialogOpen(false)}>Cancel</Button><Button onClick={handleApprove}>Approve</Button></div></div></DialogContent></Dialog>
-              <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}><DialogContent><DialogHeader><DialogTitle>Reject Request</DialogTitle></DialogHeader><div className="space-y-4 py-4"><div className="p-4 bg-muted rounded-lg"><div className="grid grid-cols-2 gap-2 text-sm"><p className="text-muted-foreground">Request ID:</p><p className="font-medium">{selectedRequest?.requestId}</p><p className="text-muted-foreground">Branch:</p><p className="font-medium">{selectedRequest?.branch}</p></div></div><div className="space-y-2"><Label>Reason for Rejection</Label><Textarea placeholder="Please provide a reason..." /></div><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setIsRejectDialogOpen(false)}>Cancel</Button><Button variant="destructive" onClick={handleReject}>Reject</Button></div></div></DialogContent></Dialog>
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-foreground font-display">Budget Approvals</h1>
+        <p className="text-muted-foreground mt-1">Review and approve budget requests from branches</p>
       </div>
+      
+      <Tabs defaultValue="pending">
+        <TabsList>
+          <TabsTrigger value="pending">Pending ({mockPendingRequests.length})</TabsTrigger>
+          <TabsTrigger value="approved">Approved ({mockApprovedRequests.length})</TabsTrigger>
+          <TabsTrigger value="rejected">Rejected ({mockRejectedRequests.length})</TabsTrigger>
+        </TabsList>
+        <TabsContent value="pending" className="mt-4">
+          <DataTable columns={pendingColumns} data={mockPendingRequests} />
+        </TabsContent>
+        <TabsContent value="approved" className="mt-4">
+          <DataTable columns={historyColumns} data={mockApprovedRequests} />
+        </TabsContent>
+        <TabsContent value="rejected" className="mt-4">
+          <DataTable columns={historyColumns} data={mockRejectedRequests} />
+        </TabsContent>
+      </Tabs>
+
+      <Dialog open={isApproveDialogOpen} onOpenChange={setIsApproveDialogOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Approve Request</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="p-4 bg-muted rounded-lg">
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <p className="text-muted-foreground">Request ID:</p><p className="font-medium">{selectedRequest?.requestId}</p>
+                <p className="text-muted-foreground">Branch:</p><p className="font-medium">{selectedRequest?.branch}</p>
+                <p className="text-muted-foreground">Requested Amount:</p><p className="font-medium">₹{selectedRequest?.amount.toLocaleString("en-IN")}</p>
+              </div>
+            </div>
+            <div className="space-y-2"><Label>Approved Amount (₹)</Label><Input type="number" defaultValue={selectedRequest?.amount} /></div>
+            <div className="space-y-2"><Label>Remarks</Label><Textarea placeholder="Add any comments..." /></div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setIsApproveDialogOpen(false)}>Cancel</Button>
+              <Button onClick={handleApprove}>Approve</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Reject Request</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="p-4 bg-muted rounded-lg">
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <p className="text-muted-foreground">Request ID:</p><p className="font-medium">{selectedRequest?.requestId}</p>
+                <p className="text-muted-foreground">Branch:</p><p className="font-medium">{selectedRequest?.branch}</p>
+              </div>
+            </div>
+            <div className="space-y-2"><Label>Reason for Rejection</Label><Textarea placeholder="Please provide a reason..." /></div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setIsRejectDialogOpen(false)}>Cancel</Button>
+              <Button variant="destructive" onClick={handleReject}>Reject</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 };
