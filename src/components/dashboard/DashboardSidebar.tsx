@@ -71,6 +71,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarHeader,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -279,9 +280,9 @@ export function DashboardSidebar() {
       )}
       collapsible="icon"
     >
-      <SidebarContent className={cn("py-4", collapsed ? "px-1" : "px-2")}>
-        {/* Logo */}
-        <div className={cn("mb-6 flex items-center gap-2", collapsed ? "justify-center px-0" : "px-2")}>
+      {/* Logo - Static Header */}
+      <SidebarHeader className={cn("py-4 border-b border-border", collapsed ? "px-1" : "px-2")}>
+        <div className={cn("flex items-center gap-2", collapsed ? "justify-center px-0" : "px-2")}>
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
             <Users className="w-4 h-4 text-primary-foreground" />
           </div>
@@ -289,7 +290,9 @@ export function DashboardSidebar() {
             <span className="font-display font-bold text-lg text-foreground">NexHR</span>
           )}
         </div>
+      </SidebarHeader>
 
+      <SidebarContent className={cn("py-4", collapsed ? "px-1" : "px-2")}>
         {/* Main Menu */}
         <SidebarGroup>
           <SidebarGroupContent>
