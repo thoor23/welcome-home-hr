@@ -94,6 +94,7 @@ const menuGroups: MenuGroup[] = [
         subItems: [
           { title: "Payslips", url: "/ess/payroll/payslips", icon: Receipt },
           { title: "Salary Details", url: "/ess/payroll/salary", icon: FileBarChart },
+          { title: "Tax Documents", url: "/ess/payroll/tax", icon: FileText },
         ],
       },
       {

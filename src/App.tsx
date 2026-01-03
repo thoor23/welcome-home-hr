@@ -112,6 +112,9 @@ import ESSLeaveRequests from "./pages/ess/LeaveRequests";
 import ESSLeaveHistory from "./pages/ess/LeaveHistory";
 import ESSShiftSchedule from "./pages/ess/ShiftSchedule";
 import ESSShiftSwapRequests from "./pages/ess/ShiftSwapRequests";
+import ESSPayslips from "./pages/ess/Payslips";
+import ESSSalaryDetails from "./pages/ess/SalaryDetails";
+import ESSTaxDocuments from "./pages/ess/TaxDocuments";
 
 const queryClient = new QueryClient();
 
@@ -251,6 +254,10 @@ const App = () => (
             <Route path="/ess/shifts" element={<Navigate to="/ess/shifts/schedule" replace />} />
             <Route path="/ess/shifts/schedule" element={<ESSShiftSchedule />} />
             <Route path="/ess/shifts/swap" element={<ESSShiftSwapRequests />} />
+            <Route path="/ess/payroll" element={<Navigate to="/ess/payroll/payslips" replace />} />
+            <Route path="/ess/payroll/payslips" element={<ESSPayslips />} />
+            <Route path="/ess/payroll/salary" element={<ESSSalaryDetails />} />
+            <Route path="/ess/payroll/tax" element={<ESSTaxDocuments />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
