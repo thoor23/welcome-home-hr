@@ -63,7 +63,6 @@ import {
   Shield,
   Server,
   Webhook,
-  HelpCircle,
   LucideIcon,
 } from "lucide-react";
 import {
@@ -88,14 +87,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 // Types
 interface SubMenuItem {
@@ -115,10 +106,10 @@ interface MenuGroup {
   items: MenuItem[];
 }
 
-// Menu Data - Organized by logical groups
+// Menu Data
 const menuGroups: MenuGroup[] = [
   {
-    label: "People Management",
+    label: "People",
     items: [
       {
         title: "Employees",
@@ -167,7 +158,7 @@ const menuGroups: MenuGroup[] = [
     ],
   },
   {
-    label: "HR Operations",
+    label: "HR",
     items: [
       {
         title: "Recruitment",
@@ -294,7 +285,7 @@ const menuGroups: MenuGroup[] = [
     ],
   },
   {
-    label: "Support & Admin",
+    label: "Support",
     items: [
       {
         title: "Support",
@@ -325,8 +316,8 @@ const menuGroups: MenuGroup[] = [
   },
 ];
 
-// Collapsible Menu Item Component
-function CollapsibleMenuItem({
+// Simple Menu Item Component
+function SimpleMenuItem({
   item,
   collapsed,
   currentPath,
@@ -338,82 +329,34 @@ function CollapsibleMenuItem({
   const isMenuActive = item.subItems.some((sub) => currentPath === sub.url);
   const [isOpen, setIsOpen] = useState(isMenuActive);
 
-  const menuButton = (
-    <SidebarMenuButton
-      isActive={isMenuActive}
-      className={cn(
-        "rounded-lg transition-all duration-200 w-full group/menu-btn",
-        isMenuActive
-          ? "bg-primary/10 text-primary border-l-2 border-primary"
-          : "hover:bg-muted/50 border-l-2 border-transparent"
-      )}
-    >
-      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-        <item.icon className={cn("h-4 w-4 flex-shrink-0", isMenuActive && "text-primary")} />
-        {!collapsed && (
-          <>
-            <span className="flex-1 truncate text-sm font-medium">{item.title}</span>
-            <ChevronDown
-              className={cn(
-                "h-4 w-4 flex-shrink-0 transition-transform duration-200 text-muted-foreground",
-                isOpen && "rotate-180"
-              )}
-            />
-          </>
-        )}
-      </div>
-    </SidebarMenuButton>
-  );
-
   if (collapsed) {
     return (
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <SidebarMenuItem>{menuButton}</SidebarMenuItem>
-          </TooltipTrigger>
-          <TooltipContent side="right" className="flex flex-col gap-1 p-2">
-            <span className="font-semibold">{item.title}</span>
-            <Separator className="my-1" />
-            {item.subItems.map((sub) => (
-              <Link
-                key={sub.url}
-                to={sub.url}
-                className={cn(
-                  "text-xs py-1 px-2 rounded hover:bg-muted/50 transition-colors",
-                  currentPath === sub.url && "bg-primary/10 text-primary"
-                )}
-              >
-                {sub.title}
-              </Link>
-            ))}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <SidebarMenuItem>
+        <SidebarMenuButton className={cn(isMenuActive && "bg-muted")}>
+          <item.icon className="h-4 w-4" />
+        </SidebarMenuButton>
+      </SidebarMenuItem>
     );
   }
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="group/collapsible">
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <SidebarMenuItem>
-        <CollapsibleTrigger asChild>{menuButton}</CollapsibleTrigger>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton className={cn(isMenuActive && "bg-muted font-medium")}>
+            <item.icon className="h-4 w-4" />
+            <span className="flex-1">{item.title}</span>
+            <ChevronDown className={cn("h-4 w-4", isOpen && "rotate-180")} />
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
         <CollapsibleContent>
-          <SidebarMenuSub className="ml-4 border-l border-border/50 pl-2 mt-1">
+          <SidebarMenuSub>
             {item.subItems.map((sub) => (
               <SidebarMenuSubItem key={sub.url}>
-                <SidebarMenuSubButton
-                  asChild
-                  isActive={currentPath === sub.url}
-                  className={cn(
-                    "rounded-md transition-all duration-200",
-                    currentPath === sub.url
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "hover:bg-muted/50 text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  <Link to={sub.url} className="flex items-center gap-2">
+                <SidebarMenuSubButton asChild className={cn(currentPath === sub.url && "bg-muted font-medium")}>
+                  <Link to={sub.url}>
                     <sub.icon className="h-3.5 w-3.5" />
-                    <span className="text-sm">{sub.title}</span>
+                    <span>{sub.title}</span>
                   </Link>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
@@ -432,90 +375,46 @@ export function DashboardSidebar() {
   const currentPath = location.pathname;
 
   return (
-    <Sidebar
-      className={cn(
-        "border-r border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300",
-        collapsed ? "w-16" : "w-64"
-      )}
-      collapsible="icon"
-    >
-      {/* Logo - Static Header */}
-      <SidebarHeader className={cn("py-4 border-b border-border/50", collapsed ? "px-2" : "px-4")}>
-        <div className={cn("flex items-center gap-3", collapsed ? "justify-center" : "")}>
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center flex-shrink-0 shadow-md shadow-primary/20">
-            <Users className="w-5 h-5 text-primary-foreground" />
+    <Sidebar className={cn("border-r border-border bg-card", collapsed ? "w-16" : "w-60")} collapsible="icon">
+      {/* Header */}
+      <SidebarHeader className={cn("p-4 border-b border-border", collapsed && "p-2")}>
+        <div className={cn("flex items-center gap-2", collapsed && "justify-center")}>
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <Users className="w-4 h-4 text-primary-foreground" />
           </div>
-          {!collapsed && (
-            <div className="flex flex-col">
-              <span className="font-display font-bold text-lg text-foreground leading-tight">NexHR</span>
-              <span className="text-[10px] text-muted-foreground font-medium tracking-wide">HR Management</span>
-            </div>
-          )}
+          {!collapsed && <span className="font-bold text-lg">NexHR</span>}
         </div>
       </SidebarHeader>
 
-      <SidebarContent className={cn("py-3", collapsed ? "px-1" : "px-2")}>
-        {/* Dashboard - Main */}
+      <SidebarContent className="p-2">
+        {/* Dashboard */}
         <SidebarGroup>
-          {!collapsed && (
-            <SidebarGroupLabel className="px-3 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-1">
-              Main
-            </SidebarGroupLabel>
-          )}
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <TooltipProvider delayDuration={0}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={currentPath === "/admin/dashboard"}
-                        className={cn(
-                          "rounded-lg transition-all duration-200",
-                          currentPath === "/admin/dashboard"
-                            ? "bg-primary text-primary-foreground shadow-md shadow-primary/25 hover:bg-primary/90"
-                            : "hover:bg-muted/50"
-                        )}
-                      >
-                        <Link to="/admin/dashboard" className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
-                          <LayoutDashboard className="h-4 w-4 flex-shrink-0" />
-                          {!collapsed && <span className="font-medium">Dashboard</span>}
-                        </Link>
-                      </SidebarMenuButton>
-                    </TooltipTrigger>
-                    {collapsed && (
-                      <TooltipContent side="right">Dashboard</TooltipContent>
-                    )}
-                  </Tooltip>
-                </TooltipProvider>
+                <SidebarMenuButton asChild className={cn(currentPath === "/admin/dashboard" && "bg-primary text-primary-foreground")}>
+                  <Link to="/admin/dashboard" className={cn("flex items-center gap-2", collapsed && "justify-center")}>
+                    <LayoutDashboard className="h-4 w-4" />
+                    {!collapsed && <span>Dashboard</span>}
+                  </Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
         {/* Menu Groups */}
-        {menuGroups.map((group, groupIndex) => (
-          <SidebarGroup key={group.label} className={groupIndex > 0 ? "mt-2" : ""}>
+        {menuGroups.map((group) => (
+          <SidebarGroup key={group.label}>
             {!collapsed && (
-              <SidebarGroupLabel className="px-3 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-1">
+              <SidebarGroupLabel className="text-xs text-muted-foreground uppercase">
                 {group.label}
               </SidebarGroupLabel>
             )}
-            {collapsed && groupIndex > 0 && (
-              <div className="mx-2 my-2">
-                <Separator className="bg-border/30" />
-              </div>
-            )}
             <SidebarGroupContent>
-              <SidebarMenu className="space-y-0.5">
+              <SidebarMenu>
                 {group.items.map((item) => (
-                  <CollapsibleMenuItem
-                    key={item.title}
-                    item={item}
-                    collapsed={collapsed}
-                    currentPath={currentPath}
-                  />
+                  <SimpleMenuItem key={item.title} item={item} collapsed={collapsed} currentPath={currentPath} />
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
@@ -523,83 +422,28 @@ export function DashboardSidebar() {
         ))}
 
         {/* Settings */}
-        <SidebarGroup className="mt-2">
-          {!collapsed && (
-            <SidebarGroupLabel className="px-3 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-1">
-              System
-            </SidebarGroupLabel>
-          )}
+        <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <TooltipProvider delayDuration={0}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={currentPath === "/admin/settings"}
-                        className={cn(
-                          "rounded-lg transition-all duration-200",
-                          currentPath === "/admin/settings"
-                            ? "bg-primary/10 text-primary border-l-2 border-primary"
-                            : "hover:bg-muted/50 border-l-2 border-transparent"
-                        )}
-                      >
-                        <Link to="/admin/settings" className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
-                          <Settings className="h-4 w-4 flex-shrink-0" />
-                          {!collapsed && <span className="text-sm font-medium">Settings</span>}
-                        </Link>
-                      </SidebarMenuButton>
-                    </TooltipTrigger>
-                    {collapsed && (
-                      <TooltipContent side="right">Settings</TooltipContent>
-                    )}
-                  </Tooltip>
-                </TooltipProvider>
+                <SidebarMenuButton asChild className={cn(currentPath === "/admin/settings" && "bg-muted font-medium")}>
+                  <Link to="/admin/settings" className={cn("flex items-center gap-2", collapsed && "justify-center")}>
+                    <Settings className="h-4 w-4" />
+                    {!collapsed && <span>Settings</span>}
+                  </Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
-      {/* Footer - Static */}
-      <SidebarFooter className={cn("py-3 border-t border-border/50", collapsed ? "px-2" : "px-3")}>
-        <div className={cn("flex items-center gap-3", collapsed ? "justify-center" : "")}>
-          <Avatar className="h-8 w-8 border-2 border-primary/20">
-            <AvatarImage src="" />
-            <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">AD</AvatarFallback>
-          </Avatar>
-          {!collapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">Admin User</p>
-              <p className="text-xs text-muted-foreground truncate">admin@nexhr.com</p>
-            </div>
-          )}
-          {!collapsed && (
-            <div className="flex gap-1">
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button className="p-1.5 rounded-md hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground">
-                      <HelpCircle className="h-4 w-4" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">Help</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button className="p-1.5 rounded-md hover:bg-destructive/10 transition-colors text-muted-foreground hover:text-destructive">
-                      <LogOut className="h-4 w-4" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">Logout</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          )}
-        </div>
+      {/* Footer */}
+      <SidebarFooter className={cn("p-3 border-t border-border", collapsed && "p-2")}>
+        <SidebarMenuButton className={cn("w-full", collapsed && "justify-center")}>
+          <LogOut className="h-4 w-4" />
+          {!collapsed && <span>Logout</span>}
+        </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>
   );
