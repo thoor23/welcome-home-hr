@@ -11,7 +11,6 @@ import {
   FileText,
   Package,
   Headphones,
-  Settings,
   ChevronDown,
   BarChart3,
   ClipboardList,
@@ -386,65 +385,6 @@ export function ESSSidebar() {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className={cn(
-        "border-t border-border p-3 shrink-0",
-        collapsed && "flex flex-col items-center"
-      )}>
-        {collapsed ? (
-          <div className="space-y-2">
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
-                <Link
-                  to="/ess/profile"
-                  className="flex items-center justify-center w-10 h-10 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
-                >
-                  <User className="h-5 w-5" />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">My Profile</TooltipContent>
-            </Tooltip>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
-                <Link
-                  to="/ess/settings"
-                  className="flex items-center justify-center w-10 h-10 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
-                >
-                  <Settings className="h-5 w-5" />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Settings</TooltipContent>
-            </Tooltip>
-          </div>
-        ) : (
-          <div className="space-y-1">
-            <Link
-              to="/ess/profile"
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
-                currentPath === "/ess/profile"
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
-              <User className="h-4 w-4" />
-              <span>My Profile</span>
-            </Link>
-            <Link
-              to="/ess/settings"
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
-                currentPath === "/ess/settings"
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
-              <Settings className="h-4 w-4" />
-              <span>Settings</span>
-            </Link>
-          </div>
-        )}
-      </div>
     </aside>
   );
 }
