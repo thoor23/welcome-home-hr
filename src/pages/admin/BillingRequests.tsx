@@ -151,153 +151,98 @@ const BillingRequests = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground">Budget Requests</h1>
-                  <p className="text-muted-foreground">Create and manage budget/fund requests from branches</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Budget Requests</h1>
+          <p className="text-muted-foreground mt-1">Create and manage budget/fund requests from branches</p>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              New Request
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Create Budget Request</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Branch/Location</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select branch" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="del">Delhi Branch</SelectItem>
+                    <SelectItem value="blr">Bangalore Hub</SelectItem>
+                    <SelectItem value="mum">Mumbai Store</SelectItem>
+                    <SelectItem value="pun">Pune Warehouse</SelectItem>
+                    <SelectItem value="chn">Chennai Factory</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Request Type</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="salary">Salary Budget</SelectItem>
+                    <SelectItem value="expense">Operational Expense</SelectItem>
+                    <SelectItem value="resource">Resource/Equipment</SelectItem>
+                    <SelectItem value="it">IT Requirements</SelectItem>
+                    <SelectItem value="maintenance">Maintenance</SelectItem>
+                    <SelectItem value="utilities">Utilities</SelectItem>
+                    <SelectItem value="marketing">Marketing</SelectItem>
+                    <SelectItem value="training">Training & Development</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Description/Purpose</Label>
+                <Textarea placeholder="Describe the purpose of this request..." />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Amount (₹)</Label>
+                  <Input type="number" placeholder="0" />
                 </div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="h-4 w-4 mr-2" />
-                      New Request
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-lg">
-                    <DialogHeader>
-                      <DialogTitle>Create Budget Request</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 py-4">
-                      <div className="space-y-2">
-                        <Label>Branch/Location</Label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select branch" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="del">Delhi Branch</SelectItem>
-                            <SelectItem value="blr">Bangalore Hub</SelectItem>
-                            <SelectItem value="mum">Mumbai Store</SelectItem>
-                            <SelectItem value="pun">Pune Warehouse</SelectItem>
-                            <SelectItem value="chn">Chennai Factory</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Request Type</Label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="salary">Salary Budget</SelectItem>
-                            <SelectItem value="expense">Operational Expense</SelectItem>
-                            <SelectItem value="resource">Resource/Equipment</SelectItem>
-                            <SelectItem value="it">IT Requirements</SelectItem>
-                            <SelectItem value="maintenance">Maintenance</SelectItem>
-                            <SelectItem value="utilities">Utilities</SelectItem>
-                            <SelectItem value="marketing">Marketing</SelectItem>
-                            <SelectItem value="training">Training & Development</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Description/Purpose</Label>
-                        <Textarea placeholder="Describe the purpose of this request..." />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label>Amount (₹)</Label>
-                          <Input type="number" placeholder="0" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Priority</Label>
-                          <Select>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select priority" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="high">High</SelectItem>
-                              <SelectItem value="medium">Medium</SelectItem>
-                              <SelectItem value="low">Low</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Required By Date</Label>
-                        <Input type="date" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Supporting Notes (Optional)</Label>
-                        <Textarea placeholder="Any additional notes..." />
-                      </div>
-                      <div className="flex justify-end gap-2">
-                        <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-                        <Button onClick={() => setIsDialogOpen(false)}>Submit Request</Button>
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <div className="space-y-2">
+                  <Label>Priority</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select priority" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Requests</CardTitle>
-                    <Receipt className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{stats.totalRequests}</div>
-                    <p className="text-xs text-muted-foreground">This month</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Pending Approval</CardTitle>
-                    <Clock className="h-4 w-4 text-yellow-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{stats.pending}</div>
-                    <p className="text-xs text-muted-foreground">Awaiting review</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Approved Amount</CardTitle>
-                    <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">₹{(stats.approvedAmount / 100000).toFixed(1)}L</div>
-                    <p className="text-xs text-muted-foreground">This month</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Rejected</CardTitle>
-                    <XCircle className="h-4 w-4 text-rose-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{stats.rejected}</div>
-                    <p className="text-xs text-muted-foreground">This month</p>
-                  </CardContent>
-                </Card>
+              <div className="space-y-2">
+                <Label>Required By Date</Label>
+                <Input type="date" />
               </div>
-
-              {/* Data Table */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>All Requests</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <DataTable columns={columns} data={mockRequests} />
-                </CardContent>
-            </Card>
+              <div className="space-y-2">
+                <Label>Supporting Notes (Optional)</Label>
+                <Textarea placeholder="Any additional notes..." />
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+                <Button onClick={() => setIsDialogOpen(false)}>Submit Request</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
+
+      <DataTable columns={columns} data={mockRequests} />
     </AdminLayout>
   );
 };

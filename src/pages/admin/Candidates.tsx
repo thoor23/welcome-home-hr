@@ -300,135 +300,114 @@ export default function Candidates() {
 
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground">Candidates</h1>
-                  <p className="text-muted-foreground">Manage candidate pool and talent database</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Candidates</h1>
+          <p className="text-muted-foreground mt-1">Manage candidate pool and talent database</p>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Candidate
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Add Candidate</DialogTitle>
+              <DialogDescription>
+                Add a new candidate to the talent pool
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="John Doe"
+                  />
                 </div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Candidate
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-lg">
-                    <DialogHeader>
-                      <DialogTitle>Add Candidate</DialogTitle>
-                      <DialogDescription>
-                        Add a new candidate to the talent pool
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="name">Full Name</Label>
-                          <Input
-                            id="name"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            placeholder="John Doe"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="email">Email</Label>
-                          <Input
-                            id="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            placeholder="john@email.com"
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="phone">Phone</Label>
-                          <Input
-                            id="phone"
-                            value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            placeholder="+1 (555) 000-0000"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="experience">Experience (years)</Label>
-                          <Input
-                            id="experience"
-                            type="number"
-                            value={formData.experience}
-                            onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                            placeholder="5"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="skills">Skills (comma separated)</Label>
-                        <Input
-                          id="skills"
-                          value={formData.skills}
-                          onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
-                          placeholder="React, TypeScript, Node.js"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="currentCompany">Current Company</Label>
-                          <Input
-                            id="currentCompany"
-                            value={formData.currentCompany}
-                            onChange={(e) => setFormData({ ...formData, currentCompany: e.target.value })}
-                            placeholder="Company name"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="expectedSalary">Expected Salary</Label>
-                          <Input
-                            id="expectedSalary"
-                            value={formData.expectedSalary}
-                            onChange={(e) => setFormData({ ...formData, expectedSalary: e.target.value })}
-                            placeholder="$100k"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button onClick={handleSubmit}>Add Candidate</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="john@email.com"
+                  />
+                </div>
               </div>
-
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {statsData.map((stat) => (
-                  <Card key={stat.title}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-muted-foreground">{stat.title}</p>
-                          <p className="text-2xl font-bold">{stat.value}</p>
-                        </div>
-                        <stat.icon className={`h-8 w-8 ${stat.color}`} />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    id="phone"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+1 (555) 000-0000"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="experience">Experience (years)</Label>
+                  <Input
+                    id="experience"
+                    type="number"
+                    value={formData.experience}
+                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                    placeholder="5"
+                  />
+                </div>
               </div>
-
-              {/* Data Table */}
-              <DataTable
-                data={candidates}
-                columns={columns}
-                filters={filters}
-                searchPlaceholder="Search candidates..."
-            />
+              <div className="space-y-2">
+                <Label htmlFor="skills">Skills (comma separated)</Label>
+                <Input
+                  id="skills"
+                  value={formData.skills}
+                  onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+                  placeholder="React, TypeScript, Node.js"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="currentCompany">Current Company</Label>
+                  <Input
+                    id="currentCompany"
+                    value={formData.currentCompany}
+                    onChange={(e) => setFormData({ ...formData, currentCompany: e.target.value })}
+                    placeholder="Company name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="expectedSalary">Expected Salary</Label>
+                  <Input
+                    id="expectedSalary"
+                    value={formData.expectedSalary}
+                    onChange={(e) => setFormData({ ...formData, expectedSalary: e.target.value })}
+                    placeholder="$100k"
+                  />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit}>Add Candidate</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
+
+      <DataTable
+        data={candidates}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search candidates..."
+      />
     </AdminLayout>
   );
 }

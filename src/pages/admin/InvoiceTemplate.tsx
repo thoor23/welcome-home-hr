@@ -44,20 +44,18 @@ const InvoiceTemplate = () => {
   };
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground">Invoice Templates</h1>
-                  <p className="text-muted-foreground">Manage and customize invoice templates for internal billing</p>
-                </div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create Template
-                    </Button>
-                  </DialogTrigger>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Invoice Templates</h1>
+          <p className="text-muted-foreground mt-1">Manage and customize invoice templates for internal billing</p>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Template
+            </Button>
+          </DialogTrigger>
                   <DialogContent className="max-w-2xl">
                     <DialogHeader>
                       <DialogTitle>Create New Template</DialogTitle>
@@ -126,12 +124,12 @@ const InvoiceTemplate = () => {
                         </Button>
                       </div>
                     </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
+          </DialogContent>
+        </Dialog>
+      </div>
 
-              {/* Templates Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Templates Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 {templates.map((template) => (
                   <Card key={template.id} className={template.isDefault ? "border-primary" : ""}>
                     <CardHeader>
@@ -185,17 +183,17 @@ const InvoiceTemplate = () => {
                         </Button>
                       )}
                     </CardContent>
-                  </Card>
-                ))}
-              </div>
+        </Card>
+      ))}
+      </div>
 
-              {/* Preview Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Invoice Preview</CardTitle>
-                  <CardDescription>Preview of the currently selected default template</CardDescription>
-                </CardHeader>
-                <CardContent>
+      {/* Preview Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Invoice Preview</CardTitle>
+          <CardDescription>Preview of the currently selected default template</CardDescription>
+        </CardHeader>
+        <CardContent>
                   <div className="bg-muted/50 rounded-lg p-8 min-h-[500px]">
                     <div className="bg-background rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
                       {/* Invoice Header */}
@@ -316,16 +314,15 @@ const InvoiceTemplate = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-center mt-4">
-                    <Button>
-                      <Download className="h-4 w-4 mr-2" />
-                      Download Sample PDF
-                    </Button>
+          <div className="flex justify-center mt-4">
+            <Button>
+              <Download className="h-4 w-4 mr-2" />
+              Download Sample PDF
+            </Button>
           </div>
         </CardContent>
       </Card>
-    </div>
-  </AdminLayout>
+    </AdminLayout>
   );
 };
 

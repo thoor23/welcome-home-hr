@@ -65,59 +65,15 @@ const GenerateInvoice = () => {
   };
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Generate Invoice</h1>
-          <p className="text-muted-foreground">Create invoices for approved budget requests</p>
+          <h1 className="text-3xl font-bold text-foreground font-display">Generate Invoice</h1>
+          <p className="text-muted-foreground mt-1">Create invoices for approved budget requests</p>
         </div>
+      </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Invoices Generated</CardTitle>
-                    <Receipt className="h-4 w-4 text-primary" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">24</div>
-                    <p className="text-xs text-muted-foreground">This month</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Pending Invoices</CardTitle>
-                    <Clock className="h-4 w-4 text-yellow-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">5</div>
-                    <p className="text-xs text-muted-foreground">Awaiting payment</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Invoice Amount</CardTitle>
-                    <Wallet className="h-4 w-4 text-emerald-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">₹45.2L</div>
-                    <p className="text-xs text-muted-foreground">This month</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Paid Invoices</CardTitle>
-                    <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">19</div>
-                    <p className="text-xs text-muted-foreground">This month</p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Invoice Form */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Invoice Form */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                   <Card>
                     <CardHeader>
@@ -337,13 +293,12 @@ const GenerateInvoice = () => {
                       <p><span className="text-muted-foreground">Invoice No:</span> INV-2026-025</p>
                       <p><span className="text-muted-foreground">Created By:</span> Admin User</p>
                       <p><span className="text-muted-foreground">Status:</span> Draft</p>
-                  </CardContent>
-                </Card>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
-        </AdminLayout>
-      );
+    </AdminLayout>
+  );
 };
 
 export default GenerateInvoice;

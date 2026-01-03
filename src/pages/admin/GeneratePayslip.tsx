@@ -206,90 +206,69 @@ const GeneratePayslip = () => {
   ];
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Generate Payslip</h1>
-          <p className="text-muted-foreground">Generate and manage employee payslips</p>
+          <h1 className="text-3xl font-bold text-foreground font-display">Generate Payslip</h1>
+          <p className="text-muted-foreground mt-1">Generate and manage employee payslips</p>
         </div>
-
-              <Tabs defaultValue="generate" className="space-y-4">
-                <TabsList>
-                  <TabsTrigger value="generate">Generate Payslip</TabsTrigger>
-                  <TabsTrigger value="requests">
-                    Payslip Requests
-                    <Badge variant="secondary" className="ml-2">
-                      {requests.filter(r => r.status === "pending").length}
-                    </Badge>
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="generate" className="space-y-4">
-                  {/* Filters */}
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex flex-wrap items-center gap-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">Month:</span>
-                          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                            <SelectTrigger className="w-[140px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map(month => (
-                                <SelectItem key={month} value={month}>{month}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">Year:</span>
-                          <Select value={selectedYear} onValueChange={setSelectedYear}>
-                            <SelectTrigger className="w-[100px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="2024">2024</SelectItem>
-                              <SelectItem value="2023">2023</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="flex-1" />
-                        <Button variant="outline" disabled={selectedEmployees.length === 0}>
-                          <FileText className="h-4 w-4 mr-2" />
-                          Generate Selected ({selectedEmployees.length})
-                        </Button>
-                        <Button disabled={selectedEmployees.length === 0}>
-                          <Send className="h-4 w-4 mr-2" />
-                          Generate & Send
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Employee Table */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Employees - {selectedMonth} {selectedYear}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <DataTable columns={employeeColumns} data={employees} />
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="requests" className="space-y-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Employee Payslip Requests</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <DataTable columns={requestColumns} data={requests} />
-                    </CardContent>
-                  </Card>
-          </TabsContent>
-        </Tabs>
       </div>
+
+      <Tabs defaultValue="generate" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="generate">Generate Payslip</TabsTrigger>
+          <TabsTrigger value="requests">
+            Payslip Requests
+            <Badge variant="secondary" className="ml-2">
+              {requests.filter(r => r.status === "pending").length}
+            </Badge>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="generate" className="space-y-4">
+          <div className="flex flex-wrap items-center gap-4 p-4 border rounded-lg bg-card">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Month:</span>
+              <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map(month => (
+                    <SelectItem key={month} value={month}>{month}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Year:</span>
+              <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <SelectTrigger className="w-[100px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="2024">2024</SelectItem>
+                  <SelectItem value="2023">2023</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex-1" />
+            <Button variant="outline" disabled={selectedEmployees.length === 0}>
+              <FileText className="h-4 w-4 mr-2" />
+              Generate Selected ({selectedEmployees.length})
+            </Button>
+            <Button disabled={selectedEmployees.length === 0}>
+              <Send className="h-4 w-4 mr-2" />
+              Generate & Send
+            </Button>
+          </div>
+
+          <DataTable columns={employeeColumns} data={employees} />
+        </TabsContent>
+
+        <TabsContent value="requests" className="space-y-4">
+          <DataTable columns={requestColumns} data={requests} />
+        </TabsContent>
+      </Tabs>
     </AdminLayout>
   );
 };

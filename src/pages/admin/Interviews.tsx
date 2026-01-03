@@ -361,205 +361,184 @@ export default function Interviews() {
   };
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground">Interviews</h1>
-                  <p className="text-muted-foreground">Schedule and manage candidate interviews</p>
-                </div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Schedule Interview
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-lg">
-                    <DialogHeader>
-                      <DialogTitle>Schedule Interview</DialogTitle>
-                      <DialogDescription>
-                        Schedule a new interview with a candidate
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="candidate">Candidate</Label>
-                          <Select
-                            value={formData.candidate}
-                            onValueChange={(value) => setFormData({ ...formData, candidate: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select candidate" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="john">John Smith</SelectItem>
-                              <SelectItem value="emily">Emily Johnson</SelectItem>
-                              <SelectItem value="michael">Michael Chen</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="jobTitle">Job Title</Label>
-                          <Select
-                            value={formData.jobTitle}
-                            onValueChange={(value) => setFormData({ ...formData, jobTitle: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select job" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="swe">Senior Software Engineer</SelectItem>
-                              <SelectItem value="pm">Product Manager</SelectItem>
-                              <SelectItem value="designer">UI/UX Designer</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="interviewType">Interview Type</Label>
-                          <Select
-                            value={formData.interviewType}
-                            onValueChange={(value) => setFormData({ ...formData, interviewType: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="video">Video Call</SelectItem>
-                              <SelectItem value="phone">Phone Call</SelectItem>
-                              <SelectItem value="inperson">In-person</SelectItem>
-                              <SelectItem value="technical">Technical</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="round">Round</Label>
-                          <Select
-                            value={formData.round}
-                            onValueChange={(value) => setFormData({ ...formData, round: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select round" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="hr">HR Round</SelectItem>
-                              <SelectItem value="technical">Technical Round</SelectItem>
-                              <SelectItem value="final">Final Round</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="date">Date</Label>
-                          <Input
-                            id="date"
-                            type="date"
-                            value={formData.date}
-                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="time">Time</Label>
-                          <Input
-                            id="time"
-                            type="time"
-                            value={formData.time}
-                            onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="duration">Duration</Label>
-                          <Select
-                            value={formData.duration}
-                            onValueChange={(value) => setFormData({ ...formData, duration: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Duration" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="30">30 mins</SelectItem>
-                              <SelectItem value="45">45 mins</SelectItem>
-                              <SelectItem value="60">1 hour</SelectItem>
-                              <SelectItem value="90">1.5 hours</SelectItem>
-                              <SelectItem value="120">2 hours</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="interviewers">Interviewers</Label>
-                        <Input
-                          id="interviewers"
-                          value={formData.interviewers}
-                          onChange={(e) => setFormData({ ...formData, interviewers: e.target.value })}
-                          placeholder="Names separated by commas"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="location">Location / Meeting Link</Label>
-                        <Input
-                          id="location"
-                          value={formData.location}
-                          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                          placeholder="e.g. Google Meet, Conference Room A"
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button onClick={handleSubmit}>Schedule</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </div>
-
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {statsData.map((stat) => (
-                  <Card key={stat.title}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-muted-foreground">{stat.title}</p>
-                          <p className="text-2xl font-bold">{stat.value}</p>
-                        </div>
-                        <stat.icon className={`h-8 w-8 ${stat.color}`} />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Tabs */}
-              <Tabs defaultValue="upcoming" className="space-y-4">
-                <TabsList>
-                  <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-                  <TabsTrigger value="completed">Completed</TabsTrigger>
-                </TabsList>
-                <TabsContent value="upcoming">
-                  <DataTable
-                    data={upcomingInterviews}
-                    columns={columns}
-                    filters={filters}
-                    searchPlaceholder="Search interviews..."
-                  />
-                </TabsContent>
-                <TabsContent value="completed">
-                  <DataTable
-                    data={completedInterviews}
-                    columns={columns}
-                    filters={filters}
-                    searchPlaceholder="Search interviews..."
-                  />
-            </TabsContent>
-          </Tabs>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Interviews</h1>
+          <p className="text-muted-foreground mt-1">Schedule and manage candidate interviews</p>
         </div>
-      </AdminLayout>
-    );
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Schedule Interview
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Schedule Interview</DialogTitle>
+              <DialogDescription>
+                Schedule a new interview with a candidate
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="candidate">Candidate</Label>
+                  <Select
+                    value={formData.candidate}
+                    onValueChange={(value) => setFormData({ ...formData, candidate: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select candidate" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="john">John Smith</SelectItem>
+                      <SelectItem value="emily">Emily Johnson</SelectItem>
+                      <SelectItem value="michael">Michael Chen</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="jobTitle">Job Title</Label>
+                  <Select
+                    value={formData.jobTitle}
+                    onValueChange={(value) => setFormData({ ...formData, jobTitle: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select job" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="swe">Senior Software Engineer</SelectItem>
+                      <SelectItem value="pm">Product Manager</SelectItem>
+                      <SelectItem value="designer">UI/UX Designer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="interviewType">Interview Type</Label>
+                  <Select
+                    value={formData.interviewType}
+                    onValueChange={(value) => setFormData({ ...formData, interviewType: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="video">Video Call</SelectItem>
+                      <SelectItem value="phone">Phone Call</SelectItem>
+                      <SelectItem value="inperson">In-person</SelectItem>
+                      <SelectItem value="technical">Technical</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="round">Round</Label>
+                  <Select
+                    value={formData.round}
+                    onValueChange={(value) => setFormData({ ...formData, round: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select round" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="hr">HR Round</SelectItem>
+                      <SelectItem value="technical">Technical Round</SelectItem>
+                      <SelectItem value="final">Final Round</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="date">Date</Label>
+                  <Input
+                    id="date"
+                    type="date"
+                    value={formData.date}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="time">Time</Label>
+                  <Input
+                    id="time"
+                    type="time"
+                    value={formData.time}
+                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="duration">Duration</Label>
+                  <Select
+                    value={formData.duration}
+                    onValueChange={(value) => setFormData({ ...formData, duration: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Duration" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="30">30 mins</SelectItem>
+                      <SelectItem value="45">45 mins</SelectItem>
+                      <SelectItem value="60">1 hour</SelectItem>
+                      <SelectItem value="90">1.5 hours</SelectItem>
+                      <SelectItem value="120">2 hours</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="interviewers">Interviewers</Label>
+                <Input
+                  id="interviewers"
+                  value={formData.interviewers}
+                  onChange={(e) => setFormData({ ...formData, interviewers: e.target.value })}
+                  placeholder="Names separated by commas"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="location">Location / Meeting Link</Label>
+                <Input
+                  id="location"
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  placeholder="e.g. Google Meet, Conference Room A"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit}>Schedule</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <Tabs defaultValue="upcoming" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+          <TabsTrigger value="completed">Completed</TabsTrigger>
+        </TabsList>
+        <TabsContent value="upcoming">
+          <DataTable
+            data={upcomingInterviews}
+            columns={columns}
+            filters={filters}
+            searchPlaceholder="Search interviews..."
+          />
+        </TabsContent>
+        <TabsContent value="completed">
+          <DataTable
+            data={completedInterviews}
+            columns={columns}
+            filters={filters}
+            searchPlaceholder="Search interviews..."
+          />
+        </TabsContent>
+      </Tabs>
+    </AdminLayout>
+  );
 }

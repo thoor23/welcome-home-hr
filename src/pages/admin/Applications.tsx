@@ -259,38 +259,19 @@ export default function Applications() {
 
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Applications</h1>
-                <p className="text-muted-foreground">Track and manage all job applications</p>
-              </div>
-
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {statsData.map((stat) => (
-                  <Card key={stat.title}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-muted-foreground">{stat.title}</p>
-                          <p className="text-2xl font-bold">{stat.value}</p>
-                        </div>
-                        <stat.icon className={`h-8 w-8 ${stat.color}`} />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Data Table */}
-              <DataTable
-                data={applications}
-                columns={columns}
-                filters={filters}
-                searchPlaceholder="Search applications..."
-              />
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Applications</h1>
+          <p className="text-muted-foreground mt-1">Track and manage all job applications</p>
+        </div>
       </div>
+
+      <DataTable
+        data={applications}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search applications..."
+      />
     </AdminLayout>
   );
 }
