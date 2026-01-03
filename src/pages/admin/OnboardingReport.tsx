@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Download, Users, Clock, TrendingUp, FileText } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -13,21 +13,15 @@ import {
 import { DataTable, Column } from "@/components/ui/data-table";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { toast } from "sonner";
+import { Pie, PieChart, Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 
 interface DepartmentSummary {
   id: string;
@@ -39,12 +33,21 @@ interface DepartmentSummary {
 }
 
 const onboardingByDepartment = [
-  { name: "Engineering", value: 25, color: "hsl(var(--chart-1))" },
-  { name: "Marketing", value: 12, color: "hsl(var(--chart-2))" },
-  { name: "Operations", value: 15, color: "hsl(var(--chart-3))" },
-  { name: "HR", value: 8, color: "hsl(var(--chart-4))" },
-  { name: "Finance", value: 10, color: "hsl(var(--chart-5))" },
+  { department: "engineering", value: 25, fill: "var(--color-engineering)" },
+  { department: "marketing", value: 12, fill: "var(--color-marketing)" },
+  { department: "operations", value: 15, fill: "var(--color-operations)" },
+  { department: "hr", value: 8, fill: "var(--color-hr)" },
+  { department: "finance", value: 10, fill: "var(--color-finance)" },
 ];
+
+const departmentConfig = {
+  value: { label: "Onboardings" },
+  engineering: { label: "Engineering", color: "hsl(var(--chart-1))" },
+  marketing: { label: "Marketing", color: "hsl(var(--chart-2))" },
+  operations: { label: "Operations", color: "hsl(var(--chart-3))" },
+  hr: { label: "HR", color: "hsl(var(--chart-4))" },
+  finance: { label: "Finance", color: "hsl(var(--chart-5))" },
+} satisfies ChartConfig;
 
 const monthlyTrends = [
   { month: "Jul", onboardings: 8 },
@@ -55,6 +58,10 @@ const monthlyTrends = [
   { month: "Dec", onboardings: 14 },
 ];
 
+const monthlyConfig = {
+  onboardings: { label: "Onboardings", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
+
 const avgCompletionTime = [
   { month: "Jul", days: 12 },
   { month: "Aug", days: 10 },
@@ -64,6 +71,10 @@ const avgCompletionTime = [
   { month: "Dec", days: 7 },
 ];
 
+const completionConfig = {
+  days: { label: "Days", color: "hsl(var(--chart-2))" },
+} satisfies ChartConfig;
+
 const taskCompletionRates = [
   { category: "Documents", rate: 95 },
   { category: "IT Setup", rate: 92 },
@@ -71,6 +82,10 @@ const taskCompletionRates = [
   { category: "HR", rate: 98 },
   { category: "Admin", rate: 88 },
 ];
+
+const taskConfig = {
+  rate: { label: "Completion Rate %", color: "hsl(var(--chart-3))" },
+} satisfies ChartConfig;
 
 const departmentSummaryData: DepartmentSummary[] = [
   { id: "1", department: "Engineering", totalOnboardings: 25, completed: 22, inProgress: 3, avgCompletionDays: 8 },
@@ -136,141 +151,133 @@ const OnboardingReport = () => {
 
   return (
     <AdminLayout>
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground font-display">Onboarding Report</h1>
-                <p className="text-muted-foreground mt-1">Analytics and insights on employee onboarding</p>
-              </div>
-              <Button onClick={handleExport} className="gap-2">
-                <Download className="h-4 w-4" />
-                Export Report
-              </Button>
-            </div>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Onboarding Report</h1>
+          <p className="text-muted-foreground mt-1">Analytics and insights on employee onboarding</p>
+        </div>
+        <Button onClick={handleExport} className="gap-2">
+          <Download className="h-4 w-4" />
+          Export Report
+        </Button>
+      </div>
 
-            {/* Filters */}
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Date Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  {dateRanges.map((range) => (
-                    <SelectItem key={range} value={range}>{range}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
+          <SelectTrigger className="w-[150px]">
+            <SelectValue placeholder="Date Range" />
+          </SelectTrigger>
+          <SelectContent>
+            {dateRanges.map((range) => (
+              <SelectItem key={range} value={range}>{range}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              <StatsCard title="Total Onboardings" value={String(totalOnboardings)} icon={Users} />
-              <StatsCard title="Avg Completion Time" value={`${avgCompletionDays} days`} icon={Clock} />
-              <StatsCard title="On-Time Completion" value={`${onTimeRate}%`} icon={TrendingUp} />
-              <StatsCard title="Pending Documents" value={String(pendingDocuments)} icon={FileText} />
-            </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatsCard title="Total Onboardings" value={String(totalOnboardings)} icon={Users} />
+        <StatsCard title="Avg Completion Time" value={`${avgCompletionDays} days`} icon={Clock} />
+        <StatsCard title="On-Time Completion" value={`${onTimeRate}%`} icon={TrendingUp} />
+        <StatsCard title="Pending Documents" value={String(pendingDocuments)} icon={FileText} />
+      </div>
 
-            {/* Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              {/* Onboarding by Department Pie Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Onboarding by Department</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={onboardingByDepartment}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={5}
-                        dataKey="value"
-                        label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                        labelLine={false}
-                      >
-                        {onboardingByDepartment.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Onboarding by Department Pie Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Onboarding by Department</CardTitle>
+            <CardDescription>Distribution across departments</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={departmentConfig} className="mx-auto aspect-square max-h-[300px]">
+              <PieChart>
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                <Pie data={onboardingByDepartment} dataKey="value" nameKey="department" innerRadius={60} outerRadius={100} strokeWidth={5} />
+                <ChartLegend content={<ChartLegendContent nameKey="department" />} className="-translate-y-2 flex-wrap gap-2" />
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-              {/* Monthly Onboarding Trends Bar Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Monthly Onboarding Trends</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={monthlyTrends}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis dataKey="month" className="text-xs" />
-                      <YAxis className="text-xs" />
-                      <Tooltip />
-                      <Bar dataKey="onboardings" name="Onboardings" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
+        {/* Monthly Onboarding Trends Bar Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Monthly Onboarding Trends</CardTitle>
+            <CardDescription>New hires per month</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={monthlyConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={monthlyTrends}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="onboardings" fill="var(--color-onboardings)" radius={4} />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-              {/* Average Completion Time Trend */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Avg Completion Time Trend</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={avgCompletionTime}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis dataKey="month" className="text-xs" />
-                      <YAxis className="text-xs" />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="days" name="Days" stroke="hsl(var(--chart-2))" strokeWidth={2} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
+        {/* Average Completion Time Trend */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Avg Completion Time Trend</CardTitle>
+            <CardDescription>Days to complete onboarding</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={completionConfig} className="h-[300px] w-full">
+              <LineChart accessibilityLayer data={avgCompletionTime}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Line type="monotone" dataKey="days" stroke="var(--color-days)" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-              {/* Task Completion Rates by Category */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Task Completion by Category</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={taskCompletionRates} layout="vertical">
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis type="number" domain={[0, 100]} className="text-xs" />
-                      <YAxis dataKey="category" type="category" className="text-xs" width={80} />
-                      <Tooltip />
-                      <Bar dataKey="rate" name="Completion Rate %" fill="hsl(var(--chart-3))" radius={[0, 4, 4, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </div>
+        {/* Task Completion Rates by Category */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Task Completion by Category</CardTitle>
+            <CardDescription>Completion rates by task type</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={taskConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={taskCompletionRates} layout="vertical">
+                <CartesianGrid horizontal={false} />
+                <XAxis type="number" domain={[0, 100]} tickLine={false} axisLine={false} />
+                <YAxis dataKey="category" type="category" tickLine={false} axisLine={false} width={80} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="rate" fill="var(--color-rate)" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      </div>
 
-            {/* Department Summary Table */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Department Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <DataTable
-                  data={departmentSummaryData}
-                  columns={columns}
-                  searchPlaceholder="Search departments..."
-                  pageSize={10}
-                  getRowId={(row) => row.id}
-                />
-              </CardContent>
-            </Card>
+      {/* Department Summary Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Department Summary</CardTitle>
+          <CardDescription>Onboarding statistics by department</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            data={departmentSummaryData}
+            columns={columns}
+            searchPlaceholder="Search departments..."
+            pageSize={10}
+            getRowId={(row) => row.id}
+          />
+        </CardContent>
+      </Card>
     </AdminLayout>
   );
 };

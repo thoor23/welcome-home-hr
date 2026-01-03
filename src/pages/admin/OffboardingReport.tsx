@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Download, Users, TrendingDown, Clock, Wallet } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -13,21 +13,15 @@ import {
 import { DataTable, Column } from "@/components/ui/data-table";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { toast } from "sonner";
+import { Pie, PieChart, Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 
 interface DepartmentSummary {
   id: string;
@@ -39,19 +33,36 @@ interface DepartmentSummary {
 }
 
 const exitsByType = [
-  { name: "Resignation", value: 45, color: "hsl(var(--chart-1))" },
-  { name: "Termination", value: 8, color: "hsl(var(--chart-2))" },
-  { name: "Retirement", value: 5, color: "hsl(var(--chart-3))" },
-  { name: "Contract End", value: 12, color: "hsl(var(--chart-4))" },
+  { type: "resignation", value: 45, fill: "var(--color-resignation)" },
+  { type: "termination", value: 8, fill: "var(--color-termination)" },
+  { type: "retirement", value: 5, fill: "var(--color-retirement)" },
+  { type: "contract", value: 12, fill: "var(--color-contract)" },
 ];
 
+const typeConfig = {
+  value: { label: "Exits" },
+  resignation: { label: "Resignation", color: "hsl(var(--chart-1))" },
+  termination: { label: "Termination", color: "hsl(var(--chart-2))" },
+  retirement: { label: "Retirement", color: "hsl(var(--chart-3))" },
+  contract: { label: "Contract End", color: "hsl(var(--chart-4))" },
+} satisfies ChartConfig;
+
 const exitsByDepartment = [
-  { name: "Engineering", value: 20, color: "hsl(var(--chart-1))" },
-  { name: "Marketing", value: 15, color: "hsl(var(--chart-2))" },
-  { name: "Operations", value: 18, color: "hsl(var(--chart-3))" },
-  { name: "HR", value: 5, color: "hsl(var(--chart-4))" },
-  { name: "Finance", value: 12, color: "hsl(var(--chart-5))" },
+  { department: "engineering", value: 20, fill: "var(--color-engineering)" },
+  { department: "marketing", value: 15, fill: "var(--color-marketing)" },
+  { department: "operations", value: 18, fill: "var(--color-operations)" },
+  { department: "hr", value: 5, fill: "var(--color-hr)" },
+  { department: "finance", value: 12, fill: "var(--color-finance)" },
 ];
+
+const deptConfig = {
+  value: { label: "Exits" },
+  engineering: { label: "Engineering", color: "hsl(var(--chart-1))" },
+  marketing: { label: "Marketing", color: "hsl(var(--chart-2))" },
+  operations: { label: "Operations", color: "hsl(var(--chart-3))" },
+  hr: { label: "HR", color: "hsl(var(--chart-4))" },
+  finance: { label: "Finance", color: "hsl(var(--chart-5))" },
+} satisfies ChartConfig;
 
 const monthlyExits = [
   { month: "Jul", exits: 5 },
@@ -62,6 +73,10 @@ const monthlyExits = [
   { month: "Dec", exits: 9 },
 ];
 
+const monthlyConfig = {
+  exits: { label: "Exits", color: "hsl(var(--primary))" },
+} satisfies ChartConfig;
+
 const attritionTrend = [
   { month: "Jul", rate: 2.1 },
   { month: "Aug", rate: 2.5 },
@@ -70,6 +85,10 @@ const attritionTrend = [
   { month: "Nov", rate: 3.0 },
   { month: "Dec", rate: 2.6 },
 ];
+
+const attritionConfig = {
+  rate: { label: "Attrition Rate %", color: "hsl(var(--chart-2))" },
+} satisfies ChartConfig;
 
 const departmentSummaryData: DepartmentSummary[] = [
   { id: "1", department: "Engineering", totalExits: 20, resignations: 15, terminations: 3, avgTenure: 2.5 },
@@ -135,152 +154,131 @@ const OffboardingReport = () => {
 
   return (
     <AdminLayout>
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground font-display">Offboarding Report</h1>
-                <p className="text-muted-foreground mt-1">Analytics and insights on employee exits</p>
-              </div>
-              <Button onClick={handleExport} className="gap-2">
-                <Download className="h-4 w-4" />
-                Export Report
-              </Button>
-            </div>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Offboarding Report</h1>
+          <p className="text-muted-foreground mt-1">Analytics and insights on employee exits</p>
+        </div>
+        <Button onClick={handleExport} className="gap-2">
+          <Download className="h-4 w-4" />
+          Export Report
+        </Button>
+      </div>
 
-            {/* Filters */}
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Date Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  {dateRanges.map((range) => (
-                    <SelectItem key={range} value={range}>{range}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
+          <SelectTrigger className="w-[150px]">
+            <SelectValue placeholder="Date Range" />
+          </SelectTrigger>
+          <SelectContent>
+            {dateRanges.map((range) => (
+              <SelectItem key={range} value={range}>{range}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              <StatsCard title="Total Exits" value={String(totalExits)} icon={Users} />
-              <StatsCard title="Attrition Rate" value={`${attritionRate}%`} icon={TrendingDown} />
-              <StatsCard title="Avg Tenure" value={`${avgTenure} yrs`} icon={Clock} />
-              <StatsCard title="Pending F&F" value={String(pendingFnF)} icon={Wallet} />
-            </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatsCard title="Total Exits" value={String(totalExits)} icon={Users} />
+        <StatsCard title="Attrition Rate" value={`${attritionRate}%`} icon={TrendingDown} />
+        <StatsCard title="Avg Tenure" value={`${avgTenure} yrs`} icon={Clock} />
+        <StatsCard title="Pending F&F" value={String(pendingFnF)} icon={Wallet} />
+      </div>
 
-            {/* Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              {/* Exits by Type Pie Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Exits by Type</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={exitsByType}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={5}
-                        dataKey="value"
-                        label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                        labelLine={false}
-                      >
-                        {exitsByType.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Exits by Type Pie Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Exits by Type</CardTitle>
+            <CardDescription>Distribution by exit reason</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={typeConfig} className="mx-auto aspect-square max-h-[300px]">
+              <PieChart>
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                <Pie data={exitsByType} dataKey="value" nameKey="type" innerRadius={60} outerRadius={100} strokeWidth={5} />
+                <ChartLegend content={<ChartLegendContent nameKey="type" />} className="-translate-y-2 flex-wrap gap-2" />
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-              {/* Exits by Department Pie Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Exits by Department</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={exitsByDepartment}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={5}
-                        dataKey="value"
-                        label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                        labelLine={false}
-                      >
-                        {exitsByDepartment.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
+        {/* Exits by Department Pie Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Exits by Department</CardTitle>
+            <CardDescription>Distribution across departments</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={deptConfig} className="mx-auto aspect-square max-h-[300px]">
+              <PieChart>
+                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                <Pie data={exitsByDepartment} dataKey="value" nameKey="department" innerRadius={60} outerRadius={100} strokeWidth={5} />
+                <ChartLegend content={<ChartLegendContent nameKey="department" />} className="-translate-y-2 flex-wrap gap-2" />
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-              {/* Monthly Exits Bar Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Monthly Exit Trends</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={monthlyExits}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis dataKey="month" className="text-xs" />
-                      <YAxis className="text-xs" />
-                      <Tooltip />
-                      <Bar dataKey="exits" name="Exits" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
+        {/* Monthly Exits Bar Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Monthly Exit Trends</CardTitle>
+            <CardDescription>Exits per month</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={monthlyConfig} className="h-[300px] w-full">
+              <BarChart accessibilityLayer data={monthlyExits}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="exits" fill="var(--color-exits)" radius={4} />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-              {/* Attrition Rate Trend Line Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Attrition Rate Trend</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={attritionTrend}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis dataKey="month" className="text-xs" />
-                      <YAxis domain={[0, 5]} className="text-xs" />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="rate" name="Attrition Rate %" stroke="hsl(var(--chart-2))" strokeWidth={2} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </div>
+        {/* Attrition Rate Trend Line Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Attrition Rate Trend</CardTitle>
+            <CardDescription>Monthly attrition percentage</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={attritionConfig} className="h-[300px] w-full">
+              <LineChart accessibilityLayer data={attritionTrend}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                <YAxis domain={[0, 5]} tickLine={false} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Line type="monotone" dataKey="rate" stroke="var(--color-rate)" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      </div>
 
-            {/* Department Summary Table */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Department-wise Exit Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <DataTable
-                  data={departmentSummaryData}
-                  columns={columns}
-                  searchPlaceholder="Search departments..."
-                  pageSize={10}
-                  getRowId={(row) => row.id}
-                />
-              </CardContent>
-            </Card>
+      {/* Department Summary Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Department-wise Exit Summary</CardTitle>
+          <CardDescription>Exit statistics by department</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            data={departmentSummaryData}
+            columns={columns}
+            searchPlaceholder="Search departments..."
+            pageSize={10}
+            getRowId={(row) => row.id}
+          />
+        </CardContent>
+      </Card>
     </AdminLayout>
   );
 };
