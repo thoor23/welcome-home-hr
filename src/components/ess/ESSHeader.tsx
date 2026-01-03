@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, Moon, Sun, Settings, MessageSquare, Clock, ArrowRight, User, PanelLeftClose, PanelLeft, CreditCard, FileText, HelpCircle, Check, CheckCheck } from "lucide-react";
+import { Bell, Moon, Sun, Settings, MessageSquare, Clock, ArrowRight, User, PanelLeftClose, PanelLeft, CreditCard, FileText, HelpCircle, Check, CheckCheck, ExternalLink } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -211,7 +211,10 @@ export function ESSHeader() {
             
             {/* Footer */}
             <div className="p-3 text-center border-t border-border">
-              <span className="text-sm text-primary cursor-pointer hover:underline">View all notifications</span>
+              <Link to="/ess/notifications" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
+                View all notifications
+                <ExternalLink className="h-3 w-3" />
+              </Link>
             </div>
           </PopoverContent>
         </Popover>
