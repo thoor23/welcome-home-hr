@@ -1,0 +1,689 @@
+openapi: 3.0.3
+info:
+  title: HRMS API - Audit & Logs
+  version: 1.0.0
+  description: Audit logs, activity tracking, security logs, and system monitoring APIs
+
+paths:
+  # ============ ALL AUDIT LOGS ============
+  /api/v1/admin/audit-logs:
+    get:
+      tags: [Audit Logs]
+      summary: List all audit logs
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [activity, data_change, security, system, api]
+        - name: action
+          in: query
+          schema:
+            type: string
+            enum: [create, read, update, delete, login, logout, export, import]
+        - name: user_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: entity_type
+          in: query
+          schema:
+            type: string
+            enum: [employee, leave, attendance, payroll, document, asset, ticket]
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [info, warning, error, critical]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Audit log list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/AuditLog' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  /api/v1/admin/audit-logs/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Audit Logs]
+      summary: Get audit log details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Audit log details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuditLogDetail' }
+
+  /api/v1/admin/audit-logs/export:
+    get:
+      tags: [Audit Logs]
+      summary: Export audit logs
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [csv, json, pdf]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+        - name: type
+          in: query
+          schema: { type: string }
+      responses:
+        200:
+          description: Export file
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  # ============ ACTIVITY LOGS ============
+  /api/v1/admin/activity-logs:
+    get:
+      tags: [Activity Logs]
+      summary: List user activity logs
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: user_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: action
+          in: query
+          schema:
+            type: string
+            enum: [login, logout, view, create, update, delete, export, download]
+        - name: module
+          in: query
+          schema:
+            type: string
+            enum: [employees, attendance, leave, payroll, documents, assets, tickets]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Activity log list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/ActivityLog' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  # ============ DATA CHANGE LOGS ============
+  /api/v1/admin/data-change-logs:
+    get:
+      tags: [Data Change Logs]
+      summary: List data modification logs
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: entity_type
+          in: query
+          schema:
+            type: string
+            enum: [employee, salary, leave_balance, attendance, document, asset]
+        - name: entity_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: changed_by
+          in: query
+          schema: { type: string, format: uuid }
+        - name: field
+          in: query
+          schema: { type: string }
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Data change log list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/DataChangeLog' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  /api/v1/admin/data-change-logs/entity/{type}/{id}:
+    parameters:
+      - name: type
+        in: path
+        required: true
+        schema:
+          type: string
+          enum: [employee, salary, leave_balance, attendance, document, asset]
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Data Change Logs]
+      summary: Get change history for specific entity
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Entity change history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entity:
+                    type: object
+                    properties:
+                      type: { type: string }
+                      id: { type: string }
+                      name: { type: string }
+                  changes:
+                    type: array
+                    items: { $ref: '#/components/schemas/DataChangeLog' }
+
+  # ============ SECURITY LOGS ============
+  /api/v1/admin/security-logs:
+    get:
+      tags: [Security Logs]
+      summary: List security-related logs
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: event_type
+          in: query
+          schema:
+            type: string
+            enum: [login_success, login_failed, password_reset, mfa_enabled, mfa_disabled, permission_change, suspicious_activity]
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [info, warning, error, critical]
+        - name: user_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: ip_address
+          in: query
+          schema: { type: string }
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Security log list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/SecurityLog' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  # ============ SYSTEM LOGS ============
+  /api/v1/admin/system-logs:
+    get:
+      tags: [System Logs]
+      summary: List system logs
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: level
+          in: query
+          schema:
+            type: string
+            enum: [debug, info, warning, error, critical]
+        - name: source
+          in: query
+          schema:
+            type: string
+            enum: [scheduler, email, integration, backup, sync]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: System log list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/SystemLog' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  # ============ API LOGS ============
+  /api/v1/admin/api-logs:
+    get:
+      tags: [API Logs]
+      summary: List API request logs
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: method
+          in: query
+          schema:
+            type: string
+            enum: [GET, POST, PATCH, PUT, DELETE]
+        - name: status_code
+          in: query
+          schema: { type: integer }
+        - name: endpoint
+          in: query
+          schema: { type: string }
+        - name: user_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: min_duration_ms
+          in: query
+          schema: { type: integer }
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: API log list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/APILog' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  /api/v1/admin/api-logs/stats:
+    get:
+      tags: [API Logs]
+      summary: Get API usage statistics
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: API statistics
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/APIStatsResponse' }
+
+  # ============ AUDIT SETTINGS ============
+  /api/v1/admin/audit-settings:
+    get:
+      tags: [Audit Settings]
+      summary: Get audit settings
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Audit settings
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuditSettings' }
+    patch:
+      tags: [Audit Settings]
+      summary: Update audit settings
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateAuditSettingsRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+components:
+  schemas:
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [activity, data_change, security, system, api]
+        action:
+          type: string
+          example: "employee.update"
+        description:
+          type: string
+        user:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        entity_type:
+          type: string
+        entity_id:
+          type: string
+        entity_name:
+          type: string
+        ip_address:
+          type: string
+        user_agent:
+          type: string
+        severity:
+          type: string
+          enum: [info, warning, error, critical]
+        created_at:
+          type: string
+          format: date-time
+
+    AuditLogDetail:
+      allOf:
+        - $ref: '#/components/schemas/AuditLog'
+        - type: object
+          properties:
+            metadata:
+              type: object
+              additionalProperties: true
+            request_data:
+              type: object
+            response_data:
+              type: object
+            changes:
+              type: array
+              items:
+                type: object
+                properties:
+                  field: { type: string }
+                  old_value: { type: string }
+                  new_value: { type: string }
+            related_logs:
+              type: array
+              items: { $ref: '#/components/schemas/AuditLog' }
+
+    ActivityLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        action:
+          type: string
+          enum: [login, logout, view, create, update, delete, export, download]
+        module:
+          type: string
+        description:
+          type: string
+        entity_type:
+          type: string
+        entity_id:
+          type: string
+        ip_address:
+          type: string
+        device:
+          type: string
+        browser:
+          type: string
+        location:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    DataChangeLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entity_type:
+          type: string
+          example: "employee"
+        entity_id:
+          type: string
+          format: uuid
+        entity_name:
+          type: string
+        action:
+          type: string
+          enum: [create, update, delete]
+        changed_by:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        changes:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: "email"
+              field_label:
+                type: string
+                example: "Email Address"
+              old_value:
+                type: string
+              new_value:
+                type: string
+        reason:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    SecurityLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        event_type:
+          type: string
+          enum: [login_success, login_failed, password_reset, mfa_enabled, mfa_disabled, permission_change, suspicious_activity, session_expired, account_locked]
+        severity:
+          type: string
+          enum: [info, warning, error, critical]
+        user:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        description:
+          type: string
+        ip_address:
+          type: string
+        location:
+          type: object
+          properties:
+            country: { type: string }
+            city: { type: string }
+            coordinates:
+              type: object
+              properties:
+                lat: { type: number }
+                lng: { type: number }
+        device_info:
+          type: object
+          properties:
+            device: { type: string }
+            os: { type: string }
+            browser: { type: string }
+        risk_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        action_taken:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    SystemLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        level:
+          type: string
+          enum: [debug, info, warning, error, critical]
+        source:
+          type: string
+          enum: [scheduler, email, integration, backup, sync, cron, webhook]
+        message:
+          type: string
+        context:
+          type: object
+          additionalProperties: true
+        stack_trace:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    APILog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        method:
+          type: string
+          enum: [GET, POST, PATCH, PUT, DELETE]
+        endpoint:
+          type: string
+          example: "/api/v1/admin/employees"
+        status_code:
+          type: integer
+        duration_ms:
+          type: integer
+        user:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        ip_address:
+          type: string
+        request_size_bytes:
+          type: integer
+        response_size_bytes:
+          type: integer
+        error_message:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    APIStatsResponse:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start_date: { type: string, format: date }
+            end_date: { type: string, format: date }
+        summary:
+          type: object
+          properties:
+            total_requests:
+              type: integer
+            successful_requests:
+              type: integer
+            failed_requests:
+              type: integer
+            avg_response_time_ms:
+              type: number
+            p95_response_time_ms:
+              type: number
+            p99_response_time_ms:
+              type: number
+        by_endpoint:
+          type: array
+          items:
+            type: object
+            properties:
+              endpoint: { type: string }
+              method: { type: string }
+              count: { type: integer }
+              avg_duration_ms: { type: number }
+              error_rate: { type: number }
+        by_status:
+          type: object
+          properties:
+            2xx: { type: integer }
+            4xx: { type: integer }
+            5xx: { type: integer }
+        by_hour:
+          type: array
+          items:
+            type: object
+            properties:
+              hour: { type: string }
+              requests: { type: integer }
+
+    AuditSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        retention_days:
+          type: integer
+          example: 365
+        log_levels:
+          type: object
+          properties:
+            activity: { type: boolean }
+            data_changes: { type: boolean }
+            security: { type: boolean }
+            api_requests: { type: boolean }
+            system: { type: boolean }
+        sensitive_fields:
+          type: array
+          items: { type: string }
+          example: ["password", "ssn", "bank_account"]
+        excluded_endpoints:
+          type: array
+          items: { type: string }
+        ip_logging:
+          type: boolean
+        geo_logging:
+          type: boolean
+        alert_on_critical:
+          type: boolean
+        alert_email:
+          type: string
+          format: email
+
+    UpdateAuditSettingsRequest:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        retention_days:
+          type: integer
+        log_levels:
+          type: object
+        sensitive_fields:
+          type: array
+          items: { type: string }
+        excluded_endpoints:
+          type: array
+          items: { type: string }
+        ip_logging:
+          type: boolean
+        geo_logging:
+          type: boolean
+        alert_on_critical:
+          type: boolean
+        alert_email:
+          type: string

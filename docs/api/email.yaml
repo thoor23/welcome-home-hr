@@ -1,0 +1,859 @@
+openapi: 3.0.3
+info:
+  title: HRMS API - Email & Letters
+  version: 1.0.0
+  description: Email templates, letter generation, email logs, and configuration APIs
+
+paths:
+  # ============ EMAIL TEMPLATES ============
+  /api/v1/admin/email-templates:
+    get:
+      tags: [Email Templates]
+      summary: List email templates
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [system, custom]
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [onboarding, leave, payroll, announcement, reminder, notification]
+      responses:
+        200:
+          description: Template list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/EmailTemplate' }
+    post:
+      tags: [Email Templates]
+      summary: Create email template
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateEmailTemplateRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/email-templates/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Email Templates]
+      summary: Get template details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Template details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EmailTemplateDetail' }
+    patch:
+      tags: [Email Templates]
+      summary: Update template
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateEmailTemplateRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Email Templates]
+      summary: Delete template
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/email-templates/{id}/preview:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Email Templates]
+      summary: Preview template with sample data
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sample_data:
+                  type: object
+                  additionalProperties: true
+      responses:
+        200:
+          description: Rendered preview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subject:
+                    type: string
+                  body:
+                    type: string
+
+  /api/v1/admin/email-templates/{id}/duplicate:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Email Templates]
+      summary: Duplicate template
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  # ============ EMAIL CONFIGURATION ============
+  /api/v1/admin/email-configuration:
+    get:
+      tags: [Email Configuration]
+      summary: Get email configuration
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Email settings
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EmailConfiguration' }
+    patch:
+      tags: [Email Configuration]
+      summary: Update email configuration
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateEmailConfigRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/email-configuration/test:
+    post:
+      tags: [Email Configuration]
+      summary: Send test email
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [to_email]
+              properties:
+                to_email:
+                  type: string
+                  format: email
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ EMAIL LOGS ============
+  /api/v1/admin/emails:
+    get:
+      tags: [Email Logs]
+      summary: List sent emails
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [sent, delivered, failed, bounced]
+        - name: template_id
+          in: query
+          schema: { type: string, format: uuid }
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Email log list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/EmailLog' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  /api/v1/admin/emails/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Email Logs]
+      summary: Get email details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Email details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EmailLogDetail' }
+
+  /api/v1/admin/emails/{id}/resend:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Email Logs]
+      summary: Resend failed email
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/emails/send:
+    post:
+      tags: [Email Logs]
+      summary: Send custom email
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SendEmailRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/emails/send-bulk:
+    post:
+      tags: [Email Logs]
+      summary: Send bulk emails
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SendBulkEmailRequest' }
+      responses:
+        200:
+          description: Bulk send result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queued:
+                    type: integer
+                  failed:
+                    type: integer
+
+  # ============ EMAIL REPORT ============
+  /api/v1/admin/email-report:
+    get:
+      tags: [Email Logs]
+      summary: Generate email report
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Email report
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EmailReportResponse' }
+
+  # ============ LETTER TEMPLATES ============
+  /api/v1/admin/letter-templates:
+    get:
+      tags: [Letter Templates]
+      summary: List letter templates
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [offer, appointment, experience, relieving, promotion, warning, termination, custom]
+      responses:
+        200:
+          description: Template list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/LetterTemplate' }
+    post:
+      tags: [Letter Templates]
+      summary: Create letter template
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateLetterTemplateRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/letter-templates/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Letter Templates]
+      summary: Get template details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Template details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LetterTemplateDetail' }
+    patch:
+      tags: [Letter Templates]
+      summary: Update template
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateLetterTemplateRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Letter Templates]
+      summary: Delete template
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ GENERATE LETTER ============
+  /api/v1/admin/letters/generate:
+    post:
+      tags: [Letter Generation]
+      summary: Generate letter for employee
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/GenerateLetterRequest' }
+      responses:
+        200:
+          description: Generated letter
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/GeneratedLetter' }
+
+  /api/v1/admin/letters/generate/preview:
+    post:
+      tags: [Letter Generation]
+      summary: Preview generated letter
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/GenerateLetterRequest' }
+      responses:
+        200:
+          description: Letter preview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  html:
+                    type: string
+
+  /api/v1/admin/letters/{id}/download:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Letter Generation]
+      summary: Download generated letter as PDF
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: PDF file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+
+  /api/v1/admin/letters/{id}/send:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Letter Generation]
+      summary: Send letter via email
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+components:
+  schemas:
+    EmailTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Leave Approval Notification"
+        code:
+          type: string
+          example: "LEAVE_APPROVED"
+        type:
+          type: string
+          enum: [system, custom]
+        category:
+          type: string
+          enum: [onboarding, leave, payroll, announcement, reminder, notification]
+        subject:
+          type: string
+        is_active:
+          type: boolean
+        last_used_at:
+          type: string
+          format: date-time
+        usage_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    EmailTemplateDetail:
+      allOf:
+        - $ref: '#/components/schemas/EmailTemplate'
+        - type: object
+          properties:
+            body:
+              type: string
+              description: "HTML template with variables"
+            variables:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "{{employee_name}}"
+                  description:
+                    type: string
+            preview_text:
+              type: string
+            cc:
+              type: array
+              items: { type: string }
+            bcc:
+              type: array
+              items: { type: string }
+
+    EmailConfiguration:
+      type: object
+      properties:
+        provider:
+          type: string
+          enum: [smtp, sendgrid, ses, mailgun]
+        from_name:
+          type: string
+        from_email:
+          type: string
+          format: email
+        reply_to:
+          type: string
+          format: email
+        smtp_host:
+          type: string
+        smtp_port:
+          type: integer
+        smtp_username:
+          type: string
+        smtp_encryption:
+          type: string
+          enum: [none, tls, ssl]
+        daily_limit:
+          type: integer
+        rate_limit_per_minute:
+          type: integer
+        is_configured:
+          type: boolean
+
+    EmailLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        to:
+          type: string
+          format: email
+        subject:
+          type: string
+        template:
+          type: object
+          properties:
+            id: { type: string }
+            name: { type: string }
+        status:
+          type: string
+          enum: [queued, sent, delivered, failed, bounced]
+        sent_at:
+          type: string
+          format: date-time
+        delivered_at:
+          type: string
+          format: date-time
+        opened_at:
+          type: string
+          format: date-time
+        error_message:
+          type: string
+
+    EmailLogDetail:
+      allOf:
+        - $ref: '#/components/schemas/EmailLog'
+        - type: object
+          properties:
+            body:
+              type: string
+            cc:
+              type: array
+              items: { type: string }
+            attachments:
+              type: array
+              items:
+                type: object
+                properties:
+                  name: { type: string }
+                  size: { type: integer }
+            metadata:
+              type: object
+              additionalProperties: true
+            delivery_attempts:
+              type: array
+              items:
+                type: object
+                properties:
+                  attempted_at: { type: string, format: date-time }
+                  status: { type: string }
+                  error: { type: string }
+
+    LetterTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Offer Letter"
+        type:
+          type: string
+          enum: [offer, appointment, experience, relieving, promotion, warning, termination, custom]
+        description:
+          type: string
+        is_active:
+          type: boolean
+        usage_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    LetterTemplateDetail:
+      allOf:
+        - $ref: '#/components/schemas/LetterTemplate'
+        - type: object
+          properties:
+            content:
+              type: string
+              description: "HTML template with variables"
+            header_html:
+              type: string
+            footer_html:
+              type: string
+            variables:
+              type: array
+              items:
+                type: object
+                properties:
+                  name: { type: string }
+                  description: { type: string }
+                  default_value: { type: string }
+            page_settings:
+              type: object
+              properties:
+                size: { type: string, enum: [A4, Letter] }
+                orientation: { type: string, enum: [portrait, landscape] }
+                margins:
+                  type: object
+                  properties:
+                    top: { type: string }
+                    bottom: { type: string }
+                    left: { type: string }
+                    right: { type: string }
+
+    GeneratedLetter:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        template:
+          $ref: '#/components/schemas/LetterTemplate'
+        employee:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        generated_at:
+          type: string
+          format: date-time
+        generated_by:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        download_url:
+          type: string
+          format: uri
+        sent_via_email:
+          type: boolean
+        sent_at:
+          type: string
+          format: date-time
+
+    CreateEmailTemplateRequest:
+      type: object
+      required: [name, subject, body]
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        category:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        preview_text:
+          type: string
+        is_active:
+          type: boolean
+
+    UpdateEmailTemplateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        preview_text:
+          type: string
+        is_active:
+          type: boolean
+
+    UpdateEmailConfigRequest:
+      type: object
+      properties:
+        provider:
+          type: string
+        from_name:
+          type: string
+        from_email:
+          type: string
+        reply_to:
+          type: string
+        smtp_host:
+          type: string
+        smtp_port:
+          type: integer
+        smtp_username:
+          type: string
+        smtp_password:
+          type: string
+        smtp_encryption:
+          type: string
+        api_key:
+          type: string
+        daily_limit:
+          type: integer
+
+    SendEmailRequest:
+      type: object
+      required: [to, subject, body]
+      properties:
+        to:
+          type: array
+          items: { type: string, format: email }
+        cc:
+          type: array
+          items: { type: string, format: email }
+        bcc:
+          type: array
+          items: { type: string, format: email }
+        subject:
+          type: string
+        body:
+          type: string
+        template_id:
+          type: string
+          format: uuid
+        variables:
+          type: object
+          additionalProperties: true
+
+    SendBulkEmailRequest:
+      type: object
+      required: [template_id, recipients]
+      properties:
+        template_id:
+          type: string
+          format: uuid
+        recipients:
+          type: array
+          items:
+            type: object
+            required: [email]
+            properties:
+              email:
+                type: string
+                format: email
+              variables:
+                type: object
+                additionalProperties: true
+        department_ids:
+          type: array
+          items: { type: string, format: uuid }
+        send_to_all:
+          type: boolean
+
+    CreateLetterTemplateRequest:
+      type: object
+      required: [name, type, content]
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        header_html:
+          type: string
+        footer_html:
+          type: string
+        page_settings:
+          type: object
+
+    UpdateLetterTemplateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        header_html:
+          type: string
+        footer_html:
+          type: string
+        is_active:
+          type: boolean
+
+    GenerateLetterRequest:
+      type: object
+      required: [template_id, employee_id]
+      properties:
+        template_id:
+          type: string
+          format: uuid
+        employee_id:
+          type: string
+          format: uuid
+        custom_variables:
+          type: object
+          additionalProperties: true
+        effective_date:
+          type: string
+          format: date
+
+    EmailReportResponse:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start_date: { type: string, format: date }
+            end_date: { type: string, format: date }
+        summary:
+          type: object
+          properties:
+            total_sent:
+              type: integer
+            delivered:
+              type: integer
+            failed:
+              type: integer
+            bounced:
+              type: integer
+            delivery_rate:
+              type: number
+            open_rate:
+              type: number
+        by_template:
+          type: array
+          items:
+            type: object
+            properties:
+              template: { type: string }
+              sent: { type: integer }
+              delivered: { type: integer }
+        by_day:
+          type: array
+          items:
+            type: object
+            properties:
+              date: { type: string, format: date }
+              sent: { type: integer }
+              delivered: { type: integer }

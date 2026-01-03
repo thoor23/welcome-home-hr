@@ -1,0 +1,775 @@
+openapi: 3.0.3
+info:
+  title: HRMS API - Shift Management
+  version: 1.0.0
+  description: Shift scheduling, assignments, swap requests, and reporting APIs
+
+paths:
+  # ============ ADMIN SHIFTS ============
+  /api/v1/admin/shifts:
+    get:
+      tags: [Shifts - Admin]
+      summary: List all shift types
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Shift list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Shift' }
+    post:
+      tags: [Shifts - Admin]
+      summary: Create shift type
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateShiftRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/shifts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Shifts - Admin]
+      summary: Get shift details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Shift details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Shift' }
+    patch:
+      tags: [Shifts - Admin]
+      summary: Update shift
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateShiftRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Shifts - Admin]
+      summary: Delete shift
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ SHIFT SCHEDULE ============
+  /api/v1/admin/shift-schedule:
+    get:
+      tags: [Shift Schedule]
+      summary: Get shift schedule calendar
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: end_date
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: department_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: employee_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        200:
+          description: Schedule calendar
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ShiftScheduleResponse' }
+
+  /api/v1/admin/shift-schedule/generate:
+    post:
+      tags: [Shift Schedule]
+      summary: Auto-generate schedule for period
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/GenerateScheduleRequest' }
+      responses:
+        200:
+          description: Generated schedule
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ShiftScheduleResponse' }
+
+  /api/v1/admin/shift-schedule/publish:
+    post:
+      tags: [Shift Schedule]
+      summary: Publish schedule and notify employees
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [start_date, end_date]
+              properties:
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+                notify_employees:
+                  type: boolean
+                  default: true
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ SHIFT ASSIGNMENTS ============
+  /api/v1/admin/shift-assignments:
+    get:
+      tags: [Shift Assignments]
+      summary: List shift assignments
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: employee_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: shift_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: date
+          in: query
+          schema: { type: string, format: date }
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Assignment list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/ShiftAssignment' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+    post:
+      tags: [Shift Assignments]
+      summary: Assign shift to employee
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateAssignmentRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/shift-assignments/bulk:
+    post:
+      tags: [Shift Assignments]
+      summary: Bulk assign shifts
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BulkAssignmentRequest' }
+      responses:
+        201:
+          description: Assignments created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created: { type: integer }
+                  failed: { type: integer }
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        employee_id: { type: string }
+                        error: { type: string }
+
+  /api/v1/admin/shift-assignments/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Shift Assignments]
+      summary: Update assignment
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateAssignmentRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Shift Assignments]
+      summary: Remove shift assignment
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ SHIFT SWAPS ============
+  /api/v1/admin/shift-swaps:
+    get:
+      tags: [Shift Swaps - Admin]
+      summary: List all swap requests
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, approved, rejected, cancelled]
+      responses:
+        200:
+          description: Swap request list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/ShiftSwapRequest' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  /api/v1/admin/shift-swaps/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Shift Swaps - Admin]
+      summary: Get swap request details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Swap request details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ShiftSwapRequest' }
+
+  /api/v1/admin/shift-swaps/{id}/approve:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Shift Swaps - Admin]
+      summary: Approve swap request
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/shift-swaps/{id}/reject:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Shift Swaps - Admin]
+      summary: Reject swap request
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ SHIFT REPORT ============
+  /api/v1/admin/shift-report:
+    get:
+      tags: [Shifts - Admin]
+      summary: Generate shift report
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [json, csv, pdf]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+        - name: department_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        200:
+          description: Shift report
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ShiftReportResponse' }
+
+  # ============ ESS ENDPOINTS ============
+  /api/v1/ess/shifts/schedule:
+    get:
+      tags: [Shifts - ESS]
+      summary: Get my shift schedule
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: start_date
+          in: query
+          schema: { type: string, format: date }
+        - name: end_date
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        200:
+          description: My schedule
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/EmployeeShiftSchedule' }
+
+  /api/v1/ess/shifts/today:
+    get:
+      tags: [Shifts - ESS]
+      summary: Get today's shift
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Today's shift
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EmployeeShiftSchedule' }
+
+  /api/v1/ess/shifts/swap-requests:
+    get:
+      tags: [Shifts - ESS]
+      summary: Get my swap requests
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: My swap requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/ShiftSwapRequest' }
+    post:
+      tags: [Shifts - ESS]
+      summary: Request shift swap
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateSwapRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/ess/shifts/swap-requests/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    delete:
+      tags: [Shifts - ESS]
+      summary: Cancel swap request
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/ess/shifts/swap-requests/{id}/respond:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Shifts - ESS]
+      summary: Respond to swap request (as target employee)
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [accepted]
+              properties:
+                accepted:
+                  type: boolean
+                notes:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/ess/shifts/available-for-swap:
+    get:
+      tags: [Shifts - ESS]
+      summary: Get employees available for swap
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: assignment_id
+          in: query
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        200:
+          description: Available employees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: './common.yaml#/components/schemas/EmployeeRef' }
+
+components:
+  schemas:
+    Shift:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Morning Shift"
+        code:
+          type: string
+          example: "MS"
+        start_time:
+          type: string
+          format: time
+          example: "09:00:00"
+        end_time:
+          type: string
+          format: time
+          example: "17:00:00"
+        break_duration_minutes:
+          type: integer
+          example: 60
+        working_hours:
+          type: number
+          format: float
+          example: 8
+        color:
+          type: string
+          example: "#3B82F6"
+        is_night_shift:
+          type: boolean
+        grace_period_minutes:
+          type: integer
+          example: 15
+        overtime_applicable:
+          type: boolean
+        is_active:
+          type: boolean
+        employee_count:
+          type: integer
+
+    ShiftAssignment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        employee:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        shift:
+          $ref: '#/components/schemas/Shift'
+        date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [scheduled, completed, missed, swapped]
+        notes:
+          type: string
+        assigned_by:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        created_at:
+          type: string
+          format: date-time
+
+    ShiftSwapRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        requester:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        requester_assignment:
+          $ref: '#/components/schemas/ShiftAssignment'
+        target_employee:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        target_assignment:
+          $ref: '#/components/schemas/ShiftAssignment'
+        status:
+          type: string
+          enum: [pending_employee, pending_admin, approved, rejected, cancelled]
+        target_accepted:
+          type: boolean
+        reason:
+          type: string
+        admin_notes:
+          type: string
+        processed_by:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        processed_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+
+    EmployeeShiftSchedule:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        shift:
+          $ref: '#/components/schemas/Shift'
+        status:
+          type: string
+          enum: [scheduled, completed, missed]
+        is_today:
+          type: boolean
+        clock_in_time:
+          type: string
+          format: time
+        clock_out_time:
+          type: string
+          format: time
+
+    ShiftScheduleResponse:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        employees:
+          type: array
+          items:
+            type: object
+            properties:
+              employee:
+                $ref: './common.yaml#/components/schemas/EmployeeRef'
+              assignments:
+                type: array
+                items: { $ref: '#/components/schemas/ShiftAssignment' }
+        summary:
+          type: object
+          properties:
+            total_shifts:
+              type: integer
+            unassigned_slots:
+              type: integer
+
+    CreateShiftRequest:
+      type: object
+      required: [name, start_time, end_time]
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        break_duration_minutes:
+          type: integer
+        color:
+          type: string
+        is_night_shift:
+          type: boolean
+        grace_period_minutes:
+          type: integer
+        overtime_applicable:
+          type: boolean
+
+    UpdateShiftRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        start_time:
+          type: string
+        end_time:
+          type: string
+        break_duration_minutes:
+          type: integer
+        color:
+          type: string
+        is_active:
+          type: boolean
+
+    CreateAssignmentRequest:
+      type: object
+      required: [employee_id, shift_id, date]
+      properties:
+        employee_id:
+          type: string
+          format: uuid
+        shift_id:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        notes:
+          type: string
+
+    BulkAssignmentRequest:
+      type: object
+      required: [shift_id, employee_ids, dates]
+      properties:
+        shift_id:
+          type: string
+          format: uuid
+        employee_ids:
+          type: array
+          items: { type: string, format: uuid }
+        dates:
+          type: array
+          items: { type: string, format: date }
+        repeat_weekly:
+          type: boolean
+        repeat_until:
+          type: string
+          format: date
+
+    UpdateAssignmentRequest:
+      type: object
+      properties:
+        shift_id:
+          type: string
+        date:
+          type: string
+          format: date
+        notes:
+          type: string
+
+    GenerateScheduleRequest:
+      type: object
+      required: [start_date, end_date]
+      properties:
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        department_ids:
+          type: array
+          items: { type: string, format: uuid }
+        respect_preferences:
+          type: boolean
+        balance_workload:
+          type: boolean
+
+    CreateSwapRequest:
+      type: object
+      required: [my_assignment_id, target_employee_id]
+      properties:
+        my_assignment_id:
+          type: string
+          format: uuid
+        target_employee_id:
+          type: string
+          format: uuid
+        target_assignment_id:
+          type: string
+          format: uuid
+        reason:
+          type: string
+
+    ShiftReportResponse:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start_date: { type: string, format: date }
+            end_date: { type: string, format: date }
+        summary:
+          type: object
+          properties:
+            total_shifts:
+              type: integer
+            completed:
+              type: integer
+            missed:
+              type: integer
+            swap_requests:
+              type: integer
+            coverage_rate:
+              type: number
+              format: float
+        by_shift:
+          type: array
+          items:
+            type: object
+            properties:
+              shift: { type: string }
+              count: { type: integer }
+              coverage: { type: number }
+        by_department:
+          type: array
+          items:
+            type: object
+            properties:
+              department: { type: string }
+              shifts: { type: integer }
+              hours: { type: number }
