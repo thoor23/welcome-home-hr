@@ -1,0 +1,986 @@
+openapi: 3.0.3
+info:
+  title: HRMS API - Support & Helpdesk
+  version: 1.0.0
+  description: Support tickets, knowledge base, SLA, and helpdesk APIs
+
+paths:
+  # ============ ADMIN TICKETS ============
+  /api/v1/admin/tickets:
+    get:
+      tags: [Tickets - Admin]
+      summary: List all tickets
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [open, in_progress, pending, resolved, closed]
+        - name: priority
+          in: query
+          schema:
+            type: string
+            enum: [low, medium, high, urgent]
+        - name: category_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: assigned_to
+          in: query
+          schema: { type: string, format: uuid }
+        - name: created_by
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        200:
+          description: Ticket list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Ticket' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+    post:
+      tags: [Tickets - Admin]
+      summary: Create ticket (on behalf of employee)
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateTicketRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/tickets/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Tickets - Admin]
+      summary: Get ticket details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Ticket details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TicketDetail' }
+    patch:
+      tags: [Tickets - Admin]
+      summary: Update ticket
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateTicketRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/tickets/{id}/assign:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Tickets - Admin]
+      summary: Assign ticket to agent
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [assigned_to]
+              properties:
+                assigned_to:
+                  type: string
+                  format: uuid
+                notes:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/tickets/{id}/reply:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Tickets - Admin]
+      summary: Reply to ticket
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+                internal:
+                  type: boolean
+                  description: Internal note (not visible to requester)
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/tickets/{id}/resolve:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Tickets - Admin]
+      summary: Resolve ticket
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resolution:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/tickets/{id}/close:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Tickets - Admin]
+      summary: Close ticket
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/tickets/{id}/reopen:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Tickets - Admin]
+      summary: Reopen closed ticket
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ MY TICKETS (ADMIN) ============
+  /api/v1/admin/my-tickets:
+    get:
+      tags: [Tickets - Admin]
+      summary: Get tickets assigned to me
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [open, in_progress, pending, resolved]
+      responses:
+        200:
+          description: My assigned tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Ticket' }
+
+  # ============ TICKET CATEGORIES ============
+  /api/v1/admin/ticket-categories:
+    get:
+      tags: [Ticket Categories]
+      summary: List ticket categories
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Category list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/TicketCategory' }
+    post:
+      tags: [Ticket Categories]
+      summary: Create ticket category
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateCategoryRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/ticket-categories/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Ticket Categories]
+      summary: Update category
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateCategoryRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Ticket Categories]
+      summary: Delete category
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ SLA SETTINGS ============
+  /api/v1/admin/sla-settings:
+    get:
+      tags: [SLA Settings]
+      summary: Get SLA settings
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: SLA settings
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SLASettings' }
+    patch:
+      tags: [SLA Settings]
+      summary: Update SLA settings
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateSLASettingsRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ KNOWLEDGE BASE ============
+  /api/v1/admin/knowledge-base:
+    get:
+      tags: [Knowledge Base - Admin]
+      summary: List knowledge base articles
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: category_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, published, archived]
+      responses:
+        200:
+          description: Article list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/KnowledgeArticle' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+    post:
+      tags: [Knowledge Base - Admin]
+      summary: Create article
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateArticleRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/knowledge-base/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Knowledge Base - Admin]
+      summary: Get article details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Article details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/KnowledgeArticleDetail' }
+    patch:
+      tags: [Knowledge Base - Admin]
+      summary: Update article
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateArticleRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Knowledge Base - Admin]
+      summary: Delete article
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/knowledge-base/{id}/publish:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Knowledge Base - Admin]
+      summary: Publish article
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ SUPPORT REPORT ============
+  /api/v1/admin/support-report:
+    get:
+      tags: [Tickets - Admin]
+      summary: Generate support report
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [json, csv, pdf]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Support report
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SupportReportResponse' }
+
+  # ============ ESS ENDPOINTS ============
+  /api/v1/ess/tickets:
+    get:
+      tags: [Tickets - ESS]
+      summary: Get my tickets
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [open, in_progress, resolved, closed]
+      responses:
+        200:
+          description: My tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Ticket' }
+    post:
+      tags: [Tickets - ESS]
+      summary: Create new ticket
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/CreateEmployeeTicketRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/ess/tickets/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Tickets - ESS]
+      summary: Get ticket details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Ticket details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TicketDetail' }
+
+  /api/v1/ess/tickets/{id}/reply:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Tickets - ESS]
+      summary: Reply to ticket
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/ess/tickets/{id}/close:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Tickets - ESS]
+      summary: Close my ticket
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/ess/tickets/{id}/rate:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Tickets - ESS]
+      summary: Rate ticket resolution
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rating]
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                feedback:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/ess/knowledge-base:
+    get:
+      tags: [Knowledge Base - ESS]
+      summary: Browse knowledge base
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: category_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        200:
+          description: Articles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items: { $ref: '#/components/schemas/KBCategory' }
+                  featured:
+                    type: array
+                    items: { $ref: '#/components/schemas/KnowledgeArticle' }
+                  articles:
+                    type: array
+                    items: { $ref: '#/components/schemas/KnowledgeArticle' }
+
+  /api/v1/ess/knowledge-base/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Knowledge Base - ESS]
+      summary: Read article
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Article content
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/KnowledgeArticleDetail' }
+
+  /api/v1/ess/knowledge-base/{id}/helpful:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Knowledge Base - ESS]
+      summary: Mark article as helpful
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [helpful]
+              properties:
+                helpful:
+                  type: boolean
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+components:
+  schemas:
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        ticket_number:
+          type: string
+          example: "TKT-2024-001"
+        subject:
+          type: string
+        category:
+          $ref: '#/components/schemas/TicketCategory'
+        priority:
+          type: string
+          enum: [low, medium, high, urgent]
+        status:
+          type: string
+          enum: [open, in_progress, pending, resolved, closed]
+        requester:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        assigned_to:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        sla_due_at:
+          type: string
+          format: date-time
+        sla_breached:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+
+    TicketDetail:
+      allOf:
+        - $ref: '#/components/schemas/Ticket'
+        - type: object
+          properties:
+            description:
+              type: string
+            attachments:
+              type: array
+              items: { $ref: './common.yaml#/components/schemas/FileUpload' }
+            replies:
+              type: array
+              items: { $ref: '#/components/schemas/TicketReply' }
+            resolution:
+              type: string
+            rating:
+              type: integer
+            feedback:
+              type: string
+            activity_log:
+              type: array
+              items:
+                type: object
+                properties:
+                  action: { type: string }
+                  user: { $ref: './common.yaml#/components/schemas/UserRef' }
+                  timestamp: { type: string, format: date-time }
+
+    TicketReply:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        message:
+          type: string
+        author:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        is_internal:
+          type: boolean
+        attachments:
+          type: array
+          items: { $ref: './common.yaml#/components/schemas/FileUpload' }
+        created_at:
+          type: string
+          format: date-time
+
+    TicketCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "IT Support"
+        description:
+          type: string
+        color:
+          type: string
+        icon:
+          type: string
+        default_priority:
+          type: string
+          enum: [low, medium, high, urgent]
+        sla_hours:
+          type: integer
+        ticket_count:
+          type: integer
+        is_active:
+          type: boolean
+
+    SLASettings:
+      type: object
+      properties:
+        default_response_hours:
+          type: integer
+        default_resolution_hours:
+          type: integer
+        by_priority:
+          type: object
+          properties:
+            low:
+              type: object
+              properties:
+                response_hours: { type: integer }
+                resolution_hours: { type: integer }
+            medium:
+              type: object
+              properties:
+                response_hours: { type: integer }
+                resolution_hours: { type: integer }
+            high:
+              type: object
+              properties:
+                response_hours: { type: integer }
+                resolution_hours: { type: integer }
+            urgent:
+              type: object
+              properties:
+                response_hours: { type: integer }
+                resolution_hours: { type: integer }
+        business_hours_only:
+          type: boolean
+        escalation_enabled:
+          type: boolean
+        escalation_after_hours:
+          type: integer
+
+    KnowledgeArticle:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        slug:
+          type: string
+        excerpt:
+          type: string
+        category:
+          $ref: '#/components/schemas/KBCategory'
+        status:
+          type: string
+          enum: [draft, published, archived]
+        is_featured:
+          type: boolean
+        view_count:
+          type: integer
+        helpful_count:
+          type: integer
+        author:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        published_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    KnowledgeArticleDetail:
+      allOf:
+        - $ref: '#/components/schemas/KnowledgeArticle'
+        - type: object
+          properties:
+            content:
+              type: string
+              description: "HTML content"
+            tags:
+              type: array
+              items: { type: string }
+            related_articles:
+              type: array
+              items: { $ref: '#/components/schemas/KnowledgeArticle' }
+            attachments:
+              type: array
+              items: { $ref: './common.yaml#/components/schemas/FileUpload' }
+
+    KBCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        article_count:
+          type: integer
+
+    CreateTicketRequest:
+      type: object
+      required: [subject, description, category_id]
+      properties:
+        subject:
+          type: string
+        description:
+          type: string
+        category_id:
+          type: string
+          format: uuid
+        priority:
+          type: string
+          enum: [low, medium, high, urgent]
+        requester_id:
+          type: string
+          format: uuid
+        assigned_to:
+          type: string
+          format: uuid
+
+    CreateEmployeeTicketRequest:
+      type: object
+      required: [subject, description, category_id]
+      properties:
+        subject:
+          type: string
+        description:
+          type: string
+        category_id:
+          type: string
+          format: uuid
+        attachments:
+          type: array
+          items:
+            type: string
+            format: binary
+
+    UpdateTicketRequest:
+      type: object
+      properties:
+        subject:
+          type: string
+        priority:
+          type: string
+        category_id:
+          type: string
+        status:
+          type: string
+
+    CreateCategoryRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        icon:
+          type: string
+        default_priority:
+          type: string
+        sla_hours:
+          type: integer
+
+    UpdateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        sla_hours:
+          type: integer
+        is_active:
+          type: boolean
+
+    UpdateSLASettingsRequest:
+      type: object
+      properties:
+        default_response_hours:
+          type: integer
+        default_resolution_hours:
+          type: integer
+        by_priority:
+          type: object
+        business_hours_only:
+          type: boolean
+        escalation_enabled:
+          type: boolean
+
+    CreateArticleRequest:
+      type: object
+      required: [title, content, category_id]
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        excerpt:
+          type: string
+        category_id:
+          type: string
+          format: uuid
+        tags:
+          type: array
+          items: { type: string }
+        is_featured:
+          type: boolean
+        status:
+          type: string
+          enum: [draft, published]
+
+    UpdateArticleRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        excerpt:
+          type: string
+        category_id:
+          type: string
+        tags:
+          type: array
+          items: { type: string }
+        is_featured:
+          type: boolean
+        status:
+          type: string
+
+    SupportReportResponse:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start_date: { type: string, format: date }
+            end_date: { type: string, format: date }
+        summary:
+          type: object
+          properties:
+            total_tickets:
+              type: integer
+            resolved:
+              type: integer
+            open:
+              type: integer
+            avg_response_time_hours:
+              type: number
+            avg_resolution_time_hours:
+              type: number
+            sla_compliance_rate:
+              type: number
+            satisfaction_rating:
+              type: number
+        by_category:
+          type: array
+          items:
+            type: object
+            properties:
+              category: { type: string }
+              count: { type: integer }
+              avg_resolution_hours: { type: number }
+        by_agent:
+          type: array
+          items:
+            type: object
+            properties:
+              agent: { $ref: './common.yaml#/components/schemas/UserRef' }
+              assigned: { type: integer }
+              resolved: { type: integer }
+              avg_rating: { type: number }

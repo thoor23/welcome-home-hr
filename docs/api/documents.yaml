@@ -1,0 +1,650 @@
+openapi: 3.0.3
+info:
+  title: HRMS API - Document Management
+  version: 1.0.0
+  description: Document storage, categories, folders, and file management APIs
+
+paths:
+  # ============ ADMIN DOCUMENTS ============
+  /api/v1/admin/documents:
+    get:
+      tags: [Documents - Admin]
+      summary: List all documents
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: category_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: folder_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: employee_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [company, employee, policy, template]
+      responses:
+        200:
+          description: Document list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Document' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+
+  /api/v1/admin/documents/upload:
+    post:
+      tags: [Documents - Admin]
+      summary: Upload document
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/UploadDocumentRequest' }
+      responses:
+        201:
+          description: Document uploaded
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Document' }
+
+  /api/v1/admin/documents/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Documents - Admin]
+      summary: Get document details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Document details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DocumentDetail' }
+    patch:
+      tags: [Documents - Admin]
+      summary: Update document metadata
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateDocumentRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Documents - Admin]
+      summary: Delete document
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/documents/{id}/download:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Documents - Admin]
+      summary: Download document
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: File download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  /api/v1/admin/documents/{id}/share:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Documents - Admin]
+      summary: Share document with employees
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employee_ids:
+                  type: array
+                  items: { type: string, format: uuid }
+                department_ids:
+                  type: array
+                  items: { type: string, format: uuid }
+                share_all:
+                  type: boolean
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ FOLDERS ============
+  /api/v1/admin/folders:
+    get:
+      tags: [Document Folders]
+      summary: List folders
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: parent_id
+          in: query
+          schema: { type: string, format: uuid }
+          description: Get subfolders of parent
+      responses:
+        200:
+          description: Folder list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Folder' }
+    post:
+      tags: [Document Folders]
+      summary: Create folder
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateFolderRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/folders/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Document Folders]
+      summary: Rename folder
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Document Folders]
+      summary: Delete folder
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ DOCUMENT CATEGORIES ============
+  /api/v1/admin/document-categories:
+    get:
+      tags: [Document Categories]
+      summary: List document categories
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Category list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/DocumentCategory' }
+    post:
+      tags: [Document Categories]
+      summary: Create document category
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateCategoryRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/document-categories/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Document Categories]
+      summary: Update category
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateCategoryRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Document Categories]
+      summary: Delete category
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ DOCUMENT SETTINGS ============
+  /api/v1/admin/document-settings:
+    get:
+      tags: [Document Settings]
+      summary: Get document settings
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Settings
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DocumentSettings' }
+    patch:
+      tags: [Document Settings]
+      summary: Update document settings
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateDocumentSettingsRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ DOCUMENT REPORT ============
+  /api/v1/admin/document-report:
+    get:
+      tags: [Documents - Admin]
+      summary: Generate document report
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [json, csv, pdf]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Document report
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DocumentReportResponse' }
+
+  # ============ MY DOCUMENTS (ADMIN) ============
+  /api/v1/admin/my-documents:
+    get:
+      tags: [Documents - Admin]
+      summary: Get admin's own documents
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: My documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Document' }
+
+  # ============ ESS ENDPOINTS ============
+  /api/v1/ess/documents:
+    get:
+      tags: [Documents - ESS]
+      summary: Get my documents
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [personal, shared, policy]
+      responses:
+        200:
+          description: My documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  personal:
+                    type: array
+                    items: { $ref: '#/components/schemas/Document' }
+                  shared:
+                    type: array
+                    items: { $ref: '#/components/schemas/Document' }
+                  policies:
+                    type: array
+                    items: { $ref: '#/components/schemas/Document' }
+
+  /api/v1/ess/documents/upload:
+    post:
+      tags: [Documents - ESS]
+      summary: Upload personal document
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                category_id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/ess/documents/{id}/download:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Documents - ESS]
+      summary: Download document
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: File download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  /api/v1/ess/documents/{id}/acknowledge:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Documents - ESS]
+      summary: Acknowledge policy document
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Employee Handbook.pdf"
+        original_name:
+          type: string
+        file_type:
+          type: string
+          example: "application/pdf"
+        file_size:
+          type: integer
+          description: "Size in bytes"
+        category:
+          $ref: '#/components/schemas/DocumentCategory'
+        folder:
+          $ref: '#/components/schemas/Folder'
+        type:
+          type: string
+          enum: [company, employee, policy, template]
+        employee:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        uploaded_by:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    DocumentDetail:
+      allOf:
+        - $ref: '#/components/schemas/Document'
+        - type: object
+          properties:
+            description:
+              type: string
+            tags:
+              type: array
+              items: { type: string }
+            shared_with:
+              type: array
+              items: { $ref: './common.yaml#/components/schemas/EmployeeRef' }
+            requires_acknowledgment:
+              type: boolean
+            acknowledgments:
+              type: array
+              items:
+                type: object
+                properties:
+                  employee: { $ref: './common.yaml#/components/schemas/EmployeeRef' }
+                  acknowledged_at: { type: string, format: date-time }
+            version:
+              type: integer
+            versions:
+              type: array
+              items:
+                type: object
+                properties:
+                  version: { type: integer }
+                  uploaded_at: { type: string, format: date-time }
+                  uploaded_by: { $ref: './common.yaml#/components/schemas/UserRef' }
+
+    Folder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        parent_id:
+          type: string
+          format: uuid
+        path:
+          type: string
+          example: "/HR/Policies"
+        document_count:
+          type: integer
+        subfolder_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    DocumentCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Contracts"
+        description:
+          type: string
+        color:
+          type: string
+          example: "#3B82F6"
+        document_count:
+          type: integer
+        is_active:
+          type: boolean
+
+    DocumentSettings:
+      type: object
+      properties:
+        max_file_size_mb:
+          type: integer
+          example: 10
+        allowed_extensions:
+          type: array
+          items: { type: string }
+          example: ["pdf", "doc", "docx", "xls", "xlsx", "jpg", "png"]
+        require_category:
+          type: boolean
+        auto_delete_after_days:
+          type: integer
+        enable_versioning:
+          type: boolean
+        enable_acknowledgment:
+          type: boolean
+
+    UploadDocumentRequest:
+      type: object
+      required: [file]
+      properties:
+        file:
+          type: string
+          format: binary
+        name:
+          type: string
+        category_id:
+          type: string
+          format: uuid
+        folder_id:
+          type: string
+          format: uuid
+        employee_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [company, employee, policy, template]
+        description:
+          type: string
+        tags:
+          type: array
+          items: { type: string }
+        requires_acknowledgment:
+          type: boolean
+
+    UpdateDocumentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        category_id:
+          type: string
+        folder_id:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items: { type: string }
+
+    CreateFolderRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        parent_id:
+          type: string
+          format: uuid
+
+    CreateCategoryRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+
+    UpdateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        is_active:
+          type: boolean
+
+    UpdateDocumentSettingsRequest:
+      type: object
+      properties:
+        max_file_size_mb:
+          type: integer
+        allowed_extensions:
+          type: array
+          items: { type: string }
+        require_category:
+          type: boolean
+        auto_delete_after_days:
+          type: integer
+        enable_versioning:
+          type: boolean
+
+    DocumentReportResponse:
+      type: object
+      properties:
+        summary:
+          type: object
+          properties:
+            total_documents:
+              type: integer
+            total_size_bytes:
+              type: integer
+            by_category:
+              type: array
+              items:
+                type: object
+                properties:
+                  category: { type: string }
+                  count: { type: integer }
+            by_type:
+              type: object
+              properties:
+                company: { type: integer }
+                employee: { type: integer }
+                policy: { type: integer }
+            pending_acknowledgments:
+              type: integer
+        recent_uploads:
+          type: array
+          items: { $ref: '#/components/schemas/Document' }

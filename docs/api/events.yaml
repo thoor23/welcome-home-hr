@@ -1,0 +1,603 @@
+openapi: 3.0.3
+info:
+  title: HRMS API - Events Management
+  version: 1.0.0
+  description: Company events, calendar, categories, and RSVP APIs
+
+paths:
+  # ============ ADMIN ENDPOINTS ============
+  /api/v1/admin/events:
+    get:
+      tags: [Events - Admin]
+      summary: List all events
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: category_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [upcoming, ongoing, completed, cancelled]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Event list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Event' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+    post:
+      tags: [Events - Admin]
+      summary: Create event
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateEventRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/events/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Events - Admin]
+      summary: Get event details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Event details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EventDetail' }
+    patch:
+      tags: [Events - Admin]
+      summary: Update event
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateEventRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Events - Admin]
+      summary: Delete event
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/events/{id}/cancel:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Events - Admin]
+      summary: Cancel event
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                notify_attendees:
+                  type: boolean
+                  default: true
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/events/{id}/attendees:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Events - Admin]
+      summary: Get event attendees
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Attendee list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/EventAttendee' }
+                  summary:
+                    type: object
+                    properties:
+                      total_invited: { type: integer }
+                      attending: { type: integer }
+                      declined: { type: integer }
+                      pending: { type: integer }
+
+  /api/v1/admin/events/{id}/notify:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Events - Admin]
+      summary: Send reminder to attendees
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                target:
+                  type: string
+                  enum: [all, pending, attending]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ EVENT CATEGORIES ============
+  /api/v1/admin/event-categories:
+    get:
+      tags: [Event Categories]
+      summary: List event categories
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Category list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/EventCategory' }
+    post:
+      tags: [Event Categories]
+      summary: Create event category
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateEventCategoryRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/event-categories/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Event Categories]
+      summary: Update category
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateEventCategoryRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Event Categories]
+      summary: Delete category
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ EVENT REPORT ============
+  /api/v1/admin/event-report:
+    get:
+      tags: [Events - Admin]
+      summary: Generate event report
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [json, csv, pdf]
+        - $ref: './common.yaml#/components/parameters/StartDateParam'
+        - $ref: './common.yaml#/components/parameters/EndDateParam'
+      responses:
+        200:
+          description: Event report
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EventReportResponse' }
+
+  # ============ ESS ENDPOINTS ============
+  /api/v1/ess/events:
+    get:
+      tags: [Events - ESS]
+      summary: Get upcoming events
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: filter
+          in: query
+          schema:
+            type: string
+            enum: [all, my_rsvp, upcoming]
+      responses:
+        200:
+          description: Event list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Event' }
+
+  /api/v1/ess/events/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Events - ESS]
+      summary: Get event details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Event details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EventDetail' }
+
+  /api/v1/ess/events/{id}/rsvp:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Events - ESS]
+      summary: RSVP to event
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [response]
+              properties:
+                response:
+                  type: string
+                  enum: [attending, declined, maybe]
+                guests:
+                  type: integer
+                  minimum: 0
+                notes:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/ess/events/calendar:
+    get:
+      tags: [Events - ESS]
+      summary: Get events calendar view
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: month
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Calendar events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items: { $ref: '#/components/schemas/CalendarEvent' }
+
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "Annual Company Picnic"
+        description:
+          type: string
+        category:
+          $ref: '#/components/schemas/EventCategory'
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        all_day:
+          type: boolean
+        location:
+          type: string
+        location_type:
+          type: string
+          enum: [in_person, virtual, hybrid]
+        virtual_link:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [upcoming, ongoing, completed, cancelled]
+        is_mandatory:
+          type: boolean
+        cover_image:
+          type: string
+          format: uri
+        attendee_count:
+          type: integer
+        my_rsvp:
+          type: string
+          enum: [attending, declined, maybe, pending]
+        created_by:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        created_at:
+          type: string
+          format: date-time
+
+    EventDetail:
+      allOf:
+        - $ref: '#/components/schemas/Event'
+        - type: object
+          properties:
+            organizer:
+              $ref: './common.yaml#/components/schemas/EmployeeRef'
+            agenda:
+              type: string
+            attachments:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: string }
+                  name: { type: string }
+                  url: { type: string }
+            rsvp_deadline:
+              type: string
+              format: date-time
+            max_attendees:
+              type: integer
+            allow_guests:
+              type: boolean
+            guest_limit:
+              type: integer
+            departments:
+              type: array
+              items: { $ref: './common.yaml#/components/schemas/DepartmentRef' }
+            attendees:
+              type: array
+              items: { $ref: '#/components/schemas/EventAttendee' }
+
+    EventAttendee:
+      type: object
+      properties:
+        employee:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        response:
+          type: string
+          enum: [attending, declined, maybe, pending]
+        guests:
+          type: integer
+        responded_at:
+          type: string
+          format: date-time
+        notes:
+          type: string
+
+    EventCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Team Building"
+        description:
+          type: string
+        color:
+          type: string
+          example: "#10B981"
+        icon:
+          type: string
+        event_count:
+          type: integer
+        is_active:
+          type: boolean
+
+    CalendarEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        all_day:
+          type: boolean
+        color:
+          type: string
+        category:
+          type: string
+        my_rsvp:
+          type: string
+
+    CreateEventRequest:
+      type: object
+      required: [title, start_date, end_date]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category_id:
+          type: string
+          format: uuid
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        all_day:
+          type: boolean
+        location:
+          type: string
+        location_type:
+          type: string
+          enum: [in_person, virtual, hybrid]
+        virtual_link:
+          type: string
+        is_mandatory:
+          type: boolean
+        agenda:
+          type: string
+        rsvp_deadline:
+          type: string
+          format: date-time
+        max_attendees:
+          type: integer
+        allow_guests:
+          type: boolean
+        guest_limit:
+          type: integer
+        department_ids:
+          type: array
+          items: { type: string, format: uuid }
+        invite_all:
+          type: boolean
+        cover_image:
+          type: string
+          format: uri
+
+    UpdateEventRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category_id:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        location:
+          type: string
+        virtual_link:
+          type: string
+        agenda:
+          type: string
+        max_attendees:
+          type: integer
+
+    CreateEventCategoryRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        icon:
+          type: string
+
+    UpdateEventCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        is_active:
+          type: boolean
+
+    EventReportResponse:
+      type: object
+      properties:
+        summary:
+          type: object
+          properties:
+            total_events:
+              type: integer
+            by_category:
+              type: array
+              items:
+                type: object
+                properties:
+                  category: { type: string }
+                  count: { type: integer }
+            by_status:
+              type: object
+              properties:
+                completed: { type: integer }
+                cancelled: { type: integer }
+                upcoming: { type: integer }
+            total_attendees:
+              type: integer
+            average_attendance_rate:
+              type: number
+              format: float
+        events:
+          type: array
+          items: { $ref: '#/components/schemas/Event' }

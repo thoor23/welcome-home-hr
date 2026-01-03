@@ -1,0 +1,711 @@
+openapi: 3.0.3
+info:
+  title: HRMS API - Asset Management
+  version: 1.0.0
+  description: Asset tracking, assignments, categories, and maintenance APIs
+
+paths:
+  # ============ ADMIN ENDPOINTS ============
+  /api/v1/admin/assets:
+    get:
+      tags: [Assets - Admin]
+      summary: List all assets
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - $ref: './common.yaml#/components/parameters/SearchParam'
+        - name: category_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [available, assigned, maintenance, retired, lost]
+        - name: location_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        200:
+          description: Asset list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Asset' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+    post:
+      tags: [Assets - Admin]
+      summary: Add new asset
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateAssetRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/assets/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Assets - Admin]
+      summary: Get asset details
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Asset details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AssetDetail' }
+    patch:
+      tags: [Assets - Admin]
+      summary: Update asset
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateAssetRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Assets - Admin]
+      summary: Delete/retire asset
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/assets/{id}/qr-code:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Assets - Admin]
+      summary: Generate QR code for asset
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: QR code image
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+
+  # ============ ASSET CATEGORIES ============
+  /api/v1/admin/asset-categories:
+    get:
+      tags: [Asset Categories]
+      summary: List asset categories
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: Category list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/AssetCategory' }
+    post:
+      tags: [Asset Categories]
+      summary: Create asset category
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateAssetCategoryRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/asset-categories/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Asset Categories]
+      summary: Update category
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateAssetCategoryRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+    delete:
+      tags: [Asset Categories]
+      summary: Delete category
+      security: [{ BearerAuth: [] }]
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ ASSET ASSIGNMENTS ============
+  /api/v1/admin/asset-assignments:
+    get:
+      tags: [Asset Assignments]
+      summary: List all assignments
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: employee_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: asset_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, returned, lost]
+      responses:
+        200:
+          description: Assignment list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/AssetAssignment' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+    post:
+      tags: [Asset Assignments]
+      summary: Assign asset to employee
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateAssignmentRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/asset-assignments/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    delete:
+      tags: [Asset Assignments]
+      summary: Return asset (end assignment)
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                return_condition:
+                  type: string
+                  enum: [good, damaged, lost]
+                notes:
+                  type: string
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ ASSET MAINTENANCE ============
+  /api/v1/admin/asset-maintenance:
+    get:
+      tags: [Asset Maintenance]
+      summary: List maintenance records
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: './common.yaml#/components/parameters/PageParam'
+        - $ref: './common.yaml#/components/parameters/LimitParam'
+        - name: asset_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [scheduled, in_progress, completed, cancelled]
+      responses:
+        200:
+          description: Maintenance records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/MaintenanceRecord' }
+                  meta: { $ref: './common.yaml#/components/schemas/PaginationMeta' }
+    post:
+      tags: [Asset Maintenance]
+      summary: Schedule maintenance
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateMaintenanceRequest' }
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+  /api/v1/admin/asset-maintenance/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Asset Maintenance]
+      summary: Update maintenance record
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateMaintenanceRequest' }
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  /api/v1/admin/asset-maintenance/{id}/complete:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Asset Maintenance]
+      summary: Mark maintenance as completed
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completion_notes:
+                  type: string
+                cost:
+                  type: number
+                  format: float
+      responses:
+        200: { $ref: './common.yaml#/components/responses/Success' }
+
+  # ============ ASSET REPORT ============
+  /api/v1/admin/asset-report:
+    get:
+      tags: [Assets - Admin]
+      summary: Generate asset report
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [json, csv, pdf]
+            default: json
+        - name: category_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [available, assigned, maintenance, retired]
+      responses:
+        200:
+          description: Asset report
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AssetReportResponse' }
+
+  # ============ ESS ENDPOINTS ============
+  /api/v1/ess/assets:
+    get:
+      tags: [Assets - ESS]
+      summary: Get my assigned assets
+      security: [{ BearerAuth: [] }]
+      responses:
+        200:
+          description: My assets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/EmployeeAsset' }
+
+  /api/v1/ess/assets/{id}/report-issue:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [Assets - ESS]
+      summary: Report issue with assigned asset
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [issue_type, description]
+              properties:
+                issue_type:
+                  type: string
+                  enum: [damaged, malfunction, lost, other]
+                description:
+                  type: string
+      responses:
+        201: { $ref: './common.yaml#/components/responses/Created' }
+
+components:
+  schemas:
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        asset_tag:
+          type: string
+          example: "AST-2024-001"
+        name:
+          type: string
+          example: "MacBook Pro 16\""
+        category:
+          $ref: '#/components/schemas/AssetCategory'
+        serial_number:
+          type: string
+        model:
+          type: string
+        manufacturer:
+          type: string
+        purchase_date:
+          type: string
+          format: date
+        purchase_price:
+          type: number
+          format: float
+        warranty_expiry:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [available, assigned, maintenance, retired, lost]
+        condition:
+          type: string
+          enum: [new, good, fair, poor]
+        location:
+          $ref: './common.yaml#/components/schemas/DepartmentRef'
+        current_assignment:
+          $ref: '#/components/schemas/AssetAssignment'
+        created_at:
+          type: string
+          format: date-time
+
+    AssetDetail:
+      allOf:
+        - $ref: '#/components/schemas/Asset'
+        - type: object
+          properties:
+            specifications:
+              type: object
+              additionalProperties: true
+            notes:
+              type: string
+            documents:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: string }
+                  name: { type: string }
+                  url: { type: string }
+            assignment_history:
+              type: array
+              items: { $ref: '#/components/schemas/AssetAssignment' }
+            maintenance_history:
+              type: array
+              items: { $ref: '#/components/schemas/MaintenanceRecord' }
+
+    AssetCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Laptops"
+        description:
+          type: string
+        icon:
+          type: string
+        depreciation_rate:
+          type: number
+          format: float
+          description: "Annual depreciation percentage"
+        asset_count:
+          type: integer
+        is_active:
+          type: boolean
+
+    AssetAssignment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        asset:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        employee:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        assigned_date:
+          type: string
+          format: date
+        expected_return_date:
+          type: string
+          format: date
+        actual_return_date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [active, returned, lost]
+        assigned_by:
+          $ref: './common.yaml#/components/schemas/UserRef'
+        assignment_notes:
+          type: string
+        return_condition:
+          type: string
+          enum: [good, damaged, lost]
+        return_notes:
+          type: string
+
+    MaintenanceRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        asset:
+          $ref: './common.yaml#/components/schemas/EmployeeRef'
+        type:
+          type: string
+          enum: [preventive, repair, upgrade, inspection]
+        status:
+          type: string
+          enum: [scheduled, in_progress, completed, cancelled]
+        scheduled_date:
+          type: string
+          format: date
+        completed_date:
+          type: string
+          format: date
+        description:
+          type: string
+        vendor:
+          type: string
+        cost:
+          type: number
+          format: float
+        notes:
+          type: string
+        created_by:
+          $ref: './common.yaml#/components/schemas/UserRef'
+
+    EmployeeAsset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        asset_tag:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        serial_number:
+          type: string
+        assigned_date:
+          type: string
+          format: date
+        condition:
+          type: string
+
+    CreateAssetRequest:
+      type: object
+      required: [name, category_id, asset_tag]
+      properties:
+        name:
+          type: string
+        category_id:
+          type: string
+          format: uuid
+        asset_tag:
+          type: string
+        serial_number:
+          type: string
+        model:
+          type: string
+        manufacturer:
+          type: string
+        purchase_date:
+          type: string
+          format: date
+        purchase_price:
+          type: number
+        warranty_expiry:
+          type: string
+          format: date
+        condition:
+          type: string
+          enum: [new, good, fair, poor]
+        location_id:
+          type: string
+          format: uuid
+        specifications:
+          type: object
+        notes:
+          type: string
+
+    UpdateAssetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        serial_number:
+          type: string
+        condition:
+          type: string
+        status:
+          type: string
+        location_id:
+          type: string
+        notes:
+          type: string
+
+    CreateAssetCategoryRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        depreciation_rate:
+          type: number
+
+    UpdateAssetCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        depreciation_rate:
+          type: number
+        is_active:
+          type: boolean
+
+    CreateAssignmentRequest:
+      type: object
+      required: [asset_id, employee_id]
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+        employee_id:
+          type: string
+          format: uuid
+        expected_return_date:
+          type: string
+          format: date
+        notes:
+          type: string
+
+    CreateMaintenanceRequest:
+      type: object
+      required: [asset_id, type, scheduled_date]
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [preventive, repair, upgrade, inspection]
+        scheduled_date:
+          type: string
+          format: date
+        description:
+          type: string
+        vendor:
+          type: string
+        estimated_cost:
+          type: number
+
+    UpdateMaintenanceRequest:
+      type: object
+      properties:
+        scheduled_date:
+          type: string
+          format: date
+        status:
+          type: string
+        description:
+          type: string
+        vendor:
+          type: string
+
+    AssetReportResponse:
+      type: object
+      properties:
+        summary:
+          type: object
+          properties:
+            total_assets:
+              type: integer
+            total_value:
+              type: number
+            by_status:
+              type: object
+              properties:
+                available: { type: integer }
+                assigned: { type: integer }
+                maintenance: { type: integer }
+                retired: { type: integer }
+            by_category:
+              type: array
+              items:
+                type: object
+                properties:
+                  category: { type: string }
+                  count: { type: integer }
+                  value: { type: number }
+        assets:
+          type: array
+          items: { $ref: '#/components/schemas/Asset' }
