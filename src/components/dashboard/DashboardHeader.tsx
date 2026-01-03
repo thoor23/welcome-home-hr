@@ -1,4 +1,4 @@
-import { Bell, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight, ChevronRight, User } from "lucide-react";
+import { Bell, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight, ChevronRight, User, PanelLeftClose, PanelLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,6 +13,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
+import { useSidebarContext } from "@/contexts/SidebarContext";
 
 const notifications = [
   {
@@ -50,11 +51,22 @@ const notifications = [
 export function DashboardHeader() {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
+  const { collapsed, toggleCollapsed } = useSidebarContext();
 
   return (
     <header className="h-16 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-50">
       {/* Left Side */}
       <div className="flex items-center gap-4">
+        {/* Collapse Toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleCollapsed}
+          className="h-8 w-8 text-muted-foreground hover:text-foreground"
+        >
+          {collapsed ? <PanelLeft className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
+        </Button>
+
         {/* Breadcrumbs */}
         <nav className="flex items-center text-sm">
           <span className="text-muted-foreground hover:text-foreground cursor-pointer">Home</span>

@@ -1,6 +1,7 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { SidebarProvider } from "@/contexts/SidebarContext";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -10,16 +11,18 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children, noPadding = false }: AdminLayoutProps) {
   return (
-    <TooltipProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col min-w-0 h-screen overflow-auto">
-          <DashboardHeader />
-          <main className={`flex-1 ${noPadding ? '' : 'p-6'}`}>
-            {children}
-          </main>
+    <SidebarProvider>
+      <TooltipProvider>
+        <div className="min-h-screen flex w-full bg-background">
+          <DashboardSidebar />
+          <div className="flex-1 flex flex-col min-w-0 h-screen overflow-auto">
+            <DashboardHeader />
+            <main className={`flex-1 ${noPadding ? '' : 'p-6'}`}>
+              {children}
+            </main>
+          </div>
         </div>
-      </div>
-    </TooltipProvider>
+      </TooltipProvider>
+    </SidebarProvider>
   );
 }

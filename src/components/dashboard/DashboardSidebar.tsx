@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSidebarContext } from "@/contexts/SidebarContext";
 import {
   LayoutDashboard,
   Users,
@@ -403,7 +404,7 @@ function CollapsibleMenuItem({
 }
 
 export function DashboardSidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed } = useSidebarContext();
   const location = useLocation();
   const currentPath = location.pathname;
 
