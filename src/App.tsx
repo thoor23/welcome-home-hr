@@ -110,6 +110,8 @@ import ESSLeaveBalance from "./pages/ess/LeaveBalance";
 import ESSApplyLeave from "./pages/ess/ApplyLeave";
 import ESSLeaveRequests from "./pages/ess/LeaveRequests";
 import ESSLeaveHistory from "./pages/ess/LeaveHistory";
+import ESSShiftSchedule from "./pages/ess/ShiftSchedule";
+import ESSShiftSwapRequests from "./pages/ess/ShiftSwapRequests";
 
 const queryClient = new QueryClient();
 
@@ -246,6 +248,9 @@ const App = () => (
             <Route path="/ess/leaves/apply" element={<ESSApplyLeave />} />
             <Route path="/ess/leaves/requests" element={<ESSLeaveRequests />} />
             <Route path="/ess/leaves/history" element={<ESSLeaveHistory />} />
+            <Route path="/ess/shifts" element={<Navigate to="/ess/shifts/schedule" replace />} />
+            <Route path="/ess/shifts/schedule" element={<ESSShiftSchedule />} />
+            <Route path="/ess/shifts/swap" element={<ESSShiftSwapRequests />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
