@@ -1,6 +1,5 @@
-import React from "react";
-import { Bell, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight, ChevronRight, User, PanelLeftClose, PanelLeft } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Bell, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight, User, PanelLeftClose, PanelLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -52,29 +51,7 @@ const notifications = [
 export function DashboardHeader() {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
-  const location = useLocation();
   const { collapsed, toggleCollapsed } = useSidebarContext();
-
-  // Generate breadcrumbs from pathname
-  const generateBreadcrumbs = () => {
-    const pathnames = location.pathname.split('/').filter(x => x);
-    
-    // Format path segment to readable text
-    const formatSegment = (segment: string) => {
-      return segment
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-    };
-    
-    return pathnames.map((segment, index) => ({
-      label: formatSegment(segment),
-      path: '/' + pathnames.slice(0, index + 1).join('/'),
-      isLast: index === pathnames.length - 1
-    }));
-  };
-  
-  const breadcrumbs = generateBreadcrumbs();
 
   return (
     <header className="h-16 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-50">
@@ -89,31 +66,6 @@ export function DashboardHeader() {
         >
           {collapsed ? <PanelLeft className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
         </Button>
-
-        {/* Breadcrumbs */}
-        <nav className="flex items-center text-sm">
-          <span 
-            className="text-muted-foreground hover:text-foreground cursor-pointer"
-            onClick={() => navigate('/admin/dashboard')}
-          >
-            Home
-          </span>
-          {breadcrumbs.map((crumb) => (
-            <React.Fragment key={crumb.path}>
-              <ChevronRight className="h-4 w-4 text-muted-foreground mx-2" />
-              {crumb.isLast ? (
-                <span className="text-foreground font-medium">{crumb.label}</span>
-              ) : (
-                <span 
-                  className="text-muted-foreground hover:text-foreground cursor-pointer"
-                  onClick={() => navigate(crumb.path)}
-                >
-                  {crumb.label}
-                </span>
-              )}
-            </React.Fragment>
-          ))}
-        </nav>
       </div>
 
       {/* Right Side */}
