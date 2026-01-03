@@ -1,7 +1,7 @@
 import { Users, UserCheck, UserX, UserPlus, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatsCard } from "@/components/dashboard/StatsCard";
@@ -21,7 +21,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <SidebarProvider>
+    <TooltipProvider>
       <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar />
         
@@ -89,7 +89,7 @@ const Dashboard = () => {
           </main>
         </div>
       </div>
-    </SidebarProvider>
+    </TooltipProvider>
   );
 };
 

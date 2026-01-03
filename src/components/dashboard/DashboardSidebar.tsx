@@ -12,6 +12,7 @@ import {
   Building2,
   Clock,
   ChevronDown,
+  ChevronLeft,
   FileCheck,
   BarChart3,
   ListChecks,
@@ -23,7 +24,7 @@ import {
   FileSpreadsheet,
   LayoutTemplate,
   Briefcase,
-  UserCheck,
+  UserCheck as UserCheckIcon,
   FileUser,
   UserSearch,
   Calendar,
@@ -65,28 +66,14 @@ import {
   Webhook,
   LucideIcon,
 } from "lucide-react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
-  useSidebar,
-} from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Types
 interface SubMenuItem {
@@ -118,7 +105,7 @@ const menuGroups: MenuGroup[] = [
           { title: "All Employees", url: "/admin/employees/all", icon: Users },
           { title: "Departments", url: "/admin/employees/departments", icon: Building2 },
           { title: "Designations", url: "/admin/employees/designations", icon: Briefcase },
-          { title: "Employment Types", url: "/admin/employees/types", icon: UserCheck },
+          { title: "Employment Types", url: "/admin/employees/types", icon: UserCheckIcon },
           { title: "Locations", url: "/admin/employees/locations", icon: MapPin },
           { title: "Regularization", url: "/admin/employees/regularization", icon: FileCheck },
         ],
@@ -316,8 +303,8 @@ const menuGroups: MenuGroup[] = [
   },
 ];
 
-// Simple Menu Item Component
-function SimpleMenuItem({
+// Collapsible Menu Item
+function CollapsibleMenuItem({
   item,
   collapsed,
   currentPath,
@@ -329,122 +316,266 @@ function SimpleMenuItem({
   const isMenuActive = item.subItems.some((sub) => currentPath === sub.url);
   const [isOpen, setIsOpen] = useState(isMenuActive);
 
+  // Icon-only mode with tooltip
   if (collapsed) {
     return (
-      <SidebarMenuItem>
-        <SidebarMenuButton className={cn(isMenuActive && "bg-muted")}>
-          <item.icon className="h-4 w-4" />
-        </SidebarMenuButton>
-      </SidebarMenuItem>
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          <button
+            className={cn(
+              "flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200",
+              isMenuActive
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+          >
+            <item.icon className="h-5 w-5" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="flex flex-col gap-1 p-2">
+          <span className="font-medium">{item.title}</span>
+          <div className="flex flex-col gap-0.5">
+            {item.subItems.map((sub) => (
+              <Link
+                key={sub.url}
+                to={sub.url}
+                className={cn(
+                  "text-xs px-2 py-1 rounded hover:bg-muted transition-colors",
+                  currentPath === sub.url && "bg-primary/10 text-primary font-medium"
+                )}
+              >
+                {sub.title}
+              </Link>
+            ))}
+          </div>
+        </TooltipContent>
+      </Tooltip>
     );
   }
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <SidebarMenuItem>
-        <CollapsibleTrigger asChild>
-          <SidebarMenuButton className={cn(isMenuActive && "bg-muted font-medium")}>
-            <item.icon className="h-4 w-4" />
-            <span className="flex-1">{item.title}</span>
-            <ChevronDown className={cn("h-4 w-4", isOpen && "rotate-180")} />
-          </SidebarMenuButton>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <SidebarMenuSub>
-            {item.subItems.map((sub) => (
-              <SidebarMenuSubItem key={sub.url}>
-                <SidebarMenuSubButton asChild className={cn(currentPath === sub.url && "bg-muted font-medium")}>
-                  <Link to={sub.url}>
-                    <sub.icon className="h-3.5 w-3.5" />
-                    <span>{sub.title}</span>
-                  </Link>
-                </SidebarMenuSubButton>
-              </SidebarMenuSubItem>
-            ))}
-          </SidebarMenuSub>
-        </CollapsibleContent>
-      </SidebarMenuItem>
-    </Collapsible>
+    <div className="space-y-1">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "flex items-center w-full gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
+          isMenuActive
+            ? "bg-primary/10 text-primary font-medium"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+        )}
+      >
+        <item.icon className="h-4 w-4 shrink-0" />
+        <span className="flex-1 text-left">{item.title}</span>
+        <ChevronDown
+          className={cn(
+            "h-4 w-4 shrink-0 transition-transform duration-200",
+            isOpen && "rotate-180"
+          )}
+        />
+      </button>
+
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-200",
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        )}
+      >
+        <div className="ml-4 pl-3 border-l border-border space-y-0.5 py-1">
+          {item.subItems.map((sub) => (
+            <Link
+              key={sub.url}
+              to={sub.url}
+              className={cn(
+                "flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-all duration-150",
+                currentPath === sub.url
+                  ? "bg-primary text-primary-foreground font-medium"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+            >
+              <sub.icon className="h-3.5 w-3.5" />
+              <span>{sub.title}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
 export function DashboardSidebar() {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
+  const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
 
   return (
-    <Sidebar className={cn("border-r border-border bg-card", collapsed ? "w-16" : "w-60")} collapsible="icon">
+    <aside
+      className={cn(
+        "h-screen bg-sidebar border-r border-border flex flex-col transition-all duration-300 ease-in-out",
+        collapsed ? "w-16" : "w-64"
+      )}
+    >
       {/* Header */}
-      <SidebarHeader className={cn("p-4 border-b border-border", collapsed && "p-2")}>
-        <div className={cn("flex items-center gap-2", collapsed && "justify-center")}>
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <Users className="w-4 h-4 text-primary-foreground" />
+      <div className={cn(
+        "flex items-center h-16 px-4 border-b border-border shrink-0",
+        collapsed && "justify-center px-2"
+      )}>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20">
+            <Users className="w-5 h-5 text-primary-foreground" />
           </div>
-          {!collapsed && <span className="font-bold text-lg">NexHR</span>}
+          {!collapsed && (
+            <span className="font-bold text-lg text-foreground tracking-tight">
+              NexHR
+            </span>
+          )}
         </div>
-      </SidebarHeader>
+      </div>
 
-      <SidebarContent className="p-2">
-        {/* Dashboard */}
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild className={cn(currentPath === "/admin/dashboard" && "bg-primary text-primary-foreground")}>
-                  <Link to="/admin/dashboard" className={cn("flex items-center gap-2", collapsed && "justify-center")}>
-                    <LayoutDashboard className="h-4 w-4" />
-                    {!collapsed && <span>Dashboard</span>}
+      {/* Content */}
+      <ScrollArea className="flex-1 py-4">
+        <div className={cn("space-y-6", collapsed ? "px-2" : "px-3")}>
+          {/* Dashboard Link */}
+          <div>
+            {collapsed ? (
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/admin/dashboard"
+                    className={cn(
+                      "flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 mx-auto",
+                      currentPath === "/admin/dashboard"
+                        ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    )}
+                  >
+                    <LayoutDashboard className="h-5 w-5" />
                   </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Menu Groups */}
-        {menuGroups.map((group) => (
-          <SidebarGroup key={group.label}>
-            {!collapsed && (
-              <SidebarGroupLabel className="text-xs text-muted-foreground uppercase">
-                {group.label}
-              </SidebarGroupLabel>
+                </TooltipTrigger>
+                <TooltipContent side="right">Dashboard</TooltipContent>
+              </Tooltip>
+            ) : (
+              <Link
+                to="/admin/dashboard"
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                  currentPath === "/admin/dashboard"
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
             )}
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {group.items.map((item) => (
-                  <SimpleMenuItem key={item.title} item={item} collapsed={collapsed} currentPath={currentPath} />
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+          </div>
 
-        {/* Settings */}
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild className={cn(currentPath === "/admin/settings" && "bg-muted font-medium")}>
-                  <Link to="/admin/settings" className={cn("flex items-center gap-2", collapsed && "justify-center")}>
-                    <Settings className="h-4 w-4" />
-                    {!collapsed && <span>Settings</span>}
+          {/* Menu Groups */}
+          {menuGroups.map((group) => (
+            <div key={group.label} className="space-y-1">
+              {!collapsed && (
+                <h3 className="px-3 text-[11px] font-semibold text-muted-foreground/70 uppercase tracking-wider mb-2">
+                  {group.label}
+                </h3>
+              )}
+              <div className={cn("space-y-1", collapsed && "flex flex-col items-center")}>
+                {group.items.map((item) => (
+                  <CollapsibleMenuItem
+                    key={item.title}
+                    item={item}
+                    collapsed={collapsed}
+                    currentPath={currentPath}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Settings */}
+          <div>
+            {collapsed ? (
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/admin/settings"
+                    className={cn(
+                      "flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 mx-auto",
+                      currentPath === "/admin/settings"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    )}
+                  >
+                    <Settings className="h-5 w-5" />
                   </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+                </TooltipTrigger>
+                <TooltipContent side="right">Settings</TooltipContent>
+              </Tooltip>
+            ) : (
+              <Link
+                to="/admin/settings"
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
+                  currentPath === "/admin/settings"
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
+              >
+                <Settings className="h-4 w-4" />
+                <span>Settings</span>
+              </Link>
+            )}
+          </div>
+        </div>
+      </ScrollArea>
 
       {/* Footer */}
-      <SidebarFooter className={cn("p-3 border-t border-border", collapsed && "p-2")}>
-        <SidebarMenuButton className={cn("w-full", collapsed && "justify-center")}>
-          <LogOut className="h-4 w-4" />
-          {!collapsed && <span>Logout</span>}
-        </SidebarMenuButton>
-      </SidebarFooter>
-    </Sidebar>
+      <div className={cn(
+        "border-t border-border p-3 shrink-0",
+        collapsed && "flex flex-col items-center gap-2"
+      )}>
+        {/* Collapse Toggle */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setCollapsed(!collapsed)}
+          className={cn(
+            "w-full justify-start gap-2 text-muted-foreground hover:text-foreground",
+            collapsed && "w-10 h-10 p-0 justify-center"
+          )}
+        >
+          <ChevronLeft
+            className={cn(
+              "h-4 w-4 transition-transform duration-300",
+              collapsed && "rotate-180"
+            )}
+          />
+          {!collapsed && <span className="text-sm">Collapse</span>}
+        </Button>
+
+        {/* Logout */}
+        {collapsed ? (
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-10 h-10 p-0 text-muted-foreground hover:text-destructive"
+              >
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">Logout</TooltipContent>
+          </Tooltip>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start gap-2 text-muted-foreground hover:text-destructive mt-1"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="text-sm">Logout</span>
+          </Button>
+        )}
+      </div>
+    </aside>
   );
 }
