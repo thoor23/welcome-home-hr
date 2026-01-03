@@ -123,6 +123,7 @@ import ESSEvents from "./pages/ess/Events";
 import ESSSupportTickets from "./pages/ess/SupportTickets";
 import ESSNewTicket from "./pages/ess/NewTicket";
 import ESSKnowledgeBase from "./pages/ess/KnowledgeBase";
+import ESSSettings from "./pages/ess/Settings";
 
 const queryClient = new QueryClient();
 
@@ -276,6 +277,7 @@ const App = () => (
             <Route path="/ess/support/tickets" element={<ESSSupportTickets />} />
             <Route path="/ess/support/new" element={<ESSNewTicket />} />
             <Route path="/ess/support/kb" element={<ESSKnowledgeBase />} />
+            <Route path="/ess/settings" element={<ESSSettings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
