@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
 
@@ -56,8 +55,6 @@ export function DashboardHeader() {
     <header className="h-16 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-50">
       {/* Left Side */}
       <div className="flex items-center gap-4">
-        <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
-        
         {/* Breadcrumbs */}
         <nav className="flex items-center text-sm">
           <span className="text-muted-foreground hover:text-foreground cursor-pointer">Home</span>
