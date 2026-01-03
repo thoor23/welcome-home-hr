@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,12 +61,7 @@ export default function SLASettings() {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
+    <AdminLayout>
             <div className="mb-6">
               <h1 className="text-2xl font-bold">SLA Settings</h1>
               <p className="text-muted-foreground">Configure Service Level Agreements for support tickets</p>
@@ -274,9 +267,6 @@ export default function SLASettings() {
                 Save Settings
               </Button>
             </div>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 }
