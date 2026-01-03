@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import {
@@ -314,8 +314,16 @@ function CollapsibleMenuItem({
   collapsed: boolean;
   currentPath: string;
 }) {
+  const { openMenus, toggleMenu } = useSidebarContext();
   const isMenuActive = item.subItems.some((sub) => currentPath === sub.url);
-  const [isOpen, setIsOpen] = useState(isMenuActive);
+  const isOpen = openMenus.has(item.title) || isMenuActive;
+
+  // Auto-open menu when its route is active
+  useEffect(() => {
+    if (isMenuActive && !openMenus.has(item.title)) {
+      toggleMenu(item.title);
+    }
+  }, [isMenuActive, item.title, openMenus, toggleMenu]);
 
   // Icon-only mode with tooltip
   if (collapsed) {
@@ -357,7 +365,7 @@ function CollapsibleMenuItem({
   return (
     <div className="space-y-1">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => toggleMenu(item.title)}
         className={cn(
           "flex items-center w-full gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
           isMenuActive
