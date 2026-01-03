@@ -1,4 +1,5 @@
-import { Bell, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight, ChevronRight } from "lucide-react";
+import { Bell, Moon, Sun, CreditCard, CheckSquare, Settings, MessageSquare, FileText, HelpCircle, Clock, ArrowRight, ChevronRight, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -49,6 +50,7 @@ const notifications = [
 
 export function DashboardHeader() {
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
 
   return (
     <header className="h-16 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-50">
@@ -166,9 +168,11 @@ export function DashboardHeader() {
               </div>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/admin/profile")}>
+              <User className="mr-2 h-4 w-4" />
+              Profile
+            </DropdownMenuItem>
             <DropdownMenuItem>
-              Offers
               <Badge className="ml-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-destructive">2</Badge>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -181,7 +185,7 @@ export function DashboardHeader() {
               <CheckSquare className="mr-2 h-4 w-4" />
               Subscriptions
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/admin/personal-settings")}>
               <Settings className="mr-2 h-4 w-4" />
               Settings
             </DropdownMenuItem>
