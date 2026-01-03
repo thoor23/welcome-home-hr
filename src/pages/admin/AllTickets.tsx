@@ -1,20 +1,16 @@
 import { useState } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
-import { Card, CardContent } from "@/components/ui/card";
 import { DataTable, Column } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TicketDialog } from "@/components/support/TicketDialog";
 import { TicketDrawer } from "@/components/support/TicketDrawer";
 import { 
-  TicketCheck, 
-  AlertCircle, 
-  Clock, 
-  CheckCircle, 
   Plus,
   Eye,
   UserPlus,
   MoreHorizontal,
+  CheckCircle,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -154,13 +150,6 @@ export default function AllTickets() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
 
-  const stats = {
-    total: sampleTickets.length,
-    open: sampleTickets.filter(t => t.status === "Open").length,
-    inProgress: sampleTickets.filter(t => t.status === "In Progress").length,
-    resolved: sampleTickets.filter(t => t.status === "Resolved" || t.status === "Closed").length,
-  };
-
   const columns: Column<Ticket>[] = [
     {
       key: "id",
@@ -251,78 +240,21 @@ export default function AllTickets() {
 
   return (
     <AdminLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">All Tickets</h1>
-        <p className="text-muted-foreground">View and manage all support tickets</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">All Tickets</h1>
+          <p className="text-muted-foreground mt-1">View and manage all support tickets</p>
+        </div>
+        <Button onClick={() => setDialogOpen(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Create Ticket
+        </Button>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-primary/10">
-                <TicketCheck className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Total Tickets</p>
-                <p className="text-2xl font-bold">{stats.total}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-blue-500/10">
-                <AlertCircle className="h-6 w-6 text-blue-500" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Open Tickets</p>
-                <p className="text-2xl font-bold">{stats.open}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-purple-500/10">
-                <Clock className="h-6 w-6 text-purple-500" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">In Progress</p>
-                <p className="text-2xl font-bold">{stats.inProgress}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-green-500/10">
-                <CheckCircle className="h-6 w-6 text-green-500" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Resolved Today</p>
-                <p className="text-2xl font-bold">{stats.resolved}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Table */}
       <DataTable
         columns={columns}
         data={sampleTickets}
         searchPlaceholder="Search tickets..."
-        toolbarActions={
-          <Button onClick={() => setDialogOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Create Ticket
-          </Button>
-        }
       />
 
       <TicketDialog open={dialogOpen} onOpenChange={setDialogOpen} />
