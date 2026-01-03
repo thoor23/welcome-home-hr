@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -551,48 +549,38 @@ const Employees = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-
-        <div className="flex-1 flex flex-col min-w-0">
-          <DashboardHeader />
-
-          <main className="flex-1 p-6 overflow-auto min-w-0">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground font-display">Employees</h1>
-                <p className="text-muted-foreground mt-1">Manage your organization's employees</p>
-              </div>
-            </div>
-
-            {/* Data Table */}
-            <DataTable
-              data={employees}
-              columns={columns}
-              filters={filters}
-              searchPlaceholder="Search Users..."
-              selectable
-              toolbarActions={
-                <>
-                  <Button variant="outline" onClick={exportEmployeesCsv}>
-                    <Download className="h-4 w-4 mr-2" />
-                    Export CSV
-                  </Button>
-                  <Button onClick={() => setAddDrawerOpen(true)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Employee
-                  </Button>
-                </>
-              }
-              pageSize={10}
-              pageSizeOptions={[10, 25, 50, 100]}
-              getRowId={(employee) => employee.id}
-            />
-          </main>
+    <AdminLayout>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Employees</h1>
+          <p className="text-muted-foreground mt-1">Manage your organization's employees</p>
         </div>
       </div>
+
+      {/* Data Table */}
+      <DataTable
+        data={employees}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search Users..."
+        selectable
+        toolbarActions={
+          <>
+            <Button variant="outline" onClick={exportEmployeesCsv}>
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </Button>
+            <Button onClick={() => setAddDrawerOpen(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Employee
+            </Button>
+          </>
+        }
+        pageSize={10}
+        pageSizeOptions={[10, 25, 50, 100]}
+        getRowId={(employee) => employee.id}
+      />
 
       {/* Drawers */}
       <AddEmployeeDrawer
@@ -614,7 +602,7 @@ const Employees = () => {
           />
         </>
       )}
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

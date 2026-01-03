@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CalendarDays, CalendarCheck, CalendarClock, Calendar, Search, Plus, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react";
-import { format, parseISO, isAfter, isBefore, isToday } from "date-fns";
+import { format, parseISO, isToday } from "date-fns";
 
 // Sample events data
 const eventsData = [
@@ -148,162 +146,154 @@ const EventsList = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-foreground">All Events</h1>
-              <p className="text-muted-foreground">View and manage all events in list format</p>
-            </div>
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              <StatsCard
-                title="Total Events"
-                value={totalEvents.toString()}
-                icon={CalendarDays}
-              />
-              <StatsCard
-                title="Upcoming Events"
-                value={upcomingEvents.toString()}
-                icon={CalendarClock}
-              />
-              <StatsCard
-                title="This Month"
-                value={thisMonthEvents.toString()}
-                icon={Calendar}
-              />
-              <StatsCard
-                title="Today"
-                value={todayEvents.toString()}
-                icon={CalendarCheck}
-              />
-            </div>
+    <AdminLayout>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-foreground">All Events</h1>
+        <p className="text-muted-foreground">View and manage all events in list format</p>
+      </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <StatsCard
+          title="Total Events"
+          value={totalEvents.toString()}
+          icon={CalendarDays}
+        />
+        <StatsCard
+          title="Upcoming Events"
+          value={upcomingEvents.toString()}
+          icon={CalendarClock}
+        />
+        <StatsCard
+          title="This Month"
+          value={thisMonthEvents.toString()}
+          icon={Calendar}
+        />
+        <StatsCard
+          title="Today"
+          value={todayEvents.toString()}
+          icon={CalendarCheck}
+        />
+      </div>
 
-            {/* Filters */}
-            <div className="bg-card rounded-lg border border-border p-4 mb-6">
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="relative flex-1 min-w-[200px]">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search events..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="Meeting">Meeting</SelectItem>
-                    <SelectItem value="Training">Training</SelectItem>
-                    <SelectItem value="Workshop">Workshop</SelectItem>
-                    <SelectItem value="Conference">Conference</SelectItem>
-                    <SelectItem value="Team Building">Team Building</SelectItem>
-                    <SelectItem value="Webinar">Webinar</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="Upcoming">Upcoming</SelectItem>
-                    <SelectItem value="Ongoing">Ongoing</SelectItem>
-                    <SelectItem value="Completed">Completed</SelectItem>
-                    <SelectItem value="Cancelled">Cancelled</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Event
-                </Button>
-              </div>
-            </div>
-
-            {/* Events Table */}
-            <div className="bg-card rounded-lg border border-border overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/50">
-                    <TableHead>Event Name</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Date & Time</TableHead>
-                    <TableHead>Organizer</TableHead>
-                    <TableHead className="text-center">Attendees</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="w-[80px]">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredEvents.map((event) => (
-                    <TableRow key={event.id}>
-                      <TableCell className="font-medium">{event.title}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: event.categoryColor }}
-                          />
-                          {event.category}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {event.location}
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">
-                            {format(parseISO(event.startDate), "MMM d, yyyy")}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {format(parseISO(event.startDate), "h:mm a")} -{" "}
-                            {format(parseISO(event.endDate), "h:mm a")}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{event.organizer}</TableCell>
-                      <TableCell className="text-center">{event.attendees}</TableCell>
-                      <TableCell>{getStatusBadge(event.status)}</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Edit className="h-4 w-4 mr-2" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </main>
+      {/* Filters */}
+      <div className="bg-card rounded-lg border border-border p-4 mb-6">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search events..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="Meeting">Meeting</SelectItem>
+              <SelectItem value="Training">Training</SelectItem>
+              <SelectItem value="Workshop">Workshop</SelectItem>
+              <SelectItem value="Conference">Conference</SelectItem>
+              <SelectItem value="Team Building">Team Building</SelectItem>
+              <SelectItem value="Webinar">Webinar</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="Upcoming">Upcoming</SelectItem>
+              <SelectItem value="Ongoing">Ongoing</SelectItem>
+              <SelectItem value="Completed">Completed</SelectItem>
+              <SelectItem value="Cancelled">Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Event
+          </Button>
         </div>
       </div>
-    </SidebarProvider>
+
+      {/* Events Table */}
+      <div className="bg-card rounded-lg border border-border overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead>Event Name</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Location</TableHead>
+              <TableHead>Date & Time</TableHead>
+              <TableHead>Organizer</TableHead>
+              <TableHead className="text-center">Attendees</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="w-[80px]">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredEvents.map((event) => (
+              <TableRow key={event.id}>
+                <TableCell className="font-medium">{event.title}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: event.categoryColor }}
+                    />
+                    {event.category}
+                  </div>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {event.location}
+                </TableCell>
+                <TableCell>
+                  <div>
+                    <div className="font-medium">
+                      {format(parseISO(event.startDate), "MMM d, yyyy")}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {format(parseISO(event.startDate), "h:mm a")} -{" "}
+                      {format(parseISO(event.endDate), "h:mm a")}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>{event.organizer}</TableCell>
+                <TableCell className="text-center">{event.attendees}</TableCell>
+                <TableCell>{getStatusBadge(event.status)}</TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>
+                        <Eye className="h-4 w-4 mr-2" />
+                        View
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive">
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </AdminLayout>
   );
 };
 

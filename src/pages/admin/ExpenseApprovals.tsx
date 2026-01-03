@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
@@ -357,118 +355,110 @@ const ExpenseApprovals = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-foreground">Expense Approvals</h1>
-              <p className="text-muted-foreground">
-                Review and approve pending expense requests
-              </p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-4 mb-6">
-              <StatsCard
-                title="Pending Approvals"
-                value={pendingCount.toString()}
-                icon={Clock}
-              />
-              <StatsCard
-                title="Total Pending Amount"
-                value={`₹${totalPendingAmount.toLocaleString()}`}
-                icon={IndianRupee}
-              />
-              <StatsCard
-                title="Approved Today"
-                value="8"
-                icon={CheckCircle}
-              />
-              <StatsCard
-                title="Rejected Today"
-                value="2"
-                icon={XCircle}
-              />
-            </div>
-
-            {selectedIds.length > 0 && (
-              <div className="mb-4 p-4 bg-muted rounded-lg flex items-center justify-between">
-                <span className="text-sm font-medium">
-                  {selectedIds.length} item(s) selected
-                </span>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-green-500 border-green-500/20 hover:bg-green-500/10"
-                    onClick={handleBulkApprove}
-                  >
-                    <Check className="mr-2 h-4 w-4" />
-                    Approve Selected
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-red-500 border-red-500/20 hover:bg-red-500/10"
-                    onClick={handleBulkReject}
-                  >
-                    <X className="mr-2 h-4 w-4" />
-                    Reject Selected
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            <DataTable
-              data={expenses}
-              columns={columns}
-              filters={filters}
-              searchPlaceholder="Search by employee..."
-            />
-
-            <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Reject Expense</DialogTitle>
-                  <DialogDescription>
-                    Please provide a reason for rejecting this expense request
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="py-4">
-                  <Label>Rejection Reason</Label>
-                  <Textarea
-                    className="mt-2"
-                    placeholder="Enter reason for rejection..."
-                    value={rejectReason}
-                    onChange={(e) => setRejectReason(e.target.value)}
-                  />
-                </div>
-                <DialogFooter>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setRejectDialogOpen(false);
-                      setRejectingId(null);
-                      setRejectReason("");
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    onClick={rejectingId ? confirmReject : confirmBulkReject}
-                  >
-                    Reject
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </main>
-        </div>
+    <AdminLayout>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-foreground">Expense Approvals</h1>
+        <p className="text-muted-foreground">
+          Review and approve pending expense requests
+        </p>
       </div>
-    </SidebarProvider>
+
+      <div className="grid gap-4 md:grid-cols-4 mb-6">
+        <StatsCard
+          title="Pending Approvals"
+          value={pendingCount.toString()}
+          icon={Clock}
+        />
+        <StatsCard
+          title="Total Pending Amount"
+          value={`₹${totalPendingAmount.toLocaleString()}`}
+          icon={IndianRupee}
+        />
+        <StatsCard
+          title="Approved Today"
+          value="8"
+          icon={CheckCircle}
+        />
+        <StatsCard
+          title="Rejected Today"
+          value="2"
+          icon={XCircle}
+        />
+      </div>
+
+      {selectedIds.length > 0 && (
+        <div className="mb-4 p-4 bg-muted rounded-lg flex items-center justify-between">
+          <span className="text-sm font-medium">
+            {selectedIds.length} item(s) selected
+          </span>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-green-500 border-green-500/20 hover:bg-green-500/10"
+              onClick={handleBulkApprove}
+            >
+              <Check className="mr-2 h-4 w-4" />
+              Approve Selected
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-red-500 border-red-500/20 hover:bg-red-500/10"
+              onClick={handleBulkReject}
+            >
+              <X className="mr-2 h-4 w-4" />
+              Reject Selected
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <DataTable
+        data={expenses}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search by employee..."
+      />
+
+      <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject Expense</DialogTitle>
+            <DialogDescription>
+              Please provide a reason for rejecting this expense request
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Label>Rejection Reason</Label>
+            <Textarea
+              className="mt-2"
+              placeholder="Enter reason for rejection..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setRejectDialogOpen(false);
+                setRejectingId(null);
+                setRejectReason("");
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={rejectingId ? confirmReject : confirmBulkReject}
+            >
+              Reject
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </AdminLayout>
   );
 };
 

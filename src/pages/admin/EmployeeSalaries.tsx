@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable, Column } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -251,92 +249,84 @@ const EmployeeSalaries = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="flex flex-col gap-6">
-              {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h1 className="text-2xl font-bold">Employee Salaries</h1>
-                  <p className="text-muted-foreground">
-                    View and manage employee salary and bank details
-                  </p>
-                </div>
-                <Button onClick={handleExport} className="gap-2">
-                  <Download className="h-4 w-4" />
-                  Export Data
-                </Button>
-              </div>
+    <AdminLayout>
+      <div className="flex flex-col gap-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold">Employee Salaries</h1>
+            <p className="text-muted-foreground">
+              View and manage employee salary and bank details
+            </p>
+          </div>
+          <Button onClick={handleExport} className="gap-2">
+            <Download className="h-4 w-4" />
+            Export Data
+          </Button>
+        </div>
 
-              {/* Stats Cards */}
-              <div className="grid gap-4 md:grid-cols-4">
-                <div className="rounded-lg border bg-card p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Users className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Total Employees</p>
-                      <p className="text-2xl font-bold">{employeeSalaryData.length}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded-lg border bg-card p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-green-500/10 flex items-center justify-center">
-                      <CreditCard className="h-5 w-5 text-green-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Total Net Salary</p>
-                      <p className="text-2xl font-bold">
-                        ₹{employeeSalaryData.reduce((sum, emp) => sum + emp.netSalary, 0).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded-lg border bg-card p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                      <Building2 className="h-5 w-5 text-blue-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Avg. Salary</p>
-                      <p className="text-2xl font-bold">
-                        ₹{Math.round(employeeSalaryData.reduce((sum, emp) => sum + emp.netSalary, 0) / employeeSalaryData.length).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded-lg border bg-card p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
-                      <Users className="h-5 w-5 text-orange-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Active Employees</p>
-                      <p className="text-2xl font-bold">
-                        {employeeSalaryData.filter(emp => emp.status === "active").length}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+        {/* Stats Cards */}
+        <div className="grid gap-4 md:grid-cols-4">
+          <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Users className="h-5 w-5 text-primary" />
               </div>
-
-              {/* Data Table */}
-              <div className="rounded-lg border bg-card">
-                <DataTable
-                  data={employeeSalaryData}
-                  columns={columns}
-                  filters={filters}
-                  searchPlaceholder="Search employees..."
-                />
+              <div>
+                <p className="text-sm text-muted-foreground">Total Employees</p>
+                <p className="text-2xl font-bold">{employeeSalaryData.length}</p>
               </div>
             </div>
-          </main>
+          </div>
+          <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                <CreditCard className="h-5 w-5 text-green-500" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Total Net Salary</p>
+                <p className="text-2xl font-bold">
+                  ₹{employeeSalaryData.reduce((sum, emp) => sum + emp.netSalary, 0).toLocaleString()}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                <Building2 className="h-5 w-5 text-blue-500" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Avg. Salary</p>
+                <p className="text-2xl font-bold">
+                  ₹{Math.round(employeeSalaryData.reduce((sum, emp) => sum + emp.netSalary, 0) / employeeSalaryData.length).toLocaleString()}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                <Users className="h-5 w-5 text-orange-500" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Active Employees</p>
+                <p className="text-2xl font-bold">
+                  {employeeSalaryData.filter(emp => emp.status === "active").length}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Data Table */}
+        <div className="rounded-lg border bg-card">
+          <DataTable
+            data={employeeSalaryData}
+            columns={columns}
+            filters={filters}
+            searchPlaceholder="Search employees..."
+          />
         </div>
       </div>
 
@@ -423,7 +413,7 @@ const EmployeeSalaries = () => {
           )}
         </DialogContent>
       </Dialog>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 
