@@ -119,6 +119,7 @@ import ESSExpenseSubmit from "./pages/ess/ExpenseSubmit";
 import ESSExpenseClaims from "./pages/ess/ExpenseClaims";
 import ESSDocuments from "./pages/ess/Documents";
 import ESSAssets from "./pages/ess/Assets";
+import ESSEvents from "./pages/ess/Events";
 
 const queryClient = new QueryClient();
 
@@ -267,6 +268,7 @@ const App = () => (
             <Route path="/ess/expenses/claims" element={<ESSExpenseClaims />} />
             <Route path="/ess/documents" element={<ESSDocuments />} />
             <Route path="/ess/assets" element={<ESSAssets />} />
+            <Route path="/ess/events" element={<ESSEvents />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
