@@ -7,13 +7,10 @@ import {
   Wallet,
   CalendarDays,
   UserPlus,
-  TrendingUp,
   FileText,
   Settings,
   Building2,
   Clock,
-  Award,
-  HelpCircle,
   ChevronDown,
   FileCheck,
   BarChart3,
@@ -60,18 +57,20 @@ import {
   FolderOpen,
   FileArchive,
   FolderCog,
-  HardDrive,
   History,
   Activity,
   Database,
   Shield,
   Server,
   Webhook,
+  HelpCircle,
+  LucideIcon,
 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -89,147 +88,342 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-const mainMenuItems = [
-  { title: "Dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
+// Types
+interface SubMenuItem {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+}
+
+interface MenuItem {
+  title: string;
+  icon: LucideIcon;
+  subItems: SubMenuItem[];
+}
+
+interface MenuGroup {
+  label: string;
+  items: MenuItem[];
+}
+
+// Menu Data - Organized by logical groups
+const menuGroups: MenuGroup[] = [
+  {
+    label: "People Management",
+    items: [
+      {
+        title: "Employees",
+        icon: Users,
+        subItems: [
+          { title: "All Employees", url: "/admin/employees/all", icon: Users },
+          { title: "Departments", url: "/admin/employees/departments", icon: Building2 },
+          { title: "Designations", url: "/admin/employees/designations", icon: Briefcase },
+          { title: "Employment Types", url: "/admin/employees/types", icon: UserCheck },
+          { title: "Locations", url: "/admin/employees/locations", icon: MapPin },
+          { title: "Regularization", url: "/admin/employees/regularization", icon: FileCheck },
+        ],
+      },
+      {
+        title: "Attendance",
+        icon: CalendarCheck,
+        subItems: [
+          { title: "Overview", url: "/admin/attendance/overview", icon: BarChart3 },
+          { title: "All Attendance", url: "/admin/attendance/all", icon: ListChecks },
+          { title: "Regularization", url: "/admin/attendance/regularization", icon: FileCheck },
+          { title: "Rules", url: "/admin/attendance/rules", icon: ScrollText },
+        ],
+      },
+      {
+        title: "Shifts",
+        icon: Timer,
+        subItems: [
+          { title: "All Shifts", url: "/admin/shifts/all", icon: Clock },
+          { title: "Assignments", url: "/admin/shifts/assignments", icon: UserCheck2 },
+          { title: "Schedule", url: "/admin/shifts/schedule", icon: CalendarClock },
+          { title: "Swap Requests", url: "/admin/shifts/swaps", icon: ArrowRightLeft },
+          { title: "Report", url: "/admin/shifts/report", icon: BarChart3 },
+        ],
+      },
+      {
+        title: "Leave",
+        icon: CalendarDays,
+        subItems: [
+          { title: "Overview", url: "/admin/leave/overview", icon: BarChart3 },
+          { title: "All Leaves", url: "/admin/leave/all", icon: CheckCircle },
+          { title: "Requests", url: "/admin/leave/requests", icon: ClipboardList },
+          { title: "Rules", url: "/admin/leave/rules", icon: ScrollText },
+          { title: "Report", url: "/admin/leave/report", icon: FileBarChart },
+        ],
+      },
+    ],
+  },
+  {
+    label: "HR Operations",
+    items: [
+      {
+        title: "Recruitment",
+        icon: UserPlus,
+        subItems: [
+          { title: "Job Postings", url: "/admin/recruitment/jobs", icon: Briefcase },
+          { title: "Applications", url: "/admin/recruitment/applications", icon: FileUser },
+          { title: "Candidates", url: "/admin/recruitment/candidates", icon: UserSearch },
+          { title: "Interviews", url: "/admin/recruitment/interviews", icon: Calendar },
+          { title: "Offers", url: "/admin/recruitment/offers", icon: FileCheck2 },
+          { title: "Report", url: "/admin/recruitment/report", icon: PieChart },
+        ],
+      },
+      {
+        title: "Onboarding",
+        icon: UserPlus2,
+        subItems: [
+          { title: "Overview", url: "/admin/onboarding/overview", icon: BarChart3 },
+          { title: "New Hire", url: "/admin/onboarding/new", icon: UserPlus2 },
+          { title: "Tasks", url: "/admin/onboarding/tasks", icon: ClipboardList },
+          { title: "Report", url: "/admin/onboarding/report", icon: PieChart },
+        ],
+      },
+      {
+        title: "Offboarding",
+        icon: UserMinus,
+        subItems: [
+          { title: "Overview", url: "/admin/offboarding/overview", icon: BarChart3 },
+          { title: "Exit Clearance", url: "/admin/offboarding/clearance", icon: LogOut },
+          { title: "Tasks", url: "/admin/offboarding/tasks", icon: ClipboardList },
+          { title: "Report", url: "/admin/offboarding/report", icon: PieChart },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Finance",
+    items: [
+      {
+        title: "Payroll",
+        icon: Wallet,
+        subItems: [
+          { title: "Employee Salaries", url: "/admin/payroll/salaries", icon: Users },
+          { title: "Salary Structure", url: "/admin/payroll/salary-structure", icon: FileSpreadsheet },
+          { title: "Generate Payslip", url: "/admin/payroll/generate", icon: Receipt },
+          { title: "Payslip Template", url: "/admin/payroll/template", icon: LayoutTemplate },
+          { title: "Report", url: "/admin/payroll/report", icon: FileBarChart },
+        ],
+      },
+      {
+        title: "Expenses",
+        icon: CreditCard,
+        subItems: [
+          { title: "All Expenses", url: "/admin/expenses/all", icon: CreditCard },
+          { title: "Categories", url: "/admin/expenses/categories", icon: Tags },
+          { title: "Claims", url: "/admin/expenses/claims", icon: ClipboardCheck },
+          { title: "Approvals", url: "/admin/expenses/approvals", icon: FileCheckIcon },
+          { title: "Report", url: "/admin/expenses/report", icon: BarChart3 },
+        ],
+      },
+      {
+        title: "Internal Billing",
+        icon: Building,
+        subItems: [
+          { title: "All Invoices", url: "/admin/billing/invoices", icon: FileText },
+          { title: "Generate Invoice", url: "/admin/billing/generate-invoice", icon: FilePlus },
+          { title: "Invoice Template", url: "/admin/billing/invoice-template", icon: LayoutTemplate },
+          { title: "Requests", url: "/admin/billing/requests", icon: Receipt },
+          { title: "Approvals", url: "/admin/billing/approvals", icon: FileCheckIcon },
+          { title: "Allocations", url: "/admin/billing/allocations", icon: Wallet },
+          { title: "Categories", url: "/admin/billing/categories", icon: Tags },
+          { title: "Report", url: "/admin/billing/report", icon: PieChart },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Organization",
+    items: [
+      {
+        title: "Assets",
+        icon: Package,
+        subItems: [
+          { title: "All Assets", url: "/admin/assets/all", icon: Package },
+          { title: "Categories", url: "/admin/assets/categories", icon: Layers },
+          { title: "Assignments", url: "/admin/assets/assignments", icon: UserCheck2 },
+          { title: "Maintenance", url: "/admin/assets/maintenance", icon: Wrench },
+          { title: "Report", url: "/admin/assets/report", icon: BarChart3 },
+        ],
+      },
+      {
+        title: "Events",
+        icon: CalendarDays,
+        subItems: [
+          { title: "Calendar", url: "/admin/events/calendar", icon: CalendarDays },
+          { title: "All Events", url: "/admin/events/list", icon: CalendarCheck },
+          { title: "Categories", url: "/admin/events/categories", icon: Tags },
+          { title: "Report", url: "/admin/events/report", icon: PieChart },
+        ],
+      },
+      {
+        title: "Documents",
+        icon: FolderOpen,
+        subItems: [
+          { title: "All Documents", url: "/admin/documents/all", icon: FolderOpen },
+          { title: "My Documents", url: "/admin/documents/my", icon: FileArchive },
+          { title: "Categories", url: "/admin/documents/categories", icon: Tags },
+          { title: "Settings", url: "/admin/documents/settings", icon: FolderCog },
+          { title: "Report", url: "/admin/documents/report", icon: PieChart },
+        ],
+      },
+      {
+        title: "Communications",
+        icon: Mail,
+        subItems: [
+          { title: "All Emails", url: "/admin/communications/all", icon: Mail },
+          { title: "Generate Letter", url: "/admin/communications/generate", icon: FileSignature },
+          { title: "Email Templates", url: "/admin/communications/email-templates", icon: FileText },
+          { title: "Letter Templates", url: "/admin/communications/letter-templates", icon: FileSignature },
+          { title: "Configuration", url: "/admin/communications/config", icon: Settings2 },
+          { title: "Report", url: "/admin/communications/report", icon: PieChart },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Support & Admin",
+    items: [
+      {
+        title: "Support",
+        icon: Headphones,
+        subItems: [
+          { title: "All Tickets", url: "/admin/support/all", icon: TicketCheck },
+          { title: "My Tickets", url: "/admin/support/my-tickets", icon: Bookmark },
+          { title: "Categories", url: "/admin/support/categories", icon: Tags },
+          { title: "SLA Settings", url: "/admin/support/sla", icon: Gauge },
+          { title: "Knowledge Base", url: "/admin/support/knowledge-base", icon: BookOpen },
+          { title: "Report", url: "/admin/support/report", icon: PieChart },
+        ],
+      },
+      {
+        title: "Audit Logs",
+        icon: History,
+        subItems: [
+          { title: "All Logs", url: "/admin/audit/all", icon: History },
+          { title: "Activity Logs", url: "/admin/audit/activity", icon: Activity },
+          { title: "Data Changes", url: "/admin/audit/data", icon: Database },
+          { title: "Security Logs", url: "/admin/audit/security", icon: Shield },
+          { title: "System Logs", url: "/admin/audit/system", icon: Server },
+          { title: "API Logs", url: "/admin/audit/api", icon: Webhook },
+          { title: "Settings", url: "/admin/audit/settings", icon: Settings },
+        ],
+      },
+    ],
+  },
 ];
 
-const employeeSubItems = [
-  { title: "All Employees", url: "/admin/employees/all", icon: Users },
-  { title: "Departments", url: "/admin/employees/departments", icon: Building2 },
-  { title: "Designations", url: "/admin/employees/designations", icon: Briefcase },
-  { title: "Employment Types", url: "/admin/employees/types", icon: UserCheck },
-  { title: "Locations", url: "/admin/employees/locations", icon: MapPin },
-  { title: "Regularization", url: "/admin/employees/regularization", icon: FileCheck },
-];
+// Collapsible Menu Item Component
+function CollapsibleMenuItem({
+  item,
+  collapsed,
+  currentPath,
+}: {
+  item: MenuItem;
+  collapsed: boolean;
+  currentPath: string;
+}) {
+  const isMenuActive = item.subItems.some((sub) => currentPath === sub.url);
+  const [isOpen, setIsOpen] = useState(isMenuActive);
 
-const attendanceSubItems = [
-  { title: "Overview", url: "/admin/attendance/overview", icon: BarChart3 },
-  { title: "All Attendance", url: "/admin/attendance/all", icon: ListChecks },
-  { title: "Regularization", url: "/admin/attendance/regularization", icon: FileCheck },
-  { title: "Rules", url: "/admin/attendance/rules", icon: ScrollText },
-];
+  const menuButton = (
+    <SidebarMenuButton
+      isActive={isMenuActive}
+      className={cn(
+        "rounded-lg transition-all duration-200 w-full group/menu-btn",
+        isMenuActive
+          ? "bg-primary/10 text-primary border-l-2 border-primary"
+          : "hover:bg-muted/50 border-l-2 border-transparent"
+      )}
+    >
+      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
+        <item.icon className={cn("h-4 w-4 flex-shrink-0", isMenuActive && "text-primary")} />
+        {!collapsed && (
+          <>
+            <span className="flex-1 truncate text-sm font-medium">{item.title}</span>
+            <ChevronDown
+              className={cn(
+                "h-4 w-4 flex-shrink-0 transition-transform duration-200 text-muted-foreground",
+                isOpen && "rotate-180"
+              )}
+            />
+          </>
+        )}
+      </div>
+    </SidebarMenuButton>
+  );
 
-const leaveSubItems = [
-  { title: "Overview", url: "/admin/leave/overview", icon: BarChart3 },
-  { title: "All Leaves", url: "/admin/leave/all", icon: CheckCircle },
-  { title: "Requests", url: "/admin/leave/requests", icon: ClipboardList },
-  { title: "Rules", url: "/admin/leave/rules", icon: ScrollText },
-  { title: "Report", url: "/admin/leave/report", icon: FileBarChart },
-];
+  if (collapsed) {
+    return (
+      <TooltipProvider delayDuration={0}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <SidebarMenuItem>{menuButton}</SidebarMenuItem>
+          </TooltipTrigger>
+          <TooltipContent side="right" className="flex flex-col gap-1 p-2">
+            <span className="font-semibold">{item.title}</span>
+            <Separator className="my-1" />
+            {item.subItems.map((sub) => (
+              <Link
+                key={sub.url}
+                to={sub.url}
+                className={cn(
+                  "text-xs py-1 px-2 rounded hover:bg-muted/50 transition-colors",
+                  currentPath === sub.url && "bg-primary/10 text-primary"
+                )}
+              >
+                {sub.title}
+              </Link>
+            ))}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
 
-const payrollSubItems = [
-  { title: "Employee Salaries", url: "/admin/payroll/salaries", icon: Users },
-  { title: "Salary Structure", url: "/admin/payroll/salary-structure", icon: FileSpreadsheet },
-  { title: "Generate Payslip", url: "/admin/payroll/generate", icon: Receipt },
-  { title: "Payslip Template", url: "/admin/payroll/template", icon: LayoutTemplate },
-  { title: "Report", url: "/admin/payroll/report", icon: FileBarChart },
-];
-
-const recruitmentSubItems = [
-  { title: "Job Postings", url: "/admin/recruitment/jobs", icon: Briefcase },
-  { title: "Applications", url: "/admin/recruitment/applications", icon: FileUser },
-  { title: "Candidates", url: "/admin/recruitment/candidates", icon: UserSearch },
-  { title: "Interviews", url: "/admin/recruitment/interviews", icon: Calendar },
-  { title: "Offers", url: "/admin/recruitment/offers", icon: FileCheck2 },
-  { title: "Report", url: "/admin/recruitment/report", icon: PieChart },
-];
-
-const assetSubItems = [
-  { title: "All Assets", url: "/admin/assets/all", icon: Package },
-  { title: "Categories", url: "/admin/assets/categories", icon: Layers },
-  { title: "Assignments", url: "/admin/assets/assignments", icon: UserCheck2 },
-  { title: "Maintenance", url: "/admin/assets/maintenance", icon: Wrench },
-  { title: "Report", url: "/admin/assets/report", icon: BarChart3 },
-];
-
-const expenseSubItems = [
-  { title: "All Expenses", url: "/admin/expenses/all", icon: CreditCard },
-  { title: "Categories", url: "/admin/expenses/categories", icon: Tags },
-  { title: "Claims", url: "/admin/expenses/claims", icon: ClipboardCheck },
-  { title: "Approvals", url: "/admin/expenses/approvals", icon: FileCheckIcon },
-  { title: "Report", url: "/admin/expenses/report", icon: BarChart3 },
-];
-
-const billingSubItems = [
-  { title: "All Invoices", url: "/admin/billing/invoices", icon: FileText },
-  { title: "Generate Invoice", url: "/admin/billing/generate-invoice", icon: FilePlus },
-  { title: "Invoice Template", url: "/admin/billing/invoice-template", icon: LayoutTemplate },
-  { title: "Requests", url: "/admin/billing/requests", icon: Receipt },
-  { title: "Approvals", url: "/admin/billing/approvals", icon: FileCheckIcon },
-  { title: "Allocations", url: "/admin/billing/allocations", icon: Wallet },
-  { title: "Categories", url: "/admin/billing/categories", icon: Tags },
-  { title: "Report", url: "/admin/billing/report", icon: PieChart },
-];
-
-const shiftSubItems = [
-  { title: "All Shifts", url: "/admin/shifts/all", icon: Clock },
-  { title: "Assignments", url: "/admin/shifts/assignments", icon: UserCheck2 },
-  { title: "Schedule", url: "/admin/shifts/schedule", icon: CalendarClock },
-  { title: "Swap Requests", url: "/admin/shifts/swaps", icon: ArrowRightLeft },
-  { title: "Report", url: "/admin/shifts/report", icon: BarChart3 },
-];
-
-const onboardingSubItems = [
-  { title: "Overview", url: "/admin/onboarding/overview", icon: BarChart3 },
-  { title: "New Hire", url: "/admin/onboarding/new", icon: UserPlus2 },
-  { title: "Tasks", url: "/admin/onboarding/tasks", icon: ClipboardList },
-  { title: "Report", url: "/admin/onboarding/report", icon: PieChart },
-];
-
-const offboardingSubItems = [
-  { title: "Overview", url: "/admin/offboarding/overview", icon: BarChart3 },
-  { title: "Exit Clearance", url: "/admin/offboarding/clearance", icon: LogOut },
-  { title: "Tasks", url: "/admin/offboarding/tasks", icon: ClipboardList },
-  { title: "Report", url: "/admin/offboarding/report", icon: PieChart },
-];
-
-const communicationsSubItems = [
-  { title: "All Emails", url: "/admin/communications/all", icon: Mail },
-  { title: "Generate Letter", url: "/admin/communications/generate", icon: FileSignature },
-  { title: "Email Templates", url: "/admin/communications/email-templates", icon: FileText },
-  { title: "Letter Templates", url: "/admin/communications/letter-templates", icon: FileSignature },
-  { title: "Configuration", url: "/admin/communications/config", icon: Settings2 },
-  { title: "Report", url: "/admin/communications/report", icon: PieChart },
-];
-
-const eventsSubItems = [
-  { title: "Calendar", url: "/admin/events/calendar", icon: CalendarDays },
-  { title: "All Events", url: "/admin/events/list", icon: CalendarCheck },
-  { title: "Categories", url: "/admin/events/categories", icon: Tags },
-  { title: "Report", url: "/admin/events/report", icon: PieChart },
-];
-
-const supportSubItems = [
-  { title: "All Tickets", url: "/admin/support/all", icon: TicketCheck },
-  { title: "My Tickets", url: "/admin/support/my-tickets", icon: Bookmark },
-  { title: "Categories", url: "/admin/support/categories", icon: Tags },
-  { title: "SLA Settings", url: "/admin/support/sla", icon: Gauge },
-  { title: "Knowledge Base", url: "/admin/support/knowledge-base", icon: BookOpen },
-  { title: "Report", url: "/admin/support/report", icon: PieChart },
-];
-
-const documentsSubItems = [
-  { title: "All Documents", url: "/admin/documents/all", icon: FolderOpen },
-  { title: "My Documents", url: "/admin/documents/my", icon: FileArchive },
-  { title: "Categories", url: "/admin/documents/categories", icon: Tags },
-  { title: "Settings", url: "/admin/documents/settings", icon: FolderCog },
-  { title: "Report", url: "/admin/documents/report", icon: PieChart },
-];
-
-const auditSubItems = [
-  { title: "All Logs", url: "/admin/audit/all", icon: History },
-  { title: "Activity Logs", url: "/admin/audit/activity", icon: Activity },
-  { title: "Data Changes", url: "/admin/audit/data", icon: Database },
-  { title: "Security Logs", url: "/admin/audit/security", icon: Shield },
-  { title: "System Logs", url: "/admin/audit/system", icon: Server },
-  { title: "API Logs", url: "/admin/audit/api", icon: Webhook },
-  { title: "Settings", url: "/admin/audit/settings", icon: Settings },
-];
-
-const otherItems = [
-  { title: "Settings", url: "/admin/settings", icon: Settings },
-];
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="group/collapsible">
+      <SidebarMenuItem>
+        <CollapsibleTrigger asChild>{menuButton}</CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarMenuSub className="ml-4 border-l border-border/50 pl-2 mt-1">
+            {item.subItems.map((sub) => (
+              <SidebarMenuSubItem key={sub.url}>
+                <SidebarMenuSubButton
+                  asChild
+                  isActive={currentPath === sub.url}
+                  className={cn(
+                    "rounded-md transition-all duration-200",
+                    currentPath === sub.url
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "hover:bg-muted/50 text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Link to={sub.url} className="flex items-center gap-2">
+                    <sub.icon className="h-3.5 w-3.5" />
+                    <span className="text-sm">{sub.title}</span>
+                  </Link>
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+            ))}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
+    </Collapsible>
+  );
+}
 
 export function DashboardSidebar() {
   const { state } = useSidebar();
@@ -237,1012 +431,176 @@ export function DashboardSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const isActive = (path: string) => currentPath === path;
-  const isEmployeeMenuActive = employeeSubItems.some((item) => currentPath === item.url);
-  const isAttendanceMenuActive = attendanceSubItems.some((item) => currentPath === item.url);
-  const isLeaveMenuActive = leaveSubItems.some((item) => currentPath === item.url);
-  const isPayrollMenuActive = payrollSubItems.some((item) => currentPath === item.url);
-  const isRecruitmentMenuActive = recruitmentSubItems.some((item) => currentPath === item.url);
-  const isAssetMenuActive = assetSubItems.some((item) => currentPath === item.url);
-  const isExpenseMenuActive = expenseSubItems.some((item) => currentPath === item.url);
-  const isBillingMenuActive = billingSubItems.some((item) => currentPath === item.url);
-  const isShiftMenuActive = shiftSubItems.some((item) => currentPath === item.url);
-  const isOnboardingMenuActive = onboardingSubItems.some((item) => currentPath === item.url);
-  const isOffboardingMenuActive = offboardingSubItems.some((item) => currentPath === item.url);
-  const isCommunicationsMenuActive = communicationsSubItems.some((item) => currentPath === item.url);
-  const isEventsMenuActive = eventsSubItems.some((item) => currentPath === item.url);
-  const isSupportMenuActive = supportSubItems.some((item) => currentPath === item.url);
-  const isDocumentsMenuActive = documentsSubItems.some((item) => currentPath === item.url);
-  const isAuditMenuActive = auditSubItems.some((item) => currentPath === item.url);
-
-  const [employeeMenuOpen, setEmployeeMenuOpen] = useState(isEmployeeMenuActive);
-  const [attendanceMenuOpen, setAttendanceMenuOpen] = useState(isAttendanceMenuActive);
-  const [leaveMenuOpen, setLeaveMenuOpen] = useState(isLeaveMenuActive);
-  const [payrollMenuOpen, setPayrollMenuOpen] = useState(isPayrollMenuActive);
-  const [recruitmentMenuOpen, setRecruitmentMenuOpen] = useState(isRecruitmentMenuActive);
-  const [assetMenuOpen, setAssetMenuOpen] = useState(isAssetMenuActive);
-  const [expenseMenuOpen, setExpenseMenuOpen] = useState(isExpenseMenuActive);
-  const [billingMenuOpen, setBillingMenuOpen] = useState(isBillingMenuActive);
-  const [shiftMenuOpen, setShiftMenuOpen] = useState(isShiftMenuActive);
-  const [onboardingMenuOpen, setOnboardingMenuOpen] = useState(isOnboardingMenuActive);
-  const [offboardingMenuOpen, setOffboardingMenuOpen] = useState(isOffboardingMenuActive);
-  const [communicationsMenuOpen, setCommunicationsMenuOpen] = useState(isCommunicationsMenuActive);
-  const [eventsMenuOpen, setEventsMenuOpen] = useState(isEventsMenuActive);
-  const [supportMenuOpen, setSupportMenuOpen] = useState(isSupportMenuActive);
-  const [documentsMenuOpen, setDocumentsMenuOpen] = useState(isDocumentsMenuActive);
-  const [auditMenuOpen, setAuditMenuOpen] = useState(isAuditMenuActive);
-
   return (
     <Sidebar
       className={cn(
-        "border-r border-border bg-card transition-all duration-300",
+        "border-r border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300",
         collapsed ? "w-16" : "w-64"
       )}
       collapsible="icon"
     >
       {/* Logo - Static Header */}
-      <SidebarHeader className={cn("py-4 border-b border-border", collapsed ? "px-1" : "px-2")}>
-        <div className={cn("flex items-center gap-2", collapsed ? "justify-center px-0" : "px-2")}>
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-            <Users className="w-4 h-4 text-primary-foreground" />
+      <SidebarHeader className={cn("py-4 border-b border-border/50", collapsed ? "px-2" : "px-4")}>
+        <div className={cn("flex items-center gap-3", collapsed ? "justify-center" : "")}>
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center flex-shrink-0 shadow-md shadow-primary/20">
+            <Users className="w-5 h-5 text-primary-foreground" />
           </div>
           {!collapsed && (
-            <span className="font-display font-bold text-lg text-foreground">NexHR</span>
+            <div className="flex flex-col">
+              <span className="font-display font-bold text-lg text-foreground leading-tight">NexHR</span>
+              <span className="text-[10px] text-muted-foreground font-medium tracking-wide">HR Management</span>
+            </div>
           )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent className={cn("py-4", collapsed ? "px-1" : "px-2")}>
-        {/* Main Menu */}
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {mainMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    className={cn(
-                      "rounded-lg transition-all",
-                      isActive(item.url)
-                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                        : "hover:bg-secondary"
-                    )}
-                  >
-                    <Link to={item.url} className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
-                      <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* HR Modules */}
+      <SidebarContent className={cn("py-3", collapsed ? "px-1" : "px-2")}>
+        {/* Dashboard - Main */}
         <SidebarGroup>
           {!collapsed && (
-            <SidebarGroupLabel className="px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              HR Modules
+            <SidebarGroupLabel className="px-3 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-1">
+              Main
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Employee Management with Submenu */}
-              <Collapsible
-                open={employeeMenuOpen}
-                onOpenChange={setEmployeeMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isEmployeeMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isEmployeeMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <Users className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Employees</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                employeeMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
+              <SidebarMenuItem>
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={currentPath === "/admin/dashboard"}
+                        className={cn(
+                          "rounded-lg transition-all duration-200",
+                          currentPath === "/admin/dashboard"
+                            ? "bg-primary text-primary-foreground shadow-md shadow-primary/25 hover:bg-primary/90"
+                            : "hover:bg-muted/50"
                         )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {employeeSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Attendance Management with Submenu */}
-              <Collapsible
-                open={attendanceMenuOpen}
-                onOpenChange={setAttendanceMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isAttendanceMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isAttendanceMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <CalendarCheck className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Attendance</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                attendanceMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {attendanceSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Shift Management with Submenu */}
-              <Collapsible
-                open={shiftMenuOpen}
-                onOpenChange={setShiftMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isShiftMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isShiftMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <Timer className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Shifts</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                shiftMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {shiftSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Leave Management with Submenu */}
-              <Collapsible
-                open={leaveMenuOpen}
-                onOpenChange={setLeaveMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isLeaveMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isLeaveMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <CalendarDays className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Leave</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                leaveMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {leaveSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Payroll Management with Submenu */}
-              <Collapsible
-                open={payrollMenuOpen}
-                onOpenChange={setPayrollMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isPayrollMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isPayrollMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <Wallet className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Payroll</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                payrollMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {payrollSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Recruitment Management with Submenu */}
-              <Collapsible
-                open={recruitmentMenuOpen}
-                onOpenChange={setRecruitmentMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isRecruitmentMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isRecruitmentMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <UserPlus className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Recruitment</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                recruitmentMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {recruitmentSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Asset Management with Submenu */}
-              <Collapsible
-                open={assetMenuOpen}
-                onOpenChange={setAssetMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isAssetMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isAssetMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <Package className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Assets</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                assetMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {assetSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Expense Management with Submenu */}
-              <Collapsible
-                open={expenseMenuOpen}
-                onOpenChange={setExpenseMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isExpenseMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isExpenseMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <CreditCard className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Expenses</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                expenseMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {expenseSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Internal Billing with Submenu */}
-              <Collapsible
-                open={billingMenuOpen}
-                onOpenChange={setBillingMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isBillingMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isBillingMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <Building className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Internal Billing</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                billingMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {billingSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Onboarding with Submenu */}
-              <Collapsible
-                open={onboardingMenuOpen}
-                onOpenChange={setOnboardingMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isOnboardingMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isOnboardingMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <UserPlus2 className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Onboarding</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                onboardingMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {onboardingSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Offboarding with Submenu */}
-              <Collapsible
-                open={offboardingMenuOpen}
-                onOpenChange={setOffboardingMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isOffboardingMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isOffboardingMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <UserMinus className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Offboarding</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                offboardingMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {offboardingSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Communications with Submenu */}
-              <Collapsible
-                open={communicationsMenuOpen}
-                onOpenChange={setCommunicationsMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isCommunicationsMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isCommunicationsMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <Mail className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Communications</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                communicationsMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {communicationsSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Events with Submenu */}
-              <Collapsible
-                open={eventsMenuOpen}
-                onOpenChange={setEventsMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isEventsMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isEventsMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <CalendarDays className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Events</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                eventsMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {eventsSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
-              {/* Support with Submenu */}
-              <Collapsible
-                open={supportMenuOpen}
-                onOpenChange={setSupportMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isSupportMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isSupportMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <Headphones className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Support</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                supportMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {supportSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-              {/* Documents Management with Submenu */}
-              <Collapsible
-                open={documentsMenuOpen}
-                onOpenChange={setDocumentsMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isDocumentsMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isDocumentsMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <FolderOpen className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Documents</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                documentsMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {documentsSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-              {/* Audit Logs with Submenu */}
-              <Collapsible
-                open={auditMenuOpen}
-                onOpenChange={setAuditMenuOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      isActive={isAuditMenuActive}
-                      className={cn(
-                        "rounded-lg transition-all w-full",
-                        isAuditMenuActive
-                          ? "bg-secondary text-foreground"
-                          : "hover:bg-secondary"
-                      )}
-                    >
-                      <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "gap-3")}>
-                        <History className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && (
-                          <>
-                            <span className="flex-1 truncate">Audit Logs</span>
-                            <ChevronDown
-                              className={cn(
-                                "h-4 w-4 flex-shrink-0 transition-transform duration-200",
-                                auditMenuOpen && "rotate-180"
-                              )}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {!collapsed && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {auditSubItems.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={isActive(item.url)}
-                            >
-                              <Link to={item.url} className="flex items-center gap-2">
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-
+                      >
+                        <Link to="/admin/dashboard" className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
+                          <LayoutDashboard className="h-4 w-4 flex-shrink-0" />
+                          {!collapsed && <span className="font-medium">Dashboard</span>}
+                        </Link>
+                      </SidebarMenuButton>
+                    </TooltipTrigger>
+                    {collapsed && (
+                      <TooltipContent side="right">Dashboard</TooltipContent>
+                    )}
+                  </Tooltip>
+                </TooltipProvider>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Other */}
-        <SidebarGroup>
+        {/* Menu Groups */}
+        {menuGroups.map((group, groupIndex) => (
+          <SidebarGroup key={group.label} className={groupIndex > 0 ? "mt-2" : ""}>
+            {!collapsed && (
+              <SidebarGroupLabel className="px-3 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-1">
+                {group.label}
+              </SidebarGroupLabel>
+            )}
+            {collapsed && groupIndex > 0 && (
+              <div className="mx-2 my-2">
+                <Separator className="bg-border/30" />
+              </div>
+            )}
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-0.5">
+                {group.items.map((item) => (
+                  <CollapsibleMenuItem
+                    key={item.title}
+                    item={item}
+                    collapsed={collapsed}
+                    currentPath={currentPath}
+                  />
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
+
+        {/* Settings */}
+        <SidebarGroup className="mt-2">
           {!collapsed && (
-            <SidebarGroupLabel className="px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Others
+            <SidebarGroupLabel className="px-3 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-1">
+              System
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
             <SidebarMenu>
-              {otherItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    className={cn(
-                      "rounded-lg transition-all",
-                      isActive(item.url)
-                        ? "bg-secondary text-foreground"
-                        : "hover:bg-secondary"
+              <SidebarMenuItem>
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={currentPath === "/admin/settings"}
+                        className={cn(
+                          "rounded-lg transition-all duration-200",
+                          currentPath === "/admin/settings"
+                            ? "bg-primary/10 text-primary border-l-2 border-primary"
+                            : "hover:bg-muted/50 border-l-2 border-transparent"
+                        )}
+                      >
+                        <Link to="/admin/settings" className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
+                          <Settings className="h-4 w-4 flex-shrink-0" />
+                          {!collapsed && <span className="text-sm font-medium">Settings</span>}
+                        </Link>
+                      </SidebarMenuButton>
+                    </TooltipTrigger>
+                    {collapsed && (
+                      <TooltipContent side="right">Settings</TooltipContent>
                     )}
-                  >
-                    <Link to={item.url} className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
-                      <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                  </Tooltip>
+                </TooltipProvider>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Footer - Static */}
+      <SidebarFooter className={cn("py-3 border-t border-border/50", collapsed ? "px-2" : "px-3")}>
+        <div className={cn("flex items-center gap-3", collapsed ? "justify-center" : "")}>
+          <Avatar className="h-8 w-8 border-2 border-primary/20">
+            <AvatarImage src="" />
+            <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">AD</AvatarFallback>
+          </Avatar>
+          {!collapsed && (
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-foreground truncate">Admin User</p>
+              <p className="text-xs text-muted-foreground truncate">admin@nexhr.com</p>
+            </div>
+          )}
+          {!collapsed && (
+            <div className="flex gap-1">
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button className="p-1.5 rounded-md hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground">
+                      <HelpCircle className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">Help</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button className="p-1.5 rounded-md hover:bg-destructive/10 transition-colors text-muted-foreground hover:text-destructive">
+                      <LogOut className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">Logout</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          )}
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }
