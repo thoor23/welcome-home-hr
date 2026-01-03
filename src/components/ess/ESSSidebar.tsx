@@ -80,7 +80,7 @@ const menuGroups: MenuGroup[] = [
         icon: Clock,
         subItems: [
           { title: "Schedule", url: "/ess/shifts/schedule", icon: Calendar },
-          { title: "Swap Requests", url: "/ess/shifts/swaps", icon: ArrowRightLeft },
+          { title: "Swap Requests", url: "/ess/shifts/swap", icon: ArrowRightLeft },
         ],
       },
     ],
