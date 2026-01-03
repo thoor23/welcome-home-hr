@@ -135,133 +135,79 @@ const SalaryStructure = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground">Salary Structure</h1>
-                  <p className="text-muted-foreground">Manage salary components and structure</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Salary Structure</h1>
+          <p className="text-muted-foreground mt-1">Manage salary components and structure</p>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Component
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add Salary Component</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Component Name</Label>
+                <Input placeholder="e.g., Special Allowance" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Type</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="earning">Earning</SelectItem>
+                      <SelectItem value="deduction">Deduction</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Component
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add Salary Component</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 py-4">
-                      <div className="space-y-2">
-                        <Label>Component Name</Label>
-                        <Input placeholder="e.g., Special Allowance" />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label>Type</Label>
-                          <Select>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="earning">Earning</SelectItem>
-                              <SelectItem value="deduction">Deduction</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Calculation Type</Label>
-                          <Select>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select calculation" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="fixed">Fixed Amount</SelectItem>
-                              <SelectItem value="percentage">Percentage</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Value</Label>
-                        <Input type="number" placeholder="Enter value" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Applicable To</Label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select applicability" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Employees</SelectItem>
-                            <SelectItem value="department">Specific Department</SelectItem>
-                            <SelectItem value="designation">Specific Designation</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <Button className="w-full" onClick={() => setIsDialogOpen(false)}>
-                        Add Component
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <div className="space-y-2">
+                  <Label>Calculation Type</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select calculation" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fixed">Fixed Amount</SelectItem>
+                      <SelectItem value="percentage">Percentage</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-
-              {/* Summary Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Earnings</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-emerald-500/10">
-                        <IndianRupee className="h-5 w-5 text-emerald-500" />
-                      </div>
-                      <span className="text-2xl font-bold">{earnings.length} Components</span>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Deductions</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-rose-500/10">
-                        <IndianRupee className="h-5 w-5 text-rose-500" />
-                      </div>
-                      <span className="text-2xl font-bold">{deductions.length} Components</span>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Active Components</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <Calculator className="h-5 w-5 text-primary" />
-                      </div>
-                      <span className="text-2xl font-bold">{components.filter(c => c.status === "active").length}</span>
-                    </div>
-                  </CardContent>
-                </Card>
+              <div className="space-y-2">
+                <Label>Value</Label>
+                <Input type="number" placeholder="Enter value" />
               </div>
-
-              {/* Components Table */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Salary Components</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <DataTable columns={columns} data={components} />
-                </CardContent>
-              </Card>
+              <div className="space-y-2">
+                <Label>Applicable To</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select applicability" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Employees</SelectItem>
+                    <SelectItem value="department">Specific Department</SelectItem>
+                    <SelectItem value="designation">Specific Designation</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button className="w-full" onClick={() => setIsDialogOpen(false)}>
+                Add Component
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
+
+      <DataTable columns={columns} data={components} />
     </AdminLayout>
   );
 };

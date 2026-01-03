@@ -295,188 +295,167 @@ export default function JobPostings() {
   };
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground">Job Postings</h1>
-                  <p className="text-muted-foreground">Manage job openings and postings</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Job Postings</h1>
+          <p className="text-muted-foreground mt-1">Manage job openings and postings</p>
+        </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Job
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Create Job Posting</DialogTitle>
+              <DialogDescription>
+                Fill in the details to create a new job posting
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Job Title</Label>
+                  <Input
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    placeholder="e.g. Senior Software Engineer"
+                  />
                 </div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Job
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle>Create Job Posting</DialogTitle>
-                      <DialogDescription>
-                        Fill in the details to create a new job posting
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="title">Job Title</Label>
-                          <Input
-                            id="title"
-                            value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            placeholder="e.g. Senior Software Engineer"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="department">Department</Label>
-                          <Select
-                            value={formData.department}
-                            onValueChange={(value) => setFormData({ ...formData, department: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select department" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Engineering">Engineering</SelectItem>
-                              <SelectItem value="Product">Product</SelectItem>
-                              <SelectItem value="Design">Design</SelectItem>
-                              <SelectItem value="Human Resources">Human Resources</SelectItem>
-                              <SelectItem value="Analytics">Analytics</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="location">Location</Label>
-                          <Input
-                            id="location"
-                            value={formData.location}
-                            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                            placeholder="e.g. New York, Remote"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="jobType">Job Type</Label>
-                          <Select
-                            value={formData.jobType}
-                            onValueChange={(value) => setFormData({ ...formData, jobType: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Full-time">Full-time</SelectItem>
-                              <SelectItem value="Part-time">Part-time</SelectItem>
-                              <SelectItem value="Contract">Contract</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="experience">Experience Level</Label>
-                          <Select
-                            value={formData.experienceLevel}
-                            onValueChange={(value) => setFormData({ ...formData, experienceLevel: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select level" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Entry-level">Entry-level</SelectItem>
-                              <SelectItem value="Mid-level">Mid-level</SelectItem>
-                              <SelectItem value="Senior">Senior</SelectItem>
-                              <SelectItem value="Lead">Lead</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="deadline">Application Deadline</Label>
-                          <Input
-                            id="deadline"
-                            type="date"
-                            value={formData.deadline}
-                            onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="salaryMin">Salary Min ($)</Label>
-                          <Input
-                            id="salaryMin"
-                            value={formData.salaryMin}
-                            onChange={(e) => setFormData({ ...formData, salaryMin: e.target.value })}
-                            placeholder="e.g. 80000"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="salaryMax">Salary Max ($)</Label>
-                          <Input
-                            id="salaryMax"
-                            value={formData.salaryMax}
-                            onChange={(e) => setFormData({ ...formData, salaryMax: e.target.value })}
-                            placeholder="e.g. 120000"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="description">Job Description</Label>
-                        <Textarea
-                          id="description"
-                          value={formData.description}
-                          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                          placeholder="Describe the role and responsibilities..."
-                          rows={4}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="requirements">Requirements</Label>
-                        <Textarea
-                          id="requirements"
-                          value={formData.requirements}
-                          onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-                          placeholder="List the required skills and qualifications..."
-                          rows={4}
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button onClick={handleSubmit}>Create Job</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                <div className="space-y-2">
+                  <Label htmlFor="department">Department</Label>
+                  <Select
+                    value={formData.department}
+                    onValueChange={(value) => setFormData({ ...formData, department: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Engineering">Engineering</SelectItem>
+                      <SelectItem value="Product">Product</SelectItem>
+                      <SelectItem value="Design">Design</SelectItem>
+                      <SelectItem value="Human Resources">Human Resources</SelectItem>
+                      <SelectItem value="Analytics">Analytics</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {statsData.map((stat) => (
-                  <Card key={stat.title}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-muted-foreground">{stat.title}</p>
-                          <p className="text-2xl font-bold">{stat.value}</p>
-                        </div>
-                        <stat.icon className={`h-8 w-8 ${stat.color}`} />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    placeholder="e.g. New York, Remote"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="jobType">Job Type</Label>
+                  <Select
+                    value={formData.jobType}
+                    onValueChange={(value) => setFormData({ ...formData, jobType: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Full-time">Full-time</SelectItem>
+                      <SelectItem value="Part-time">Part-time</SelectItem>
+                      <SelectItem value="Contract">Contract</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="experience">Experience Level</Label>
+                  <Select
+                    value={formData.experienceLevel}
+                    onValueChange={(value) => setFormData({ ...formData, experienceLevel: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Entry-level">Entry-level</SelectItem>
+                      <SelectItem value="Mid-level">Mid-level</SelectItem>
+                      <SelectItem value="Senior">Senior</SelectItem>
+                      <SelectItem value="Lead">Lead</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="deadline">Application Deadline</Label>
+                  <Input
+                    id="deadline"
+                    type="date"
+                    value={formData.deadline}
+                    onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="salaryMin">Salary Min ($)</Label>
+                  <Input
+                    id="salaryMin"
+                    value={formData.salaryMin}
+                    onChange={(e) => setFormData({ ...formData, salaryMin: e.target.value })}
+                    placeholder="e.g. 80000"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="salaryMax">Salary Max ($)</Label>
+                  <Input
+                    id="salaryMax"
+                    value={formData.salaryMax}
+                    onChange={(e) => setFormData({ ...formData, salaryMax: e.target.value })}
+                    placeholder="e.g. 120000"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Job Description</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Describe the role and responsibilities..."
+                  rows={4}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="requirements">Requirements</Label>
+                <Textarea
+                  id="requirements"
+                  value={formData.requirements}
+                  onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
+                  placeholder="List the required skills and qualifications..."
+                  rows={4}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit}>Create Job</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
 
-            {/* Data Table */}
-            <DataTable
-              data={jobs}
-              columns={columns}
-              filters={filters}
-              searchPlaceholder="Search jobs..."
-            />
-          </div>
-        </AdminLayout>
-      );
+      <DataTable
+        data={jobs}
+        columns={columns}
+        filters={filters}
+        searchPlaceholder="Search jobs..."
+      />
+    </AdminLayout>
+  );
 }

@@ -175,164 +175,22 @@ export default function RecruitmentReport() {
 
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground">Recruitment Report</h1>
-                  <p className="text-muted-foreground">Analytics and insights for recruitment</p>
-                </div>
-                <Button onClick={handleExport}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Export Report
-                </Button>
-              </div>
-
-              {/* Stats Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {statsData.map((stat) => (
-                  <Card key={stat.title}>
-                    <CardContent className="p-4">
-                      <div className="flex flex-col items-center text-center">
-                        <stat.icon className={`h-6 w-6 ${stat.color} mb-2`} />
-                        <p className="text-xs text-muted-foreground">{stat.title}</p>
-                        <p className="text-xl font-bold">{stat.value}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Charts Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Applications per Job */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Applications per Job</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={300}>
-                      <BarChart data={applicationsPerJobData} layout="vertical">
-                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                        <XAxis type="number" stroke="hsl(var(--muted-foreground))" />
-                        <YAxis
-                          type="category"
-                          dataKey="job"
-                          width={120}
-                          stroke="hsl(var(--muted-foreground))"
-                          tick={{ fontSize: 12 }}
-                        />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "hsl(var(--popover))",
-                            border: "1px solid hsl(var(--border))",
-                            borderRadius: "8px",
-                          }}
-                        />
-                        <Bar
-                          dataKey="applications"
-                          fill="hsl(var(--primary))"
-                          radius={[0, 4, 4, 0]}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-
-                {/* Source Distribution */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Application Sources</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={300}>
-                      <PieChart>
-                        <Pie
-                          data={sourceDistributionData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={100}
-                          paddingAngle={5}
-                          dataKey="value"
-                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                        >
-                          {sourceDistributionData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "hsl(var(--popover))",
-                            border: "1px solid hsl(var(--border))",
-                            borderRadius: "8px",
-                          }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Hiring Trend Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Hiring Trend (Last 6 Months)</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={hiringTrendData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                      <YAxis stroke="hsl(var(--muted-foreground))" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "hsl(var(--popover))",
-                          border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="applications"
-                        stroke="hsl(var(--primary))"
-                        strokeWidth={2}
-                        dot={{ fill: "hsl(var(--primary))" }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="interviews"
-                        stroke="hsl(var(--chart-2))"
-                        strokeWidth={2}
-                        dot={{ fill: "hsl(var(--chart-2))" }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="hires"
-                        stroke="hsl(var(--chart-3))"
-                        strokeWidth={2}
-                        dot={{ fill: "hsl(var(--chart-3))" }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* Department Summary Table */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Department-wise Summary</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <DataTable
-                    data={mockDepartmentData}
-                    columns={columns}
-                    searchPlaceholder="Search departments..."
-                  />
-                </CardContent>
-              </Card>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground font-display">Recruitment Report</h1>
+          <p className="text-muted-foreground mt-1">Analytics and insights for recruitment</p>
+        </div>
+        <Button onClick={handleExport}>
+          <Download className="h-4 w-4 mr-2" />
+          Export Report
+        </Button>
       </div>
+
+      <DataTable
+        data={mockDepartmentData}
+        columns={columns}
+        searchPlaceholder="Search departments..."
+      />
     </AdminLayout>
   );
 }
