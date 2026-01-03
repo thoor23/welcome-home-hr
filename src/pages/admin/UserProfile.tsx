@@ -1,6 +1,4 @@
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,16 +11,11 @@ import { Camera, Mail, Phone, MapPin, Building, Briefcase, Calendar, User, FileT
 
 const UserProfile = () => {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <SidebarInset className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
-            <div className="mb-6">
-              <h1 className="text-2xl font-semibold text-foreground">My Profile</h1>
-              <p className="text-muted-foreground">View and manage your profile information</p>
-            </div>
+    <AdminLayout>
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold text-foreground">My Profile</h1>
+        <p className="text-muted-foreground">View and manage your profile information</p>
+      </div>
 
             <div className="grid gap-6">
               {/* Profile Photo Section */}
@@ -212,14 +205,11 @@ const UserProfile = () => {
                       <Button variant="link" className="p-0 h-auto text-primary">View</Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
-  );
+              </CardContent>
+            </Card>
+          </div>
+        </AdminLayout>
+      );
 };
 
 export default UserProfile;

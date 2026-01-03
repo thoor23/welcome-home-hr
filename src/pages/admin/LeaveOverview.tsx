@@ -1,6 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, CheckCircle, Clock, XCircle } from "lucide-react";
 
@@ -41,18 +39,11 @@ const stats = [
 
 const LeaveOverview = () => {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-
-        <div className="flex-1 flex flex-col min-w-0">
-          <DashboardHeader />
-
-          <main className="flex-1 p-6 overflow-auto min-w-0">
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold text-foreground font-display">Leave Overview</h1>
-              <p className="text-muted-foreground mt-1">Monitor and manage employee leave requests</p>
-            </div>
+    <AdminLayout>
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-foreground font-display">Leave Overview</h1>
+        <p className="text-muted-foreground mt-1">Monitor and manage employee leave requests</p>
+      </div>
 
             {/* Stats Cards */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-6">
@@ -143,13 +134,10 @@ const LeaveOverview = () => {
                     </div>
                   ))}
                 </CardContent>
-              </Card>
-            </div>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
-  );
+            </Card>
+          </div>
+        </AdminLayout>
+      );
 };
 
 export default LeaveOverview;

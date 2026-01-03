@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -175,15 +173,10 @@ const GenerateLetter = () => {
   };
 
   const selectedEmployeeData = employees.find((e) => e.id === selectedEmployee);
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 space-y-6 overflow-auto">
-            <div className="flex items-center justify-between">
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-foreground">Generate Letter</h1>
                 <p className="text-muted-foreground">Create and send official letters and documents</p>
@@ -348,14 +341,12 @@ const GenerateLetter = () => {
                       <li>• Preview before final submission</li>
                       <li>• Save as draft to continue later</li>
                     </ul>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </main>
+            </CardContent>
+          </Card>
         </div>
       </div>
-    </SidebarProvider>
+    </div>
+  </AdminLayout>
   );
 };
 
