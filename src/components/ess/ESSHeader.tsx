@@ -15,6 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
 import { useSidebarContext } from "@/contexts/SidebarContext";
+import { BreadcrumbNav } from "@/components/ui/breadcrumb-nav";
 
 interface Notification {
   id: number;
@@ -98,6 +99,9 @@ export function ESSHeader() {
         >
           {collapsed ? <PanelLeft className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
         </Button>
+        
+        {/* Breadcrumb Navigation */}
+        <BreadcrumbNav type="ess" />
       </div>
 
       {/* Right Side */}

@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
 import { useSidebarContext } from "@/contexts/SidebarContext";
+import { BreadcrumbNav } from "@/components/ui/breadcrumb-nav";
 
 const notifications = [
   {
@@ -66,6 +67,9 @@ export function DashboardHeader() {
         >
           {collapsed ? <PanelLeft className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
         </Button>
+        
+        {/* Breadcrumb Navigation */}
+        <BreadcrumbNav type="admin" />
       </div>
 
       {/* Right Side */}
