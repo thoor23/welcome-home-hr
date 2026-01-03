@@ -30,6 +30,7 @@ import {
   Lock,
   Globe,
   LucideIcon,
+  Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -337,38 +338,70 @@ export function SuperAdminSidebar() {
             </div>
           ))}
 
-          {/* Settings */}
-          <div className="pt-2 border-t border-border">
+          {/* Status & Settings */}
+          <div className="pt-2 border-t border-border space-y-1">
             {collapsed ? (
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <Link
-                    to="/superadmin/settings"
-                    className={cn(
-                      "flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 mx-auto",
-                      currentPath === "/superadmin/settings"
-                        ? "bg-superadmin text-superadmin-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    )}
-                  >
-                    <Settings className="h-5 w-5" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="right">Settings</TooltipContent>
-              </Tooltip>
+              <>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      to="/superadmin/status"
+                      className={cn(
+                        "flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 mx-auto",
+                        currentPath === "/superadmin/status"
+                          ? "bg-superadmin text-superadmin-foreground"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
+                    >
+                      <Radio className="h-5 w-5" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">System Status</TooltipContent>
+                </Tooltip>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      to="/superadmin/settings"
+                      className={cn(
+                        "flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 mx-auto",
+                        currentPath === "/superadmin/settings"
+                          ? "bg-superadmin text-superadmin-foreground"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
+                    >
+                      <Settings className="h-5 w-5" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Settings</TooltipContent>
+                </Tooltip>
+              </>
             ) : (
-              <Link
-                to="/superadmin/settings"
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
-                  currentPath === "/superadmin/settings"
-                    ? "bg-superadmin text-superadmin-foreground"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}
-              >
-                <Settings className="h-4 w-4" />
-                <span>Settings</span>
-              </Link>
+              <>
+                <Link
+                  to="/superadmin/status"
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
+                    currentPath === "/superadmin/status"
+                      ? "bg-superadmin text-superadmin-foreground"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <Radio className="h-4 w-4" />
+                  <span>System Status</span>
+                </Link>
+                <Link
+                  to="/superadmin/settings"
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
+                    currentPath === "/superadmin/settings"
+                      ? "bg-superadmin text-superadmin-foreground"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <Settings className="h-4 w-4" />
+                  <span>Settings</span>
+                </Link>
+              </>
             )}
           </div>
         </div>

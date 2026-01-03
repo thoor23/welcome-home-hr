@@ -149,6 +149,7 @@ import LoginAttempts from "./pages/superadmin/LoginAttempts";
 import IPBlocklist from "./pages/superadmin/IPBlocklist";
 import PlatformLogs from "./pages/superadmin/PlatformLogs";
 import PlatformSettings from "./pages/superadmin/PlatformSettings";
+import StatusPage from "./pages/superadmin/StatusPage";
 
 const queryClient = new QueryClient();
 
@@ -331,6 +332,7 @@ const App = () => (
             <Route path="/superadmin/logs/system" element={<PlatformLogs />} />
             <Route path="/superadmin/logs/security" element={<PlatformLogs />} />
             <Route path="/superadmin/settings" element={<PlatformSettings />} />
+            <Route path="/superadmin/status" element={<StatusPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
