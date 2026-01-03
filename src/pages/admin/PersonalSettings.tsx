@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -232,12 +230,7 @@ const PersonalSettings = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <SidebarInset className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
+    <AdminLayout>
             <div className="mb-6">
               <h1 className="text-2xl font-semibold text-foreground">Personal Settings</h1>
               <p className="text-muted-foreground">Manage your personal preferences and account settings</p>
@@ -271,10 +264,7 @@ const PersonalSettings = () => {
                 {renderContent()}
               </div>
             </div>
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 

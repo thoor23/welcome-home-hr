@@ -1,6 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   TicketCheck, 
@@ -83,12 +81,7 @@ export default function SupportReport() {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1">
-          <DashboardHeader />
-          <main className="p-6">
+    <AdminLayout>
             <div className="mb-6">
               <h1 className="text-2xl font-bold">Support Report</h1>
               <p className="text-muted-foreground">Analytics and insights for support performance</p>
@@ -334,9 +327,6 @@ export default function SupportReport() {
                 </CardContent>
               </Card>
             </div>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 }

@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -136,13 +134,8 @@ const SalaryStructure = () => {
   ];
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader />
-          <main className="flex-1 p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
               {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
@@ -268,11 +261,8 @@ const SalaryStructure = () => {
                   <DataTable columns={columns} data={components} />
                 </CardContent>
               </Card>
-            </div>
-          </main>
-        </div>
       </div>
-    </SidebarProvider>
+    </AdminLayout>
   );
 };
 
