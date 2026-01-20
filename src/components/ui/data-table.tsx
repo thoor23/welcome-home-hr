@@ -20,7 +20,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Search, Columns3, ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Columns3, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 
 // Column definition interface
 export interface Column<T> {
@@ -386,38 +386,29 @@ export function DataTable<T>({
 
       {/* Pagination */}
       <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t border-border">
-        {/* Rows per page */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>Rows per page:</span>
-          <Select value={String(rowsPerPage)} onValueChange={(value) => setRowsPerPage(Number(value))}>
-            <SelectTrigger className="w-[70px] h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {pageSizeOptions.map((size) => (
-                <SelectItem key={size} value={String(size)}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Count display */}
+        {/* Count display - Left side */}
         <div className="text-sm text-muted-foreground">
-          {processedData.length > 0 ? `${startIndex} - ${endIndex} of ${processedData.length}` : "0 results"}
+          {processedData.length > 0 ? (
+            <>
+              Showing <span className="font-semibold text-foreground">{startIndex}</span> to{" "}
+              <span className="font-semibold text-foreground">{endIndex}</span> of{" "}
+              <span className="font-semibold text-foreground">{processedData.length}</span> results
+            </>
+          ) : (
+            "No results"
+          )}
         </div>
 
-        {/* Page navigation */}
+        {/* Page navigation - Right side */}
         <div className="flex items-center gap-1">
           <Button
             variant="outline"
-            size="icon"
-            className="h-8 w-8"
+            size="sm"
+            className="h-8 px-3 gap-1"
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
           >
-            <ChevronLeft className="h-4 w-4" />
+            Previous
           </Button>
 
           {/* Page numbers */}
@@ -438,7 +429,10 @@ export function DataTable<T>({
                 key={pageNum}
                 variant={currentPage === pageNum ? "default" : "outline"}
                 size="icon"
-                className="h-8 w-8"
+                className={cn(
+                  "h-8 w-8",
+                  currentPage === pageNum && "bg-primary text-primary-foreground hover:bg-primary/90"
+                )}
                 onClick={() => setCurrentPage(pageNum)}
               >
                 {pageNum}
@@ -448,12 +442,12 @@ export function DataTable<T>({
 
           <Button
             variant="outline"
-            size="icon"
-            className="h-8 w-8"
+            size="sm"
+            className="h-8 px-3 gap-1"
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages || totalPages === 0}
           >
-            <ChevronRight className="h-4 w-4" />
+            Next
           </Button>
         </div>
       </div>
