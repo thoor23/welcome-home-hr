@@ -386,17 +386,21 @@ export function DataTable<T>({
 
       {/* Pagination */}
       <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t border-border">
-        {/* Count display - Left side */}
-        <div className="text-sm text-muted-foreground">
-          {processedData.length > 0 ? (
-            <>
-              Showing <span className="font-semibold text-foreground">{startIndex}</span> to{" "}
-              <span className="font-semibold text-foreground">{endIndex}</span> of{" "}
-              <span className="font-semibold text-foreground">{processedData.length}</span> results
-            </>
-          ) : (
-            "No results"
-          )}
+        {/* Rows per page - Left side */}
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span>Rows per page:</span>
+          <Select value={String(rowsPerPage)} onValueChange={(value) => setRowsPerPage(Number(value))}>
+            <SelectTrigger className="w-[70px] h-8">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {pageSizeOptions.map((size) => (
+                <SelectItem key={size} value={String(size)}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Page navigation - Right side */}
