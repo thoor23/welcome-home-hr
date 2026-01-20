@@ -131,6 +131,9 @@ const App = () => (
             <Route path="/forgot-password" element={<ForgotPassword />} />
             
             <Route path="/admin/dashboard" element={<Dashboard />} />
+            {/* Legacy redirects */}
+            <Route path="/admin/departments" element={<Navigate to="/admin/employees/departments" replace />} />
+            <Route path="/admin/designations" element={<Navigate to="/admin/employees/designations" replace />} />
             <Route path="/admin/employees" element={<Navigate to="/admin/employees/all" replace />} />
             <Route path="/admin/employees/all" element={<AllEmployees />} />
             <Route path="/admin/employees/departments" element={<Departments />} />
