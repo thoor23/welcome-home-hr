@@ -3,7 +3,7 @@ import { ChevronRight, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface BreadcrumbNavProps {
-  type: "ess" | "admin" | "superadmin";
+  type: "ess" | "admin";
   className?: string;
 }
 
@@ -129,36 +129,6 @@ const adminRouteLabels: Record<string, string> = {
   "profile": "Profile",
 };
 
-// Route label mappings for Super Admin panel
-const superadminRouteLabels: Record<string, string> = {
-  "dashboard": "Dashboard",
-  "all": "All",
-  "pending": "Pending Approval",
-  "suspended": "Suspended",
-  "admins": "Super Admins",
-  "impersonation": "Impersonation Logs",
-  "plans": "Plans",
-  "invoices": "Invoices",
-  "payments": "Payments",
-  "coupons": "Coupons",
-  "overview": "Overview",
-  "usage": "Usage",
-  "growth": "Growth",
-  "features": "Feature Flags",
-  "emails": "Email Templates",
-  "maintenance": "Maintenance",
-  "logins": "Login Attempts",
-  "blocklist": "IP Blocklist",
-  "system": "System Logs",
-  "security": "Security",
-  "settings": "Settings",
-  "organizations": "Organizations",
-  "users": "Users",
-  "billing": "Billing",
-  "analytics": "Analytics",
-  "logs": "Audit Logs",
-};
-
 export function BreadcrumbNav({ type, className }: BreadcrumbNavProps) {
   const location = useLocation();
   const pathSegments = location.pathname.split("/").filter(Boolean);
@@ -168,9 +138,9 @@ export function BreadcrumbNav({ type, className }: BreadcrumbNavProps) {
     return null;
   }
 
-  const routeLabels = type === "ess" ? essRouteLabels : type === "superadmin" ? superadminRouteLabels : adminRouteLabels;
-  const baseRoute = type === "ess" ? "/ess" : type === "superadmin" ? "/superadmin" : "/admin";
-  const baseName = type === "ess" ? "Employee Portal" : type === "superadmin" ? "Super Admin" : "Admin Panel";
+  const routeLabels = type === "ess" ? essRouteLabels : adminRouteLabels;
+  const baseRoute = type === "ess" ? "/ess" : "/admin";
+  const baseName = type === "ess" ? "Employee Portal" : "Admin Panel";
 
   // Build breadcrumb items
   const breadcrumbs = pathSegments.slice(1).map((segment, index) => {
