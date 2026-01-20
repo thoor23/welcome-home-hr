@@ -121,7 +121,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Assignments", url: "/admin/shifts/assignments", icon: UserCheck2 },
           { title: "Schedule", url: "/admin/shifts/schedule", icon: CalendarClock },
           { title: "Swap Requests", url: "/admin/shifts/swaps", icon: ArrowRightLeft },
-          { title: "Report", url: "/admin/shifts/report", icon: BarChart3 },
         ],
       },
       {
@@ -132,7 +131,6 @@ const menuGroups: MenuGroup[] = [
           { title: "All Leaves", url: "/admin/leave/all", icon: CheckCircle },
           { title: "Requests", url: "/admin/leave/requests", icon: ClipboardList },
           { title: "Rules", url: "/admin/leave/rules", icon: ScrollText },
-          { title: "Report", url: "/admin/leave/report", icon: FileBarChart },
         ],
       },
     ],
@@ -148,7 +146,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Salary Structure", url: "/admin/payroll/salary-structure", icon: FileSpreadsheet },
           { title: "Generate Payslip", url: "/admin/payroll/generate", icon: Receipt },
           { title: "Payslip Template", url: "/admin/payroll/template", icon: LayoutTemplate },
-          { title: "Report", url: "/admin/payroll/report", icon: FileBarChart },
         ],
       },
       {
@@ -159,7 +156,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Categories", url: "/admin/expenses/categories", icon: Tags },
           { title: "Claims", url: "/admin/expenses/claims", icon: ClipboardCheck },
           { title: "Approvals", url: "/admin/expenses/approvals", icon: FileCheckIcon },
-          { title: "Report", url: "/admin/expenses/report", icon: BarChart3 },
         ],
       },
       {
@@ -173,7 +169,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Approvals", url: "/admin/billing/approvals", icon: FileCheckIcon },
           { title: "Allocations", url: "/admin/billing/allocations", icon: Wallet },
           { title: "Categories", url: "/admin/billing/categories", icon: Tags },
-          { title: "Report", url: "/admin/billing/report", icon: PieChart },
         ],
       },
     ],
@@ -189,7 +184,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Categories", url: "/admin/assets/categories", icon: Layers },
           { title: "Assignments", url: "/admin/assets/assignments", icon: UserCheck2 },
           { title: "Maintenance", url: "/admin/assets/maintenance", icon: Wrench },
-          { title: "Report", url: "/admin/assets/report", icon: BarChart3 },
         ],
       },
       {
@@ -199,7 +193,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Calendar", url: "/admin/events/calendar", icon: CalendarDays },
           { title: "All Events", url: "/admin/events/list", icon: CalendarCheck },
           { title: "Categories", url: "/admin/events/categories", icon: Tags },
-          { title: "Report", url: "/admin/events/report", icon: PieChart },
         ],
       },
       {
@@ -210,7 +203,6 @@ const menuGroups: MenuGroup[] = [
           { title: "My Documents", url: "/admin/documents/my", icon: FileArchive },
           { title: "Categories", url: "/admin/documents/categories", icon: Tags },
           { title: "Settings", url: "/admin/documents/settings", icon: FolderCog },
-          { title: "Report", url: "/admin/documents/report", icon: PieChart },
         ],
       },
       {
@@ -222,7 +214,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Email Templates", url: "/admin/communications/email-templates", icon: FileText },
           { title: "Letter Templates", url: "/admin/communications/letter-templates", icon: FileSignature },
           { title: "Configuration", url: "/admin/communications/config", icon: Settings2 },
-          { title: "Report", url: "/admin/communications/report", icon: PieChart },
         ],
       },
     ],
@@ -239,7 +230,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Categories", url: "/admin/support/categories", icon: Tags },
           { title: "SLA Settings", url: "/admin/support/sla", icon: Gauge },
           { title: "Knowledge Base", url: "/admin/support/knowledge-base", icon: BookOpen },
-          { title: "Report", url: "/admin/support/report", icon: PieChart },
         ],
       },
       {
