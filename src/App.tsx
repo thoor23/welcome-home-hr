@@ -113,6 +113,11 @@ import ESSSettings from "./pages/ess/Settings";
 import ESSProfile from "./pages/ess/Profile";
 import ESSNotifications from "./pages/ess/Notifications";
 
+// New App Routes (Unified)
+import AppAllUsers from "./pages/app/users/AllUsers";
+import AppRoles from "./pages/app/users/Roles";
+import AppPermissions from "./pages/app/users/Permissions";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -130,8 +135,147 @@ const App = () => (
             <Route path="/verify-code" element={<VerifyCode />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             
+            {/* ============================================= */}
+            {/* NEW UNIFIED APP ROUTES (/app/*) */}
+            {/* ============================================= */}
+            <Route path="/app" element={<Navigate to="/app/dashboard" replace />} />
+            <Route path="/app/dashboard" element={<Dashboard />} />
+            
+            {/* User Management */}
+            <Route path="/app/users" element={<Navigate to="/app/users/all" replace />} />
+            <Route path="/app/users/all" element={<AppAllUsers />} />
+            <Route path="/app/users/roles" element={<AppRoles />} />
+            <Route path="/app/users/permissions" element={<AppPermissions />} />
+            
+            {/* Employees */}
+            <Route path="/app/employees" element={<Navigate to="/app/employees/all" replace />} />
+            <Route path="/app/employees/all" element={<AllEmployees />} />
+            <Route path="/app/employees/departments" element={<Departments />} />
+            <Route path="/app/employees/designations" element={<Designations />} />
+            <Route path="/app/employees/types" element={<EmploymentTypes />} />
+            <Route path="/app/employees/locations" element={<Locations />} />
+            <Route path="/app/employees/regularization" element={<DetailsRegularization />} />
+            
+            {/* Attendance */}
+            <Route path="/app/attendance" element={<Navigate to="/app/attendance/overview" replace />} />
+            <Route path="/app/attendance/overview" element={<AttendanceOverview />} />
+            <Route path="/app/attendance/all" element={<AllAttendance />} />
+            <Route path="/app/attendance/my" element={<ESSAttendanceHistory />} />
+            <Route path="/app/attendance/regularization" element={<AttendanceRegularization />} />
+            <Route path="/app/attendance/rules" element={<AttendanceRules />} />
+            
+            {/* Shifts */}
+            <Route path="/app/shifts" element={<Navigate to="/app/shifts/all" replace />} />
+            <Route path="/app/shifts/all" element={<AllShifts />} />
+            <Route path="/app/shifts/assignments" element={<ShiftAssignments />} />
+            <Route path="/app/shifts/schedule" element={<ShiftSchedule />} />
+            <Route path="/app/shifts/my-schedule" element={<ESSShiftSchedule />} />
+            <Route path="/app/shifts/swaps" element={<ShiftSwaps />} />
+            <Route path="/app/shifts/report" element={<ShiftReport />} />
+            
+            {/* Leave */}
+            <Route path="/app/leave" element={<Navigate to="/app/leave/overview" replace />} />
+            <Route path="/app/leave/overview" element={<LeaveOverview />} />
+            <Route path="/app/leave/all" element={<AllLeaves />} />
+            <Route path="/app/leave/requests" element={<LeaveRequests />} />
+            <Route path="/app/leave/my-leaves" element={<ESSLeaveHistory />} />
+            <Route path="/app/leave/apply" element={<ESSApplyLeave />} />
+            <Route path="/app/leave/rules" element={<LeaveRules />} />
+            <Route path="/app/leave/report" element={<LeaveReport />} />
+            
+            {/* Payroll */}
+            <Route path="/app/payroll" element={<Navigate to="/app/payroll/salaries" replace />} />
+            <Route path="/app/payroll/salaries" element={<EmployeeSalaries />} />
+            <Route path="/app/payroll/salary-structure" element={<SalaryStructure />} />
+            <Route path="/app/payroll/generate" element={<GeneratePayslip />} />
+            <Route path="/app/payroll/my-payslips" element={<ESSPayslips />} />
+            <Route path="/app/payroll/template" element={<PayslipTemplate />} />
+            <Route path="/app/payroll/report" element={<PayrollReport />} />
+            
+            {/* Expenses */}
+            <Route path="/app/expenses" element={<Navigate to="/app/expenses/all" replace />} />
+            <Route path="/app/expenses/all" element={<AllExpenses />} />
+            <Route path="/app/expenses/my" element={<ESSExpenseClaims />} />
+            <Route path="/app/expenses/submit" element={<ESSExpenseSubmit />} />
+            <Route path="/app/expenses/categories" element={<ExpenseCategories />} />
+            <Route path="/app/expenses/claims" element={<ExpenseClaims />} />
+            <Route path="/app/expenses/approvals" element={<ExpenseApprovals />} />
+            <Route path="/app/expenses/report" element={<ExpenseReport />} />
+            
+            {/* Billing */}
+            <Route path="/app/billing" element={<Navigate to="/app/billing/invoices" replace />} />
+            <Route path="/app/billing/invoices" element={<AllInvoices />} />
+            <Route path="/app/billing/generate-invoice" element={<GenerateInvoice />} />
+            <Route path="/app/billing/invoice-template" element={<InvoiceTemplate />} />
+            <Route path="/app/billing/requests" element={<BillingRequests />} />
+            <Route path="/app/billing/approvals" element={<BillingApprovals />} />
+            <Route path="/app/billing/allocations" element={<BillingAllocations />} />
+            <Route path="/app/billing/categories" element={<BillingCategories />} />
+            <Route path="/app/billing/report" element={<BillingReport />} />
+            
+            {/* Assets */}
+            <Route path="/app/assets" element={<Navigate to="/app/assets/all" replace />} />
+            <Route path="/app/assets/all" element={<AllAssets />} />
+            <Route path="/app/assets/my" element={<ESSAssets />} />
+            <Route path="/app/assets/categories" element={<AssetCategories />} />
+            <Route path="/app/assets/assignments" element={<AssetAssignments />} />
+            <Route path="/app/assets/maintenance" element={<AssetMaintenance />} />
+            <Route path="/app/assets/report" element={<AssetReport />} />
+            
+            {/* Events */}
+            <Route path="/app/events" element={<Navigate to="/app/events/calendar" replace />} />
+            <Route path="/app/events/calendar" element={<AllEvents />} />
+            <Route path="/app/events/list" element={<EventsList />} />
+            <Route path="/app/events/categories" element={<EventCategories />} />
+            <Route path="/app/events/report" element={<EventReport />} />
+            
+            {/* Documents */}
+            <Route path="/app/documents" element={<Navigate to="/app/documents/all" replace />} />
+            <Route path="/app/documents/all" element={<AllDocuments />} />
+            <Route path="/app/documents/my" element={<MyDocuments />} />
+            <Route path="/app/documents/categories" element={<DocumentCategories />} />
+            <Route path="/app/documents/settings" element={<DocumentSettings />} />
+            <Route path="/app/documents/report" element={<DocumentReport />} />
+            
+            {/* Communications */}
+            <Route path="/app/communications" element={<Navigate to="/app/communications/all" replace />} />
+            <Route path="/app/communications/all" element={<AllEmails />} />
+            <Route path="/app/communications/generate" element={<GenerateLetter />} />
+            <Route path="/app/communications/email-templates" element={<EmailTemplates />} />
+            <Route path="/app/communications/letter-templates" element={<LetterTemplates />} />
+            <Route path="/app/communications/config" element={<EmailConfiguration />} />
+            <Route path="/app/communications/report" element={<EmailReport />} />
+            
+            {/* Support */}
+            <Route path="/app/support" element={<Navigate to="/app/support/all" replace />} />
+            <Route path="/app/support/all" element={<AllTickets />} />
+            <Route path="/app/support/my-tickets" element={<MyTickets />} />
+            <Route path="/app/support/new" element={<ESSNewTicket />} />
+            <Route path="/app/support/categories" element={<TicketCategories />} />
+            <Route path="/app/support/sla" element={<SLASettings />} />
+            <Route path="/app/support/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/app/support/report" element={<SupportReport />} />
+            
+            {/* Audit */}
+            <Route path="/app/audit" element={<Navigate to="/app/audit/all" replace />} />
+            <Route path="/app/audit/all" element={<AllAuditLogs />} />
+            <Route path="/app/audit/activity" element={<ActivityLogs />} />
+            <Route path="/app/audit/data" element={<DataChangeLogs />} />
+            <Route path="/app/audit/security" element={<SecurityLogs />} />
+            <Route path="/app/audit/system" element={<SystemLogs />} />
+            <Route path="/app/audit/api" element={<APILogs />} />
+            <Route path="/app/audit/settings" element={<AuditSettings />} />
+            
+            {/* Settings */}
+            <Route path="/app/settings" element={<CompanySettings />} />
+            <Route path="/app/settings/company" element={<CompanySettings />} />
+            <Route path="/app/settings/personal" element={<PersonalSettings />} />
+            <Route path="/app/profile" element={<UserProfile />} />
+            
+            {/* ============================================= */}
+            {/* LEGACY ADMIN ROUTES (for backward compatibility) */}
+            {/* ============================================= */}
             <Route path="/admin/dashboard" element={<Dashboard />} />
-            {/* Legacy redirects */}
             <Route path="/admin/departments" element={<Navigate to="/admin/employees/departments" replace />} />
             <Route path="/admin/designations" element={<Navigate to="/admin/employees/designations" replace />} />
             <Route path="/admin/employees" element={<Navigate to="/admin/employees/all" replace />} />
@@ -222,6 +366,7 @@ const App = () => (
             <Route path="/admin/profile" element={<UserProfile />} />
             <Route path="/admin/personal-settings" element={<PersonalSettings />} />
             <Route path="/profile-update-request" element={<ProfileUpdateRequest />} />
+            
             {/* ESS Portal Routes */}
             <Route path="/ess" element={<Navigate to="/ess/dashboard" replace />} />
             <Route path="/ess/dashboard" element={<ESSDashboard />} />

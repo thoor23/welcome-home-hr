@@ -309,20 +309,20 @@ function CollapsibleMenuItem({
     (sub) => !sub.requiredPermission || hasPermission(sub.requiredPermission)
   );
   
-  // Don't render if no visible sub-items
-  if (visibleSubItems.length === 0) {
-    return null;
-  }
-  
   const isMenuActive = visibleSubItems.some((sub) => currentPath === sub.url);
   const isOpen = openMenus.has(item.title) || isMenuActive;
 
-  // Auto-open menu when its route is active
+  // Auto-open menu when its route is active - must be before any conditional returns
   useEffect(() => {
     if (isMenuActive && !openMenus.has(item.title)) {
       toggleMenu(item.title);
     }
   }, [isMenuActive, item.title, openMenus, toggleMenu]);
+  
+  // Don't render if no visible sub-items
+  if (visibleSubItems.length === 0) {
+    return null;
+  }
 
   // Icon-only mode with tooltip
   if (collapsed) {
