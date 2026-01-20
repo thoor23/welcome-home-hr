@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import VerifyCode from "./pages/VerifyCode";
 import ForgotPassword from "./pages/ForgotPassword";
-import OrganizationOnboarding from "./pages/OrganizationOnboarding";
+
 import Dashboard from "./pages/admin/Dashboard";
 import AllEmployees from "./pages/admin/AllEmployees";
 import Departments from "./pages/admin/Departments";
@@ -143,7 +143,7 @@ const App = () => (
             <Route path="/signup" element={<Signup />} />
             <Route path="/verify-code" element={<VerifyCode />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/organization-onboarding" element={<OrganizationOnboarding />} />
+            
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/employees" element={<Navigate to="/admin/employees/all" replace />} />
             <Route path="/admin/employees/all" element={<AllEmployees />} />

@@ -19,11 +19,9 @@ import {
   Bell, 
   Shield, 
   Puzzle, 
-  CreditCard,
   Upload,
   Save,
   RotateCcw,
-  Download,
   Check,
   ExternalLink
 } from "lucide-react";
@@ -37,7 +35,6 @@ const menuItems = [
   { id: "notifications", label: "Notifications", icon: Bell, description: "Alerts and channels" },
   { id: "security", label: "Security", icon: Shield, description: "Password and 2FA" },
   { id: "integrations", label: "Integrations", icon: Puzzle, description: "Connected services" },
-  { id: "subscription", label: "Subscription", icon: CreditCard, description: "Plans and billing" },
 ];
 
 const CompanySettings = () => {
@@ -812,125 +809,6 @@ const CompanySettings = () => {
                     <ExternalLink className="h-4 w-4 mr-2" />
                     API Documentation
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        );
-
-      case "subscription":
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Current Plan</CardTitle>
-                <CardDescription>Your subscription details</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between p-6 rounded-lg border bg-gradient-to-r from-primary/10 to-primary/5">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-2xl font-bold">Pro Plan</h3>
-                      <Badge>Active</Badge>
-                    </div>
-                    <p className="text-muted-foreground mt-1">Billed monthly • Renews on Jan 15, 2026</p>
-                    <div className="mt-4 space-y-1 text-sm">
-                      <p>✓ Up to 200 employees</p>
-                      <p>✓ 50 GB storage</p>
-                      <p>✓ All modules included</p>
-                      <p>✓ Priority support</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-bold">$99</p>
-                    <p className="text-muted-foreground">/month</p>
-                    <div className="mt-4 flex gap-2">
-                      <Button variant="outline">Change Plan</Button>
-                      <Button>Upgrade</Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Usage Statistics</CardTitle>
-                <CardDescription>Current usage vs. plan limits</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-6 md:grid-cols-4">
-                  {[
-                    { label: "Employees", current: 87, limit: 200, unit: "" },
-                    { label: "Storage Used", current: 12.5, limit: 50, unit: "GB" },
-                    { label: "API Calls", current: 2340, limit: 10000, unit: "" },
-                    { label: "Active Users", current: 45, limit: 200, unit: "" },
-                  ].map((stat) => (
-                    <div key={stat.label} className="space-y-2">
-                      <p className="text-sm text-muted-foreground">{stat.label}</p>
-                      <p className="text-2xl font-bold">
-                        {stat.current}{stat.unit && ` ${stat.unit}`}
-                        <span className="text-sm font-normal text-muted-foreground"> / {stat.limit}{stat.unit && ` ${stat.unit}`}</span>
-                      </p>
-                      <div className="h-2 rounded-full bg-muted overflow-hidden">
-                        <div 
-                          className="h-full bg-primary rounded-full"
-                          style={{ width: `${(stat.current / stat.limit) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Billing History</CardTitle>
-                <CardDescription>Past invoices and payments</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[
-                    { date: "Dec 15, 2025", desc: "Pro Plan - Monthly", amount: "$99.00", status: "Paid" },
-                    { date: "Nov 15, 2025", desc: "Pro Plan - Monthly", amount: "$99.00", status: "Paid" },
-                    { date: "Oct 15, 2025", desc: "Pro Plan - Monthly", amount: "$99.00", status: "Paid" },
-                  ].map((invoice, index) => (
-                    <div key={index} className="flex items-center justify-between py-3 border-b last:border-0">
-                      <div>
-                        <p className="font-medium">{invoice.desc}</p>
-                        <p className="text-sm text-muted-foreground">{invoice.date}</p>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="font-medium">{invoice.amount}</span>
-                        <Badge variant="outline" className="text-green-600 border-green-600">{invoice.status}</Badge>
-                        <Button variant="ghost" size="sm">
-                          <Download className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Payment Method</CardTitle>
-                <CardDescription>Manage your payment information</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between p-4 rounded-lg border">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-14 rounded bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white text-xs font-bold">
-                      VISA
-                    </div>
-                    <div>
-                      <p className="font-medium">•••• •••• •••• 4242</p>
-                      <p className="text-sm text-muted-foreground">Expires 12/2027</p>
-                    </div>
-                  </div>
-                  <Button variant="outline">Update</Button>
                 </div>
               </CardContent>
             </Card>
