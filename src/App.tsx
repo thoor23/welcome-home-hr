@@ -61,14 +61,6 @@ import ShiftAssignments from "./pages/admin/ShiftAssignments";
 import ShiftSchedule from "./pages/admin/ShiftSchedule";
 import ShiftSwaps from "./pages/admin/ShiftSwaps";
 import ShiftReport from "./pages/admin/ShiftReport";
-import OnboardingOverview from "./pages/admin/OnboardingOverview";
-import OnboardingTasks from "./pages/admin/OnboardingTasks";
-import NewHireOnboarding from "./pages/admin/NewHireOnboarding";
-import OnboardingReport from "./pages/admin/OnboardingReport";
-import OffboardingOverview from "./pages/admin/OffboardingOverview";
-import OffboardingTasks from "./pages/admin/OffboardingTasks";
-import ExitClearance from "./pages/admin/ExitClearance";
-import OffboardingReport from "./pages/admin/OffboardingReport";
 import AllEmails from "./pages/admin/AllEmails";
 import EmailTemplates from "./pages/admin/EmailTemplates";
 import LetterTemplates from "./pages/admin/LetterTemplates";
@@ -203,16 +195,6 @@ const App = () => (
             <Route path="/admin/shifts/schedule" element={<ShiftSchedule />} />
             <Route path="/admin/shifts/swaps" element={<ShiftSwaps />} />
             <Route path="/admin/shifts/report" element={<ShiftReport />} />
-            <Route path="/admin/onboarding" element={<Navigate to="/admin/onboarding/overview" replace />} />
-            <Route path="/admin/onboarding/overview" element={<OnboardingOverview />} />
-            <Route path="/admin/onboarding/new" element={<NewHireOnboarding />} />
-            <Route path="/admin/onboarding/tasks" element={<OnboardingTasks />} />
-            <Route path="/admin/onboarding/report" element={<OnboardingReport />} />
-            <Route path="/admin/offboarding" element={<Navigate to="/admin/offboarding/overview" replace />} />
-            <Route path="/admin/offboarding/overview" element={<OffboardingOverview />} />
-            <Route path="/admin/offboarding/clearance" element={<ExitClearance />} />
-            <Route path="/admin/offboarding/tasks" element={<OffboardingTasks />} />
-            <Route path="/admin/offboarding/report" element={<OffboardingReport />} />
             <Route path="/admin/communications" element={<Navigate to="/admin/communications/all" replace />} />
             <Route path="/admin/communications/all" element={<AllEmails />} />
             <Route path="/admin/communications/generate" element={<GenerateLetter />} />
