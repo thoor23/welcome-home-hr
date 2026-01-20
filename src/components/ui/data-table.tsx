@@ -213,9 +213,9 @@ export function DataTable<T>({
   const endIndex = Math.min(currentPage * rowsPerPage, processedData.length);
 
   return (
-    <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
-      {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-3 px-4 py-3 border-b border-border">
+    <div className="space-y-4">
+      {/* Toolbar - Outside the table card */}
+      <div className="flex flex-wrap items-center gap-3">
         {/* Search */}
         <div className="relative flex-1 min-w-[200px] max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -274,58 +274,60 @@ export function DataTable<T>({
         {toolbarActions ? <div className="ml-auto flex items-center gap-2">{toolbarActions}</div> : null}
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto scrollbar-horizontal">
-        <Table className="text-sm min-w-max">
-          <TableHeader>
-            <TableRow className="hover:bg-transparent">
-              {selectable && (
-                <TableHead className="w-[50px] sticky left-0 bg-card z-20 border-r border-border shadow-[1px_0_0_hsl(var(--border))]">
-                  <Checkbox
-                    checked={allSelected}
-                    ref={(el) => {
-                      if (el) {
-                        (el as HTMLButtonElement & { indeterminate: boolean }).indeterminate = someSelected;
-                      }
-                    }}
-                    onCheckedChange={handleSelectAll}
-                    aria-label="Select all"
-                  />
-                </TableHead>
-              )}
-              {displayColumns.map((column) => (
-                <TableHead
-                  key={column.key}
-                  className={cn(
-                    column.headerClassName,
-                    "border-r border-border text-xs font-semibold text-muted-foreground",
-                    column.sticky === "left" && "sticky left-0 bg-card z-20 shadow-[1px_0_0_hsl(var(--border))]",
-                    column.sticky === "right" && "sticky right-0 bg-card z-20 shadow-[-1px_0_0_hsl(var(--border))]",
-                  )}
-                >
-                  {column.sortable !== false ? (
-                    <button
-                      className="flex items-center gap-1 hover:text-foreground transition-colors"
-                      onClick={() => handleSort(column.key)}
-                    >
-                      {column.header}
-                      {sortColumn === column.key ? (
-                        sortDirection === "asc" ? (
-                          <ArrowUp className="h-4 w-4" />
+      {/* Table Card */}
+      <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
+        {/* Table */}
+        <div className="overflow-x-auto scrollbar-horizontal">
+          <Table className="text-sm min-w-max">
+            <TableHeader>
+              <TableRow className="hover:bg-transparent bg-muted/50">
+                {selectable && (
+                  <TableHead className="w-[50px] sticky left-0 bg-muted/50 z-20 border-r border-border shadow-[1px_0_0_hsl(var(--border))]">
+                    <Checkbox
+                      checked={allSelected}
+                      ref={(el) => {
+                        if (el) {
+                          (el as HTMLButtonElement & { indeterminate: boolean }).indeterminate = someSelected;
+                        }
+                      }}
+                      onCheckedChange={handleSelectAll}
+                      aria-label="Select all"
+                    />
+                  </TableHead>
+                )}
+                {displayColumns.map((column) => (
+                  <TableHead
+                    key={column.key}
+                    className={cn(
+                      column.headerClassName,
+                      "border-r border-border text-sm font-bold text-foreground bg-muted/50",
+                      column.sticky === "left" && "sticky left-0 bg-muted/50 z-20 shadow-[1px_0_0_hsl(var(--border))]",
+                      column.sticky === "right" && "sticky right-0 bg-muted/50 z-20 shadow-[-1px_0_0_hsl(var(--border))]",
+                    )}
+                  >
+                    {column.sortable !== false ? (
+                      <button
+                        className="flex items-center gap-1 hover:text-primary transition-colors"
+                        onClick={() => handleSort(column.key)}
+                      >
+                        {column.header}
+                        {sortColumn === column.key ? (
+                          sortDirection === "asc" ? (
+                            <ArrowUp className="h-4 w-4" />
+                          ) : (
+                            <ArrowDown className="h-4 w-4" />
+                          )
                         ) : (
-                          <ArrowDown className="h-4 w-4" />
-                        )
-                      ) : (
-                        <ArrowUpDown className="h-4 w-4 opacity-50" />
-                      )}
-                    </button>
-                  ) : (
-                    column.header
-                  )}
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
+                          <ArrowUpDown className="h-4 w-4 opacity-50" />
+                        )}
+                      </button>
+                    ) : (
+                      column.header
+                    )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
           <TableBody>
             {paginatedData.length === 0 ? (
               <TableRow>
@@ -384,75 +386,76 @@ export function DataTable<T>({
         </Table>
       </div>
 
-      {/* Pagination */}
-      <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t border-border">
-        {/* Rows per page - Left side */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>Rows per page:</span>
-          <Select value={String(rowsPerPage)} onValueChange={(value) => setRowsPerPage(Number(value))}>
-            <SelectTrigger className="w-[70px] h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {pageSizeOptions.map((size) => (
-                <SelectItem key={size} value={String(size)}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Pagination */}
+        <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t border-border">
+          {/* Rows per page - Left side */}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Rows per page:</span>
+            <Select value={String(rowsPerPage)} onValueChange={(value) => setRowsPerPage(Number(value))}>
+              <SelectTrigger className="w-[70px] h-8">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {pageSizeOptions.map((size) => (
+                  <SelectItem key={size} value={String(size)}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-        {/* Page navigation - Right side */}
-        <div className="flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 px-3 gap-1"
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </Button>
+          {/* Page navigation - Right side */}
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 px-3 gap-1"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
 
-          {/* Page numbers */}
-          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-            let pageNum: number;
-            if (totalPages <= 5) {
-              pageNum = i + 1;
-            } else if (currentPage <= 3) {
-              pageNum = i + 1;
-            } else if (currentPage >= totalPages - 2) {
-              pageNum = totalPages - 4 + i;
-            } else {
-              pageNum = currentPage - 2 + i;
-            }
+            {/* Page numbers */}
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum: number;
+              if (totalPages <= 5) {
+                pageNum = i + 1;
+              } else if (currentPage <= 3) {
+                pageNum = i + 1;
+              } else if (currentPage >= totalPages - 2) {
+                pageNum = totalPages - 4 + i;
+              } else {
+                pageNum = currentPage - 2 + i;
+              }
 
-            return (
-              <Button
-                key={pageNum}
-                variant={currentPage === pageNum ? "default" : "outline"}
-                size="icon"
-                className={cn(
-                  "h-8 w-8",
-                  currentPage === pageNum && "bg-primary text-primary-foreground hover:bg-primary/90"
-                )}
-                onClick={() => setCurrentPage(pageNum)}
-              >
-                {pageNum}
-              </Button>
-            );
-          })}
+              return (
+                <Button
+                  key={pageNum}
+                  variant={currentPage === pageNum ? "default" : "outline"}
+                  size="icon"
+                  className={cn(
+                    "h-8 w-8",
+                    currentPage === pageNum && "bg-primary text-primary-foreground hover:bg-primary/90"
+                  )}
+                  onClick={() => setCurrentPage(pageNum)}
+                >
+                  {pageNum}
+                </Button>
+              );
+            })}
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 px-3 gap-1"
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages || totalPages === 0}
-          >
-            Next
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 px-3 gap-1"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages || totalPages === 0}
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>
