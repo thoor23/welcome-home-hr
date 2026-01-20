@@ -58,9 +58,6 @@ import {
   Server,
   Webhook,
   LucideIcon,
-  UserCog,
-  KeyRound,
-  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -92,21 +89,6 @@ interface MenuGroup {
 
 // Menu Data with Permission Requirements
 const menuGroups: MenuGroup[] = [
-  {
-    label: "Administration",
-    items: [
-      {
-        title: "User Management",
-        icon: UserCog,
-        requiredPermission: "users.view",
-        subItems: [
-          { title: "All Users", url: "/app/users/all", icon: Users, requiredPermission: "users.view" },
-          { title: "Roles", url: "/app/users/roles", icon: ShieldCheck, requiredPermission: "roles.view" },
-          { title: "Permissions", url: "/app/users/permissions", icon: KeyRound, requiredPermission: "roles.view" },
-        ],
-      },
-    ],
-  },
   {
     label: "People",
     items: [
