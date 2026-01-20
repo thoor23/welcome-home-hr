@@ -60,7 +60,7 @@ const Departments = () => {
       code: "HR",
       head: "Sneha Gupta",
       employees: 8,
-      description: "Employee management and recruitment",
+      description: "Employee management and policies",
       status: "active",
       createdAt: "2024-01-15",
     },

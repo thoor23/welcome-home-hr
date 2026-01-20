@@ -36,7 +36,7 @@ const plans = [
       "Everything in Starter",
       "Payroll processing",
       "Performance reviews",
-      "Custom reports",
+      "Analytics dashboard",
       "Priority support",
     ],
     cta: "Start Free Trial",

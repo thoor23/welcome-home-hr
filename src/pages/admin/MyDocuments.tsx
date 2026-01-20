@@ -28,7 +28,7 @@ const myDocuments = {
       type: "pdf",
       size: "245 KB",
       category: "Offer Letters",
-      module: "Recruitment",
+      module: "HR",
       uploadedBy: "HR Admin",
       uploadedAt: "Mar 15, 2024",
       accessLevel: "private",

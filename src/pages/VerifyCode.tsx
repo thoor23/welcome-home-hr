@@ -33,7 +33,7 @@ const VerifyCode = () => {
     e.preventDefault();
     const verificationCode = code.join("");
     console.log("Verification code submitted", { verificationCode });
-    navigate("/organization-onboarding");
+    navigate("/app/dashboard");
   };
 
   const handleResend = () => {

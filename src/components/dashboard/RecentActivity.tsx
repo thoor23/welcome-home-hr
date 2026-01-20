@@ -3,15 +3,15 @@ import { Badge } from "@/components/ui/badge";
 
 const activities = [
   { id: 1, user: "Sarah Johnson", initials: "SJ", action: "submitted leave request", time: "2 min ago", type: "leave" },
-  { id: 2, user: "Mike Chen", initials: "MC", action: "completed onboarding", time: "15 min ago", type: "onboarding" },
-  { id: 3, user: "Emily Davis", initials: "ED", action: "updated profile", time: "1 hour ago", type: "profile" },
+  { id: 2, user: "Mike Chen", initials: "MC", action: "updated profile", time: "15 min ago", type: "profile" },
+  { id: 3, user: "Emily Davis", initials: "ED", action: "submitted expense claim", time: "1 hour ago", type: "expense" },
   { id: 4, user: "Alex Wilson", initials: "AW", action: "clocked in late", time: "2 hours ago", type: "attendance" },
   { id: 5, user: "Lisa Brown", initials: "LB", action: "received performance bonus", time: "3 hours ago", type: "payroll" },
 ];
 
 const typeColors: Record<string, string> = {
   leave: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
-  onboarding: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+  expense: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
   profile: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
   attendance: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
   payroll: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",

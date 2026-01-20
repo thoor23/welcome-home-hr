@@ -318,30 +318,6 @@ paths:
       responses:
         200: { $ref: './common.yaml#/components/responses/Success' }
 
-  # ============ SHIFT REPORT ============
-  /api/v1/admin/shift-report:
-    get:
-      tags: [Shifts - Admin]
-      summary: Generate shift report
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: format
-          in: query
-          schema:
-            type: string
-            enum: [json, csv, pdf]
-        - $ref: './common.yaml#/components/parameters/StartDateParam'
-        - $ref: './common.yaml#/components/parameters/EndDateParam'
-        - name: department_id
-          in: query
-          schema: { type: string, format: uuid }
-      responses:
-        200:
-          description: Shift report
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/ShiftReportResponse' }
-
   # ============ ESS ENDPOINTS ============
   /api/v1/ess/shifts/schedule:
     get:

@@ -52,8 +52,8 @@ const sampleEvents: CalendarEvent[] = [
   },
   {
     id: "4",
-    title: "New Hire Orientation",
-    description: "Onboarding new employees",
+    title: "Team Orientation",
+    description: "Welcoming new team members",
     startDate: "2025-01-06T10:00:00",
     endDate: "2025-01-06T13:00:00",
     categoryId: "2",

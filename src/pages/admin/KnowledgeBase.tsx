@@ -92,14 +92,14 @@ const sampleArticles: Article[] = [
   },
   {
     id: "5",
-    title: "New Employee Onboarding Checklist",
+    title: "Employee Handbook Guide",
     category: "HR",
-    tags: ["onboarding", "new hire", "checklist"],
+    tags: ["handbook", "policies", "guide"],
     author: "HR Team",
     status: "Draft",
     views: 0,
     lastUpdated: "2026-01-01",
-    content: "Checklist for new employee onboarding...",
+    content: "Complete guide to company policies and procedures...",
   },
   {
     id: "6",

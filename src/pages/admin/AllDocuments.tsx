@@ -68,7 +68,7 @@ const files = [
     type: "pdf",
     size: "245 KB",
     category: "Offer Letters",
-    module: "Recruitment",
+    module: "HR",
     uploadedBy: "HR Admin",
     uploadedAt: "Jan 15, 2026",
     accessLevel: "private",
@@ -97,7 +97,7 @@ const files = [
     uploadedBy: "Sarah Johnson",
     uploadedAt: "Jan 8, 2026",
     accessLevel: "public",
-    tags: ["handbook", "onboarding"],
+    tags: ["handbook", "policies"],
   },
   {
     id: "4",
@@ -125,7 +125,7 @@ const files = [
   },
   {
     id: "6",
-    name: "Salary_Report_Q4.xlsx",
+    name: "Salary_Summary_Q4.xlsx",
     type: "xlsx",
     size: "890 KB",
     category: "Payslips",
@@ -133,7 +133,7 @@ const files = [
     uploadedBy: "Finance",
     uploadedAt: "Dec 20, 2025",
     accessLevel: "private",
-    tags: ["salary", "report", "Q4"],
+    tags: ["salary", "summary", "Q4"],
   },
 ];
 
