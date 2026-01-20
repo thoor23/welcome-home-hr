@@ -104,10 +104,6 @@ import ESSSettings from "./pages/ess/Settings";
 import ESSProfile from "./pages/ess/Profile";
 import ESSNotifications from "./pages/ess/Notifications";
 
-// New App Routes (Unified)
-import AppAllUsers from "./pages/app/users/AllUsers";
-import AppRoles from "./pages/app/users/Roles";
-import AppPermissions from "./pages/app/users/Permissions";
 
 const queryClient = new QueryClient();
 
@@ -133,11 +129,6 @@ const App = () => (
             <Route path="/app" element={<Navigate to="/app/dashboard" replace />} />
             <Route path="/app/dashboard" element={<Dashboard />} />
             
-            {/* User Management */}
-            <Route path="/app/users" element={<Navigate to="/app/users/all" replace />} />
-            <Route path="/app/users/all" element={<AppAllUsers />} />
-            <Route path="/app/users/roles" element={<AppRoles />} />
-            <Route path="/app/users/permissions" element={<AppPermissions />} />
             
             {/* Employees */}
             <Route path="/app/employees" element={<Navigate to="/app/employees/all" replace />} />
