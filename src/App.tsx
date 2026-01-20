@@ -26,23 +26,19 @@ import LeaveOverview from "./pages/admin/LeaveOverview";
 import AllLeaves from "./pages/admin/AllLeaves";
 import LeaveRequests from "./pages/admin/LeaveRequests";
 import LeaveRules from "./pages/admin/LeaveRules";
-import LeaveReport from "./pages/admin/LeaveReport";
 import SalaryStructure from "./pages/admin/SalaryStructure";
 import GeneratePayslip from "./pages/admin/GeneratePayslip";
 import PayslipTemplate from "./pages/admin/PayslipTemplate";
-import PayrollReport from "./pages/admin/PayrollReport";
 import EmployeeSalaries from "./pages/admin/EmployeeSalaries";
 import Locations from "./pages/admin/Locations";
 import AllAssets from "./pages/admin/AllAssets";
 import AssetCategories from "./pages/admin/AssetCategories";
 import AssetAssignments from "./pages/admin/AssetAssignments";
 import AssetMaintenance from "./pages/admin/AssetMaintenance";
-import AssetReport from "./pages/admin/AssetReport";
 import AllExpenses from "./pages/admin/AllExpenses";
 import ExpenseCategories from "./pages/admin/ExpenseCategories";
 import ExpenseClaims from "./pages/admin/ExpenseClaims";
 import ExpenseApprovals from "./pages/admin/ExpenseApprovals";
-import ExpenseReport from "./pages/admin/ExpenseReport";
 import AllInvoices from "./pages/admin/AllInvoices";
 import GenerateInvoice from "./pages/admin/GenerateInvoice";
 import InvoiceTemplate from "./pages/admin/InvoiceTemplate";
@@ -50,33 +46,27 @@ import BillingRequests from "./pages/admin/BillingRequests";
 import BillingApprovals from "./pages/admin/BillingApprovals";
 import BillingAllocations from "./pages/admin/BillingAllocations";
 import BillingCategories from "./pages/admin/BillingCategories";
-import BillingReport from "./pages/admin/BillingReport";
 import AllShifts from "./pages/admin/AllShifts";
 import ShiftAssignments from "./pages/admin/ShiftAssignments";
 import ShiftSchedule from "./pages/admin/ShiftSchedule";
 import ShiftSwaps from "./pages/admin/ShiftSwaps";
-import ShiftReport from "./pages/admin/ShiftReport";
 import AllEmails from "./pages/admin/AllEmails";
 import EmailTemplates from "./pages/admin/EmailTemplates";
 import LetterTemplates from "./pages/admin/LetterTemplates";
 import EmailConfiguration from "./pages/admin/EmailConfiguration";
-import EmailReport from "./pages/admin/EmailReport";
 import GenerateLetter from "./pages/admin/GenerateLetter";
 import AllEvents from "./pages/admin/AllEvents";
 import EventsList from "./pages/admin/EventsList";
 import EventCategories from "./pages/admin/EventCategories";
-import EventReport from "./pages/admin/EventReport";
 import AllTickets from "./pages/admin/AllTickets";
 import MyTickets from "./pages/admin/MyTickets";
 import TicketCategories from "./pages/admin/TicketCategories";
 import SLASettings from "./pages/admin/SLASettings";
 import KnowledgeBase from "./pages/admin/KnowledgeBase";
-import SupportReport from "./pages/admin/SupportReport";
 import AllDocuments from "./pages/admin/AllDocuments";
 import MyDocuments from "./pages/admin/MyDocuments";
 import DocumentCategories from "./pages/admin/DocumentCategories";
 import DocumentSettings from "./pages/admin/DocumentSettings";
-import DocumentReport from "./pages/admin/DocumentReport";
 import AllAuditLogs from "./pages/admin/AllAuditLogs";
 import ActivityLogs from "./pages/admin/ActivityLogs";
 import DataChangeLogs from "./pages/admin/DataChangeLogs";
@@ -173,7 +163,6 @@ const App = () => (
             <Route path="/app/shifts/schedule" element={<ShiftSchedule />} />
             <Route path="/app/shifts/my-schedule" element={<ESSShiftSchedule />} />
             <Route path="/app/shifts/swaps" element={<ShiftSwaps />} />
-            <Route path="/app/shifts/report" element={<ShiftReport />} />
             
             {/* Leave */}
             <Route path="/app/leave" element={<Navigate to="/app/leave/overview" replace />} />
@@ -183,7 +172,6 @@ const App = () => (
             <Route path="/app/leave/my-leaves" element={<ESSLeaveHistory />} />
             <Route path="/app/leave/apply" element={<ESSApplyLeave />} />
             <Route path="/app/leave/rules" element={<LeaveRules />} />
-            <Route path="/app/leave/report" element={<LeaveReport />} />
             
             {/* Payroll */}
             <Route path="/app/payroll" element={<Navigate to="/app/payroll/salaries" replace />} />
@@ -192,7 +180,6 @@ const App = () => (
             <Route path="/app/payroll/generate" element={<GeneratePayslip />} />
             <Route path="/app/payroll/my-payslips" element={<ESSPayslips />} />
             <Route path="/app/payroll/template" element={<PayslipTemplate />} />
-            <Route path="/app/payroll/report" element={<PayrollReport />} />
             
             {/* Expenses */}
             <Route path="/app/expenses" element={<Navigate to="/app/expenses/all" replace />} />
@@ -202,7 +189,6 @@ const App = () => (
             <Route path="/app/expenses/categories" element={<ExpenseCategories />} />
             <Route path="/app/expenses/claims" element={<ExpenseClaims />} />
             <Route path="/app/expenses/approvals" element={<ExpenseApprovals />} />
-            <Route path="/app/expenses/report" element={<ExpenseReport />} />
             
             {/* Billing */}
             <Route path="/app/billing" element={<Navigate to="/app/billing/invoices" replace />} />
@@ -213,7 +199,6 @@ const App = () => (
             <Route path="/app/billing/approvals" element={<BillingApprovals />} />
             <Route path="/app/billing/allocations" element={<BillingAllocations />} />
             <Route path="/app/billing/categories" element={<BillingCategories />} />
-            <Route path="/app/billing/report" element={<BillingReport />} />
             
             {/* Assets */}
             <Route path="/app/assets" element={<Navigate to="/app/assets/all" replace />} />
@@ -222,14 +207,12 @@ const App = () => (
             <Route path="/app/assets/categories" element={<AssetCategories />} />
             <Route path="/app/assets/assignments" element={<AssetAssignments />} />
             <Route path="/app/assets/maintenance" element={<AssetMaintenance />} />
-            <Route path="/app/assets/report" element={<AssetReport />} />
             
             {/* Events */}
             <Route path="/app/events" element={<Navigate to="/app/events/calendar" replace />} />
             <Route path="/app/events/calendar" element={<AllEvents />} />
             <Route path="/app/events/list" element={<EventsList />} />
             <Route path="/app/events/categories" element={<EventCategories />} />
-            <Route path="/app/events/report" element={<EventReport />} />
             
             {/* Documents */}
             <Route path="/app/documents" element={<Navigate to="/app/documents/all" replace />} />
@@ -237,7 +220,6 @@ const App = () => (
             <Route path="/app/documents/my" element={<MyDocuments />} />
             <Route path="/app/documents/categories" element={<DocumentCategories />} />
             <Route path="/app/documents/settings" element={<DocumentSettings />} />
-            <Route path="/app/documents/report" element={<DocumentReport />} />
             
             {/* Communications */}
             <Route path="/app/communications" element={<Navigate to="/app/communications/all" replace />} />
@@ -246,7 +228,6 @@ const App = () => (
             <Route path="/app/communications/email-templates" element={<EmailTemplates />} />
             <Route path="/app/communications/letter-templates" element={<LetterTemplates />} />
             <Route path="/app/communications/config" element={<EmailConfiguration />} />
-            <Route path="/app/communications/report" element={<EmailReport />} />
             
             {/* Support */}
             <Route path="/app/support" element={<Navigate to="/app/support/all" replace />} />
@@ -256,7 +237,6 @@ const App = () => (
             <Route path="/app/support/categories" element={<TicketCategories />} />
             <Route path="/app/support/sla" element={<SLASettings />} />
             <Route path="/app/support/knowledge-base" element={<KnowledgeBase />} />
-            <Route path="/app/support/report" element={<SupportReport />} />
             
             {/* Audit */}
             <Route path="/app/audit" element={<Navigate to="/app/audit/all" replace />} />
@@ -297,25 +277,21 @@ const App = () => (
             <Route path="/admin/leave/all" element={<AllLeaves />} />
             <Route path="/admin/leave/requests" element={<LeaveRequests />} />
             <Route path="/admin/leave/rules" element={<LeaveRules />} />
-            <Route path="/admin/leave/report" element={<LeaveReport />} />
             <Route path="/admin/payroll" element={<Navigate to="/admin/payroll/salaries" replace />} />
             <Route path="/admin/payroll/salaries" element={<EmployeeSalaries />} />
             <Route path="/admin/payroll/salary-structure" element={<SalaryStructure />} />
             <Route path="/admin/payroll/generate" element={<GeneratePayslip />} />
             <Route path="/admin/payroll/template" element={<PayslipTemplate />} />
-            <Route path="/admin/payroll/report" element={<PayrollReport />} />
             <Route path="/admin/assets" element={<Navigate to="/admin/assets/all" replace />} />
             <Route path="/admin/assets/all" element={<AllAssets />} />
             <Route path="/admin/assets/categories" element={<AssetCategories />} />
             <Route path="/admin/assets/assignments" element={<AssetAssignments />} />
             <Route path="/admin/assets/maintenance" element={<AssetMaintenance />} />
-            <Route path="/admin/assets/report" element={<AssetReport />} />
             <Route path="/admin/expenses" element={<Navigate to="/admin/expenses/all" replace />} />
             <Route path="/admin/expenses/all" element={<AllExpenses />} />
             <Route path="/admin/expenses/categories" element={<ExpenseCategories />} />
             <Route path="/admin/expenses/claims" element={<ExpenseClaims />} />
             <Route path="/admin/expenses/approvals" element={<ExpenseApprovals />} />
-            <Route path="/admin/expenses/report" element={<ExpenseReport />} />
             <Route path="/admin/billing" element={<Navigate to="/admin/billing/invoices" replace />} />
             <Route path="/admin/billing/invoices" element={<AllInvoices />} />
             <Route path="/admin/billing/generate-invoice" element={<GenerateInvoice />} />
@@ -324,38 +300,32 @@ const App = () => (
             <Route path="/admin/billing/approvals" element={<BillingApprovals />} />
             <Route path="/admin/billing/allocations" element={<BillingAllocations />} />
             <Route path="/admin/billing/categories" element={<BillingCategories />} />
-            <Route path="/admin/billing/report" element={<BillingReport />} />
             <Route path="/admin/shifts" element={<Navigate to="/admin/shifts/all" replace />} />
             <Route path="/admin/shifts/all" element={<AllShifts />} />
             <Route path="/admin/shifts/assignments" element={<ShiftAssignments />} />
             <Route path="/admin/shifts/schedule" element={<ShiftSchedule />} />
             <Route path="/admin/shifts/swaps" element={<ShiftSwaps />} />
-            <Route path="/admin/shifts/report" element={<ShiftReport />} />
             <Route path="/admin/communications" element={<Navigate to="/admin/communications/all" replace />} />
             <Route path="/admin/communications/all" element={<AllEmails />} />
             <Route path="/admin/communications/generate" element={<GenerateLetter />} />
             <Route path="/admin/communications/email-templates" element={<EmailTemplates />} />
             <Route path="/admin/communications/letter-templates" element={<LetterTemplates />} />
             <Route path="/admin/communications/config" element={<EmailConfiguration />} />
-            <Route path="/admin/communications/report" element={<EmailReport />} />
             <Route path="/admin/events" element={<Navigate to="/admin/events/calendar" replace />} />
             <Route path="/admin/events/calendar" element={<AllEvents />} />
             <Route path="/admin/events/list" element={<EventsList />} />
             <Route path="/admin/events/categories" element={<EventCategories />} />
-            <Route path="/admin/events/report" element={<EventReport />} />
             <Route path="/admin/support" element={<Navigate to="/admin/support/all" replace />} />
             <Route path="/admin/support/all" element={<AllTickets />} />
             <Route path="/admin/support/my-tickets" element={<MyTickets />} />
             <Route path="/admin/support/categories" element={<TicketCategories />} />
             <Route path="/admin/support/sla" element={<SLASettings />} />
             <Route path="/admin/support/knowledge-base" element={<KnowledgeBase />} />
-            <Route path="/admin/support/report" element={<SupportReport />} />
             <Route path="/admin/documents" element={<Navigate to="/admin/documents/all" replace />} />
             <Route path="/admin/documents/all" element={<AllDocuments />} />
             <Route path="/admin/documents/my" element={<MyDocuments />} />
             <Route path="/admin/documents/categories" element={<DocumentCategories />} />
             <Route path="/admin/documents/settings" element={<DocumentSettings />} />
-            <Route path="/admin/documents/report" element={<DocumentReport />} />
             <Route path="/admin/audit" element={<Navigate to="/admin/audit/all" replace />} />
             <Route path="/admin/audit/all" element={<AllAuditLogs />} />
             <Route path="/admin/audit/activity" element={<ActivityLogs />} />

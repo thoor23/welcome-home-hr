@@ -143,7 +143,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Schedule", url: "/app/shifts/schedule", icon: CalendarClock, requiredPermission: "shifts.view_all" },
           { title: "My Schedule", url: "/app/shifts/my-schedule", icon: CalendarClock, requiredPermission: "shifts.view_own" },
           { title: "Swap Requests", url: "/app/shifts/swaps", icon: ArrowRightLeft, requiredPermission: "shifts.swap_request" },
-          { title: "Report", url: "/app/shifts/report", icon: BarChart3, requiredPermission: "shifts.view_all" },
         ],
       },
       {
@@ -156,7 +155,6 @@ const menuGroups: MenuGroup[] = [
           { title: "My Leaves", url: "/app/leave/my-leaves", icon: CalendarDays, requiredPermission: "leave.view_own" },
           { title: "Apply Leave", url: "/app/leave/apply", icon: FilePlus, requiredPermission: "leave.apply" },
           { title: "Rules", url: "/app/leave/rules", icon: ScrollText, requiredPermission: "leave.manage_rules" },
-          { title: "Report", url: "/app/leave/report", icon: FileBarChart, requiredPermission: "leave.view_all" },
         ],
       },
     ],
@@ -173,7 +171,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Generate Payslip", url: "/app/payroll/generate", icon: Receipt, requiredPermission: "payroll.generate" },
           { title: "My Payslips", url: "/app/payroll/my-payslips", icon: Receipt, requiredPermission: "payslips.view_own" },
           { title: "Payslip Template", url: "/app/payroll/template", icon: LayoutTemplate, requiredPermission: "payroll.manage" },
-          { title: "Report", url: "/app/payroll/report", icon: FileBarChart, requiredPermission: "payroll.view" },
         ],
       },
       {
@@ -186,7 +183,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Categories", url: "/app/expenses/categories", icon: Tags, requiredPermission: "expenses.manage" },
           { title: "Claims", url: "/app/expenses/claims", icon: ClipboardCheck, requiredPermission: "expenses.view_all" },
           { title: "Approvals", url: "/app/expenses/approvals", icon: FileCheckIcon, requiredPermission: "expenses.approve" },
-          { title: "Report", url: "/app/expenses/report", icon: BarChart3, requiredPermission: "expenses.view_all" },
         ],
       },
       {
@@ -201,7 +197,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Approvals", url: "/app/billing/approvals", icon: FileCheckIcon, requiredPermission: "billing.manage" },
           { title: "Allocations", url: "/app/billing/allocations", icon: Wallet, requiredPermission: "billing.manage" },
           { title: "Categories", url: "/app/billing/categories", icon: Tags, requiredPermission: "billing.manage" },
-          { title: "Report", url: "/app/billing/report", icon: PieChart, requiredPermission: "billing.view" },
         ],
       },
     ],
@@ -218,7 +213,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Categories", url: "/app/assets/categories", icon: Layers, requiredPermission: "assets.manage" },
           { title: "Assignments", url: "/app/assets/assignments", icon: UserCheck2, requiredPermission: "assets.assign" },
           { title: "Maintenance", url: "/app/assets/maintenance", icon: Wrench, requiredPermission: "assets.manage" },
-          { title: "Report", url: "/app/assets/report", icon: BarChart3, requiredPermission: "assets.view_all" },
         ],
       },
       {
@@ -228,7 +222,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Calendar", url: "/app/events/calendar", icon: CalendarDays, requiredPermission: "events.view" },
           { title: "All Events", url: "/app/events/list", icon: CalendarCheck, requiredPermission: "events.manage" },
           { title: "Categories", url: "/app/events/categories", icon: Tags, requiredPermission: "events.manage" },
-          { title: "Report", url: "/app/events/report", icon: PieChart, requiredPermission: "events.manage" },
         ],
       },
       {
@@ -239,7 +232,6 @@ const menuGroups: MenuGroup[] = [
           { title: "My Documents", url: "/app/documents/my", icon: FileArchive, requiredPermission: "documents.view_own" },
           { title: "Categories", url: "/app/documents/categories", icon: Tags, requiredPermission: "documents.manage" },
           { title: "Settings", url: "/app/documents/settings", icon: FolderCog, requiredPermission: "documents.manage" },
-          { title: "Report", url: "/app/documents/report", icon: PieChart, requiredPermission: "documents.view_all" },
         ],
       },
       {
@@ -252,7 +244,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Email Templates", url: "/app/communications/email-templates", icon: FileText, requiredPermission: "communications.manage" },
           { title: "Letter Templates", url: "/app/communications/letter-templates", icon: FileSignature, requiredPermission: "communications.manage" },
           { title: "Configuration", url: "/app/communications/config", icon: Settings2, requiredPermission: "communications.manage" },
-          { title: "Report", url: "/app/communications/report", icon: PieChart, requiredPermission: "communications.view" },
         ],
       },
     ],
@@ -270,7 +261,6 @@ const menuGroups: MenuGroup[] = [
           { title: "Categories", url: "/app/support/categories", icon: Tags, requiredPermission: "support.manage" },
           { title: "SLA Settings", url: "/app/support/sla", icon: Gauge, requiredPermission: "support.manage" },
           { title: "Knowledge Base", url: "/app/support/knowledge-base", icon: BookOpen, requiredPermission: "support.knowledge_base" },
-          { title: "Report", url: "/app/support/report", icon: PieChart, requiredPermission: "support.view_all" },
         ],
       },
       {
