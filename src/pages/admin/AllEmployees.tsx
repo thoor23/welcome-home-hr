@@ -210,10 +210,10 @@ const AllEmployees = () => {
     };
 
     const labels = {
-      active: "In Office",
-      probation: "Remote",
-      notice: "On Leave",
-      exit: "Exit",
+      active: "Active",
+      probation: "Probation",
+      notice: "Notice Period",
+      exit: "Resigned",
     };
 
     const dots = {
@@ -468,10 +468,10 @@ const AllEmployees = () => {
       key: "status",
       label: "Status",
       options: [
-        { label: "In Office", value: "active" },
-        { label: "Remote", value: "probation" },
-        { label: "On Leave", value: "notice" },
-        { label: "Exit", value: "exit" },
+        { label: "Active", value: "active" },
+        { label: "Probation", value: "probation" },
+        { label: "Notice Period", value: "notice" },
+        { label: "Resigned", value: "exit" },
       ],
     },
     {
