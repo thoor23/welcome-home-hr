@@ -307,34 +307,6 @@ paths:
       responses:
         200: { $ref: './common.yaml#/components/responses/Success' }
 
-  # ============ ASSET REPORT ============
-  /api/v1/admin/asset-report:
-    get:
-      tags: [Assets - Admin]
-      summary: Generate asset report
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: format
-          in: query
-          schema:
-            type: string
-            enum: [json, csv, pdf]
-            default: json
-        - name: category_id
-          in: query
-          schema: { type: string, format: uuid }
-        - name: status
-          in: query
-          schema:
-            type: string
-            enum: [available, assigned, maintenance, retired]
-      responses:
-        200:
-          description: Asset report
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/AssetReportResponse' }
-
   # ============ ESS ENDPOINTS ============
   /api/v1/ess/assets:
     get:

@@ -384,27 +384,6 @@ paths:
       responses:
         200: { $ref: './common.yaml#/components/responses/Success' }
 
-  # ============ SUPPORT REPORT ============
-  /api/v1/admin/support-report:
-    get:
-      tags: [Tickets - Admin]
-      summary: Generate support report
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: format
-          in: query
-          schema:
-            type: string
-            enum: [json, csv, pdf]
-        - $ref: './common.yaml#/components/parameters/StartDateParam'
-        - $ref: './common.yaml#/components/parameters/EndDateParam'
-      responses:
-        200:
-          description: Support report
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/SupportReportResponse' }
-
   # ============ ESS ENDPOINTS ============
   /api/v1/ess/tickets:
     get:

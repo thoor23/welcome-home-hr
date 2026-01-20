@@ -211,27 +211,6 @@ paths:
       responses:
         200: { $ref: './common.yaml#/components/responses/Success' }
 
-  # ============ EVENT REPORT ============
-  /api/v1/admin/event-report:
-    get:
-      tags: [Events - Admin]
-      summary: Generate event report
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: format
-          in: query
-          schema:
-            type: string
-            enum: [json, csv, pdf]
-        - $ref: './common.yaml#/components/parameters/StartDateParam'
-        - $ref: './common.yaml#/components/parameters/EndDateParam'
-      responses:
-        200:
-          description: Event report
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/EventReportResponse' }
-
   # ============ ESS ENDPOINTS ============
   /api/v1/ess/events:
     get:

@@ -43,7 +43,7 @@ const sampleLogs: DataChangeLog[] = [
     module: "Employees",
     table: "employees",
     recordId: "EMP-045",
-    reason: "New hire onboarding",
+    reason: "New employee added",
     changes: [
       { field: "name", oldValue: "-", newValue: "Alice Johnson" },
       { field: "department", oldValue: "-", newValue: "Engineering" },

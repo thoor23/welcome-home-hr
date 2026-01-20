@@ -42,7 +42,7 @@ const categories = [
 const modules = [
   "Employees",
   "Payroll",
-  "Recruitment",
+  "HR",
   "Billing",
   "General",
 ];

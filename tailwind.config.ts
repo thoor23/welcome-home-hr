@@ -66,11 +66,6 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        superadmin: {
-          DEFAULT: "hsl(var(--superadmin))",
-          foreground: "hsl(var(--superadmin-foreground))",
-          muted: "hsl(var(--superadmin-muted))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",

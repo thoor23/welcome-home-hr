@@ -50,7 +50,7 @@ const sampleTemplates: EmailTemplate[] = [
   {
     id: "1",
     name: "Offer Letter",
-    category: "Recruitment",
+    category: "HR",
     type: "Letter",
     subject: "Job Offer - {{position}} Position at {{company_name}}",
     body: "Dear {{candidate_name}},\n\nWe are pleased to offer you the position of {{position}} at {{company_name}}...\n\nSalary: {{salary}}\nJoining Date: {{joining_date}}\n\nBest regards,\n{{hr_name}}",
@@ -61,10 +61,10 @@ const sampleTemplates: EmailTemplate[] = [
   {
     id: "2",
     name: "Welcome Email",
-    category: "Onboarding",
+    category: "HR",
     type: "Email",
     subject: "Welcome to {{company_name}}, {{employee_name}}!",
-    body: "Dear {{employee_name}},\n\nWelcome to {{company_name}}! We are excited to have you on board...\n\nYour manager {{manager_name}} will guide you through the onboarding process.\n\nJoining Date: {{joining_date}}",
+    body: "Dear {{employee_name}},\n\nWelcome to {{company_name}}! We are excited to have you on board...\n\nYour manager {{manager_name}} will guide you through the initial setup.\n\nJoining Date: {{joining_date}}",
     variables: ["employee_name", "company_name", "manager_name", "joining_date"],
     status: "Active",
     lastModified: "18 Jan 2026",
@@ -72,7 +72,7 @@ const sampleTemplates: EmailTemplate[] = [
   {
     id: "3",
     name: "Relieving Letter",
-    category: "Offboarding",
+    category: "HR",
     type: "Letter",
     subject: "Relieving Letter - {{employee_name}}",
     body: "To Whom It May Concern,\n\nThis is to certify that {{employee_name}} (Employee ID: {{employee_id}}) was employed with {{company_name}} as {{designation}} from {{joining_date}} to {{lwd}}...",
@@ -83,7 +83,7 @@ const sampleTemplates: EmailTemplate[] = [
   {
     id: "4",
     name: "Experience Letter",
-    category: "Offboarding",
+    category: "HR",
     type: "Letter",
     subject: "Experience Certificate - {{employee_name}}",
     body: "To Whom It May Concern,\n\nThis is to certify that {{employee_name}} worked with {{company_name}} as {{designation}} for {{experience_years}} years...",
@@ -94,7 +94,7 @@ const sampleTemplates: EmailTemplate[] = [
   {
     id: "5",
     name: "Interview Invitation",
-    category: "Recruitment",
+    category: "HR",
     type: "Email",
     subject: "Interview Invitation - {{position}} at {{company_name}}",
     body: "Dear {{candidate_name}},\n\nWe would like to invite you for an interview for the {{position}} position.\n\nDate: {{interview_date}}\nTime: {{interview_time}}\nLocation: {{interview_location}}\n\nBest regards,\n{{hr_name}}",
@@ -126,7 +126,7 @@ const sampleTemplates: EmailTemplate[] = [
   },
 ];
 
-const categories = ["Recruitment", "Onboarding", "Offboarding", "Payroll", "HR", "General"];
+const categories = ["HR", "Payroll", "Announcements", "General"];
 const availableVariables = [
   "employee_name", "employee_id", "designation", "department", "company_name",
   "date", "joining_date", "lwd", "salary", "manager_name", "hr_name",
